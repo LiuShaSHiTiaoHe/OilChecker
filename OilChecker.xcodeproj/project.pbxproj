@@ -3,17 +3,43 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		69B10B7C262DE76A00617D17 /* BaseTabBarItemContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10B7B262DE76A00617D17 /* BaseTabBarItemContentView.swift */; };
+		69B10B81262DE7A200617D17 /* BaseBouncesContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10B80262DE7A200617D17 /* BaseBouncesContentView.swift */; };
+		69B10B8C262DE91700617D17 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10B8B262DE91700617D17 /* HomeViewController.swift */; };
+		69B10BAD262DF47900617D17 /* Macro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10BAC262DF47900617D17 /* Macro.swift */; };
+		69B10C18262DFAAC00617D17 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 69B10C1A262DFAAC00617D17 /* Localizable.strings */; };
+		69B10C40262F517300617D17 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10C3F262F517300617D17 /* SettingViewController.swift */; };
+		69B10C59262F5B8700617D17 /* SettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10C58262F5B8700617D17 /* SettingTableViewCell.swift */; };
+		69B10C61262F5DE100617D17 /* GlobalConfigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10C60262F5DE100617D17 /* GlobalConfigure.swift */; };
+		69B10C882631E41300617D17 /* AddSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10C872631E41300617D17 /* AddSectionHeaderView.swift */; };
+		69B10CBE2631F8B200617D17 /* UserAndCarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10CBD2631F8B200617D17 /* UserAndCarModel.swift */; };
+		69B10CC7263324E300617D17 /* AddNewCarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10CC6263324E300617D17 /* AddNewCarTableViewCell.swift */; };
+		69B10CCC26332E7700617D17 /* MyCarInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10CCB26332E7700617D17 /* MyCarInfoTableViewCell.swift */; };
+		69B10CD12633F6E200617D17 /* AddNewDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10CD02633F6E200617D17 /* AddNewDeviceViewController.swift */; };
+		69B10D432634480F00617D17 /* MalfunctionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10D422634480F00617D17 /* MalfunctionListViewController.swift */; };
+		69B10D482634615B00617D17 /* MalfunctionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10D472634615B00617D17 /* MalfunctionModel.swift */; };
+		69B10D4D263465EE00617D17 /* MalfunctionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10D4C263465EE00617D17 /* MalfunctionTableViewCell.swift */; };
+		69B10D5326347F6A00617D17 /* StatisticalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10D5226347F6A00617D17 /* StatisticalViewController.swift */; };
+		69B10D5B26348BEB00617D17 /* FuelConsumptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10D5A26348BEB00617D17 /* FuelConsumptionView.swift */; };
+		69B10D65263499D200617D17 /* ButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10D64263499D200617D17 /* ButtonExtension.swift */; };
+		69B10D6D2635825F00617D17 /* BaseEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10D6C2635825F00617D17 /* BaseEmptyView.swift */; };
+		69B10D7226359E1000617D17 /* RefuelRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10D7126359E1000617D17 /* RefuelRecordView.swift */; };
+		69B10D912635A41A00617D17 /* FuelConsumptionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10D902635A41A00617D17 /* FuelConsumptionDetailViewController.swift */; };
+		69B10D962635A42E00617D17 /* RefuelRecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10D952635A42E00617D17 /* RefuelRecordDetailViewController.swift */; };
+		69B10D9C2635C74900617D17 /* FuelCapacityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10D9B2635C74900617D17 /* FuelCapacityView.swift */; };
+		69B10DA12635D05600617D17 /* HomeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10DA02635D05600617D17 /* HomeChartView.swift */; };
+		69B10DC026371AE300617D17 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10DBF26371AE300617D17 /* UserDefaultsKeys.swift */; };
 		69CAA35826275E8100333AA2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CAA35726275E8100333AA2 /* AppDelegate.swift */; };
-		69CAA35C26275E8100333AA2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CAA35B26275E8100333AA2 /* ViewController.swift */; };
-		69CAA35F26275E8100333AA2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69CAA35D26275E8100333AA2 /* Main.storyboard */; };
 		69CAA36126275E8400333AA2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69CAA36026275E8400333AA2 /* Assets.xcassets */; };
 		69CAA36426275E8400333AA2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69CAA36226275E8400333AA2 /* LaunchScreen.storyboard */; };
 		69CAA36F26275E8400333AA2 /* OilCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CAA36E26275E8400333AA2 /* OilCheckerTests.swift */; };
 		69CAA37A26275E8400333AA2 /* OilCheckerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CAA37926275E8400333AA2 /* OilCheckerUITests.swift */; };
+		69CAA3D12628B17E00333AA2 /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CAA3D02628B17D00333AA2 /* BaseNavigationController.swift */; };
+		69CAA3DA2628B19600333AA2 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CAA3D92628B19600333AA2 /* BaseViewController.swift */; };
 		AF3740654BE833F7AB31A402 /* Pods_OilChecker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C031E0B931EC9CAECCC58A6 /* Pods_OilChecker.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,10 +62,35 @@
 
 /* Begin PBXFileReference section */
 		056F54F2EA47FA6C37668A74 /* Pods-OilChecker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OilChecker.release.xcconfig"; path = "Target Support Files/Pods-OilChecker/Pods-OilChecker.release.xcconfig"; sourceTree = "<group>"; };
+		69B10B7B262DE76A00617D17 /* BaseTabBarItemContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarItemContentView.swift; sourceTree = "<group>"; };
+		69B10B80262DE7A200617D17 /* BaseBouncesContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBouncesContentView.swift; sourceTree = "<group>"; };
+		69B10B8B262DE91700617D17 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		69B10BAC262DF47900617D17 /* Macro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Macro.swift; sourceTree = "<group>"; };
+		69B10C19262DFAAC00617D17 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		69B10C1B262DFAB100617D17 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		69B10C3F262F517300617D17 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		69B10C58262F5B8700617D17 /* SettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewCell.swift; sourceTree = "<group>"; };
+		69B10C60262F5DE100617D17 /* GlobalConfigure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConfigure.swift; sourceTree = "<group>"; };
+		69B10C872631E41300617D17 /* AddSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSectionHeaderView.swift; sourceTree = "<group>"; };
+		69B10CBD2631F8B200617D17 /* UserAndCarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAndCarModel.swift; sourceTree = "<group>"; };
+		69B10CC6263324E300617D17 /* AddNewCarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewCarTableViewCell.swift; sourceTree = "<group>"; };
+		69B10CCB26332E7700617D17 /* MyCarInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCarInfoTableViewCell.swift; sourceTree = "<group>"; };
+		69B10CD02633F6E200617D17 /* AddNewDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewDeviceViewController.swift; sourceTree = "<group>"; };
+		69B10D422634480F00617D17 /* MalfunctionListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MalfunctionListViewController.swift; sourceTree = "<group>"; };
+		69B10D472634615B00617D17 /* MalfunctionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MalfunctionModel.swift; sourceTree = "<group>"; };
+		69B10D4C263465EE00617D17 /* MalfunctionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MalfunctionTableViewCell.swift; sourceTree = "<group>"; };
+		69B10D5226347F6A00617D17 /* StatisticalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticalViewController.swift; sourceTree = "<group>"; };
+		69B10D5A26348BEB00617D17 /* FuelConsumptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelConsumptionView.swift; sourceTree = "<group>"; };
+		69B10D64263499D200617D17 /* ButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonExtension.swift; sourceTree = "<group>"; };
+		69B10D6C2635825F00617D17 /* BaseEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseEmptyView.swift; sourceTree = "<group>"; };
+		69B10D7126359E1000617D17 /* RefuelRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefuelRecordView.swift; sourceTree = "<group>"; };
+		69B10D902635A41A00617D17 /* FuelConsumptionDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelConsumptionDetailViewController.swift; sourceTree = "<group>"; };
+		69B10D952635A42E00617D17 /* RefuelRecordDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefuelRecordDetailViewController.swift; sourceTree = "<group>"; };
+		69B10D9B2635C74900617D17 /* FuelCapacityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelCapacityView.swift; sourceTree = "<group>"; };
+		69B10DA02635D05600617D17 /* HomeChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeChartView.swift; sourceTree = "<group>"; };
+		69B10DBF26371AE300617D17 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		69CAA35426275E8100333AA2 /* OilChecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OilChecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69CAA35726275E8100333AA2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		69CAA35B26275E8100333AA2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		69CAA35E26275E8100333AA2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		69CAA36026275E8400333AA2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		69CAA36326275E8400333AA2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		69CAA36526275E8400333AA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +100,8 @@
 		69CAA37526275E8400333AA2 /* OilCheckerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OilCheckerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69CAA37926275E8400333AA2 /* OilCheckerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OilCheckerUITests.swift; sourceTree = "<group>"; };
 		69CAA37B26275E8400333AA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69CAA3D02628B17D00333AA2 /* BaseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
+		69CAA3D92628B19600333AA2 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		9C031E0B931EC9CAECCC58A6 /* Pods_OilChecker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OilChecker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E77FFEB2FE77314B5AC3A207 /* Pods-OilChecker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OilChecker.debug.xcconfig"; path = "Target Support Files/Pods-OilChecker/Pods-OilChecker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,8 +146,125 @@
 				E77FFEB2FE77314B5AC3A207 /* Pods-OilChecker.debug.xcconfig */,
 				056F54F2EA47FA6C37668A74 /* Pods-OilChecker.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		69B10B85262DE7FA00617D17 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				69B10B86262DE80400617D17 /* Home */,
+				69B10B87262DE82F00617D17 /* Statistical */,
+				69B10B89262DE8A600617D17 /* Setting */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		69B10B86262DE80400617D17 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				69B10D9A2635C70000617D17 /* View */,
+				69B10B8A262DE8FE00617D17 /* Controller */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		69B10B87262DE82F00617D17 /* Statistical */ = {
+			isa = PBXGroup;
+			children = (
+				69B10D5126347F5400617D17 /* View */,
+				69B10D5226347F6A00617D17 /* StatisticalViewController.swift */,
+				69B10D902635A41A00617D17 /* FuelConsumptionDetailViewController.swift */,
+				69B10D952635A42E00617D17 /* RefuelRecordDetailViewController.swift */,
+			);
+			path = Statistical;
+			sourceTree = "<group>";
+		};
+		69B10B89262DE8A600617D17 /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				69B10CBC2631F89200617D17 /* Model */,
+				69B10C57262F5B7200617D17 /* View */,
+				69B10C3F262F517300617D17 /* SettingViewController.swift */,
+				69B10CD02633F6E200617D17 /* AddNewDeviceViewController.swift */,
+				69B10D422634480F00617D17 /* MalfunctionListViewController.swift */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		69B10B8A262DE8FE00617D17 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				69B10B8B262DE91700617D17 /* HomeViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		69B10BAB262DF41E00617D17 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				69B10D63263499B800617D17 /* Extension */,
+				69B10BAC262DF47900617D17 /* Macro.swift */,
+				69B10C60262F5DE100617D17 /* GlobalConfigure.swift */,
+				69B10DBF26371AE300617D17 /* UserDefaultsKeys.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		69B10C0F262DFA5F00617D17 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				69CAA36526275E8400333AA2 /* Info.plist */,
+				69B10C1A262DFAAC00617D17 /* Localizable.strings */,
+				69CAA36226275E8400333AA2 /* LaunchScreen.storyboard */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		69B10C57262F5B7200617D17 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				69B10C58262F5B8700617D17 /* SettingTableViewCell.swift */,
+				69B10C872631E41300617D17 /* AddSectionHeaderView.swift */,
+				69B10CC6263324E300617D17 /* AddNewCarTableViewCell.swift */,
+				69B10CCB26332E7700617D17 /* MyCarInfoTableViewCell.swift */,
+				69B10D4C263465EE00617D17 /* MalfunctionTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		69B10CBC2631F89200617D17 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				69B10CBD2631F8B200617D17 /* UserAndCarModel.swift */,
+				69B10D472634615B00617D17 /* MalfunctionModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		69B10D5126347F5400617D17 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				69B10D5A26348BEB00617D17 /* FuelConsumptionView.swift */,
+				69B10D7126359E1000617D17 /* RefuelRecordView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		69B10D63263499B800617D17 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				69B10D64263499D200617D17 /* ButtonExtension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		69B10D9A2635C70000617D17 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				69B10D9B2635C74900617D17 /* FuelCapacityView.swift */,
+				69B10DA02635D05600617D17 /* HomeChartView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		69CAA34B26275E8100333AA2 = {
@@ -123,11 +293,11 @@
 			isa = PBXGroup;
 			children = (
 				69CAA35726275E8100333AA2 /* AppDelegate.swift */,
-				69CAA35B26275E8100333AA2 /* ViewController.swift */,
-				69CAA35D26275E8100333AA2 /* Main.storyboard */,
+				69B10B85262DE7FA00617D17 /* Modules */,
+				69CAA3CD2628B11500333AA2 /* Base */,
+				69B10BAB262DF41E00617D17 /* Common */,
 				69CAA36026275E8400333AA2 /* Assets.xcassets */,
-				69CAA36226275E8400333AA2 /* LaunchScreen.storyboard */,
-				69CAA36526275E8400333AA2 /* Info.plist */,
+				69B10C0F262DFA5F00617D17 /* Resource */,
 			);
 			path = OilChecker;
 			sourceTree = "<group>";
@@ -148,6 +318,34 @@
 				69CAA37B26275E8400333AA2 /* Info.plist */,
 			);
 			path = OilCheckerUITests;
+			sourceTree = "<group>";
+		};
+		69CAA3CD2628B11500333AA2 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				69CAA3CF2628B14100333AA2 /* BaseView */,
+				69CAA3CE2628B12600333AA2 /* BaseViewController */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		69CAA3CE2628B12600333AA2 /* BaseViewController */ = {
+			isa = PBXGroup;
+			children = (
+				69CAA3D02628B17D00333AA2 /* BaseNavigationController.swift */,
+				69CAA3D92628B19600333AA2 /* BaseViewController.swift */,
+			);
+			path = BaseViewController;
+			sourceTree = "<group>";
+		};
+		69CAA3CF2628B14100333AA2 /* BaseView */ = {
+			isa = PBXGroup;
+			children = (
+				69B10B7B262DE76A00617D17 /* BaseTabBarItemContentView.swift */,
+				69B10B80262DE7A200617D17 /* BaseBouncesContentView.swift */,
+				69B10D6C2635825F00617D17 /* BaseEmptyView.swift */,
+			);
+			path = BaseView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -237,6 +435,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 69CAA34B26275E8100333AA2;
 			productRefGroup = 69CAA35526275E8100333AA2 /* Products */;
@@ -256,8 +455,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				69CAA36426275E8400333AA2 /* LaunchScreen.storyboard in Resources */,
+				69B10C18262DFAAC00617D17 /* Localizable.strings in Resources */,
 				69CAA36126275E8400333AA2 /* Assets.xcassets in Resources */,
-				69CAA35F26275E8100333AA2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,8 +523,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				69CAA35C26275E8100333AA2 /* ViewController.swift in Sources */,
+				69B10D65263499D200617D17 /* ButtonExtension.swift in Sources */,
+				69B10D912635A41A00617D17 /* FuelConsumptionDetailViewController.swift in Sources */,
+				69B10BAD262DF47900617D17 /* Macro.swift in Sources */,
+				69B10DA12635D05600617D17 /* HomeChartView.swift in Sources */,
+				69B10D432634480F00617D17 /* MalfunctionListViewController.swift in Sources */,
+				69B10C61262F5DE100617D17 /* GlobalConfigure.swift in Sources */,
+				69B10B81262DE7A200617D17 /* BaseBouncesContentView.swift in Sources */,
+				69B10D9C2635C74900617D17 /* FuelCapacityView.swift in Sources */,
+				69B10DC026371AE300617D17 /* UserDefaultsKeys.swift in Sources */,
+				69B10D482634615B00617D17 /* MalfunctionModel.swift in Sources */,
+				69B10CD12633F6E200617D17 /* AddNewDeviceViewController.swift in Sources */,
+				69CAA3DA2628B19600333AA2 /* BaseViewController.swift in Sources */,
+				69B10C882631E41300617D17 /* AddSectionHeaderView.swift in Sources */,
+				69B10C59262F5B8700617D17 /* SettingTableViewCell.swift in Sources */,
+				69B10CCC26332E7700617D17 /* MyCarInfoTableViewCell.swift in Sources */,
+				69B10D6D2635825F00617D17 /* BaseEmptyView.swift in Sources */,
+				69B10C40262F517300617D17 /* SettingViewController.swift in Sources */,
+				69B10CC7263324E300617D17 /* AddNewCarTableViewCell.swift in Sources */,
+				69B10D7226359E1000617D17 /* RefuelRecordView.swift in Sources */,
 				69CAA35826275E8100333AA2 /* AppDelegate.swift in Sources */,
+				69B10B7C262DE76A00617D17 /* BaseTabBarItemContentView.swift in Sources */,
+				69B10D5326347F6A00617D17 /* StatisticalViewController.swift in Sources */,
+				69B10CBE2631F8B200617D17 /* UserAndCarModel.swift in Sources */,
+				69B10B8C262DE91700617D17 /* HomeViewController.swift in Sources */,
+				69B10D4D263465EE00617D17 /* MalfunctionTableViewCell.swift in Sources */,
+				69B10D5B26348BEB00617D17 /* FuelConsumptionView.swift in Sources */,
+				69CAA3D12628B17E00333AA2 /* BaseNavigationController.swift in Sources */,
+				69B10D962635A42E00617D17 /* RefuelRecordDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,12 +586,13 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		69CAA35D26275E8100333AA2 /* Main.storyboard */ = {
+		69B10C1A262DFAAC00617D17 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				69CAA35E26275E8100333AA2 /* Base */,
+				69B10C19262DFAAC00617D17 /* en */,
+				69B10C1B262DFAB100617D17 /* zh-Hans */,
 			);
-			name = Main.storyboard;
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		69CAA36226275E8400333AA2 /* LaunchScreen.storyboard */ = {
@@ -384,6 +610,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -445,6 +672,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -503,7 +731,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = OilChecker/Info.plist;
+				INFOPLIST_FILE = OilChecker/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -524,7 +752,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = OilChecker/Info.plist;
+				INFOPLIST_FILE = OilChecker/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
