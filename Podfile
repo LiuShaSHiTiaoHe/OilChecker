@@ -14,7 +14,6 @@ target 'OilChecker' do
   pod 'IceCream'
   pod 'RealmSwift'
   pod 'Charts'
-  pod "GMStepper"
   pod 'DropDown'
 
   
@@ -24,12 +23,14 @@ target 'OilChecker' do
   pod 'SPPermissions/Bluetooth'
   pod 'IQKeyboardManagerSwift'
   pod 'SVProgressHUD'
-  pod 'DateTimePicker'
+#  pod 'DateTimePicker'
+  pod 'DatePickerDialog'
   pod 'SwiftyUserDefaults'
+  pod 'SwiftDate'
   
   pod 'WoodPeckeriOS', :configurations => ['Debug']
 
-  
+#  pod "GMStepper"
 #  pod 'SegementSlide'
 #  pod "Sheeeeeeeeet"
 #  pod 'BEMCheckBox'

@@ -1,42 +1,30 @@
 //
-//  MalfunctionModel.swift
+//  FuelLevelModel.swift
 //  OilChecker
 //
-//  Created by 顾桂俊 on 2021/4/24.
+//  Created by 顾桂俊 on 2021/4/30.
 //
 
-import Foundation
-import CloudKit
-import IceCream
+import UIKit
 import RealmSwift
 
-class MalfunctionModel: Object {
+class RefuelRecordModel: Object {
 
     @objc dynamic var id = NSUUID().uuidString
     @objc dynamic var deviceID = ""
-    @objc dynamic var mName = ""
-    @objc dynamic var mcode = ""
-    @objc dynamic var mDescription = ""
-    @objc dynamic var mtime = Date()
+    @objc dynamic var time = Date()
+    @objc dynamic var refuelLevel = 0.0
     @objc dynamic var isDeleted = false
     override class func primaryKey() -> String? {
         return "id"
     }
 }
 
-extension MalfunctionModel: CKRecordRecoverable {
-    
-}
-
-extension MalfunctionModel: CKRecordConvertible {
-    
-}
-
 extension SettingManager{
-    func updateMalfunctionInfo(_ data: MalfunctionModel){
+    func updateRefuelRecordModel(_ data: RefuelRecordModel){
         
         let token = realm.observe { notification, realm in
-            self.delegate?.UpdateMalfunctionInfoComplete()
+            self.delegate?.updateFuelLevelComplete()
         }
         
         if data.id.isEmpty {
@@ -51,14 +39,13 @@ extension SettingManager{
         token.invalidate()
     }
     
-    func deleteMalfunctionInfo(_ modelID: String){
-            
-        let model = realm.object(ofType: MalfunctionModel.self, forPrimaryKey: modelID)
+    func deleteRefuelRecordModel(_ modelID: String){
+        let model = realm.object(ofType: RefuelRecordModel.self, forPrimaryKey: modelID)
         guard model != nil else {
             return
         }
         let token = realm.observe { notification, realm in
-            self.delegate?.UpdateMalfunctionInfoComplete()
+            self.delegate?.updateFuelLevelComplete()
         }
         try! realm.write{
             model?.isDeleted = true
@@ -66,3 +53,4 @@ extension SettingManager{
         token.invalidate()
     }
 }
+

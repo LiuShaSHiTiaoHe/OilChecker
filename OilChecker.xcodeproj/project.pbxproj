@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6953CCE82642E5A100D48DA2 /* RecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */; };
+		6953CCFB26431F8100D48DA2 /* OCInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CCFA26431F8100D48DA2 /* OCInputView.swift */; };
 		69B10B7C262DE76A00617D17 /* BaseTabBarItemContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10B7B262DE76A00617D17 /* BaseTabBarItemContentView.swift */; };
 		69B10B81262DE7A200617D17 /* BaseBouncesContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10B80262DE7A200617D17 /* BaseBouncesContentView.swift */; };
 		69B10B8C262DE91700617D17 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10B8B262DE91700617D17 /* HomeViewController.swift */; };
@@ -33,6 +35,10 @@
 		69B10D9C2635C74900617D17 /* FuelCapacityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10D9B2635C74900617D17 /* FuelCapacityView.swift */; };
 		69B10DA12635D05600617D17 /* HomeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10DA02635D05600617D17 /* HomeChartView.swift */; };
 		69B10DC026371AE300617D17 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10DBF26371AE300617D17 /* UserDefaultsKeys.swift */; };
+		69B10E27263B237C00617D17 /* RefuelRecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10E26263B237C00617D17 /* RefuelRecordModel.swift */; };
+		69B10E46263B2AAC00617D17 /* FuelConsumptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10E45263B2AAC00617D17 /* FuelConsumptionModel.swift */; };
+		69B10E68263DBEAE00617D17 /* DateValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10E67263DBEAE00617D17 /* DateValueFormatter.swift */; };
+		69B10E6D263DD95C00617D17 /* BaseFuelDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10E6C263DD95C00617D17 /* BaseFuelDataModel.swift */; };
 		69CAA35826275E8100333AA2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CAA35726275E8100333AA2 /* AppDelegate.swift */; };
 		69CAA36126275E8400333AA2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69CAA36026275E8400333AA2 /* Assets.xcassets */; };
 		69CAA36426275E8400333AA2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69CAA36226275E8400333AA2 /* LaunchScreen.storyboard */; };
@@ -62,6 +68,8 @@
 
 /* Begin PBXFileReference section */
 		056F54F2EA47FA6C37668A74 /* Pods-OilChecker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OilChecker.release.xcconfig"; path = "Target Support Files/Pods-OilChecker/Pods-OilChecker.release.xcconfig"; sourceTree = "<group>"; };
+		6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTableViewCell.swift; sourceTree = "<group>"; };
+		6953CCFA26431F8100D48DA2 /* OCInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCInputView.swift; sourceTree = "<group>"; };
 		69B10B7B262DE76A00617D17 /* BaseTabBarItemContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarItemContentView.swift; sourceTree = "<group>"; };
 		69B10B80262DE7A200617D17 /* BaseBouncesContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBouncesContentView.swift; sourceTree = "<group>"; };
 		69B10B8B262DE91700617D17 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +97,10 @@
 		69B10D9B2635C74900617D17 /* FuelCapacityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelCapacityView.swift; sourceTree = "<group>"; };
 		69B10DA02635D05600617D17 /* HomeChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeChartView.swift; sourceTree = "<group>"; };
 		69B10DBF26371AE300617D17 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
+		69B10E26263B237C00617D17 /* RefuelRecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefuelRecordModel.swift; sourceTree = "<group>"; };
+		69B10E45263B2AAC00617D17 /* FuelConsumptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelConsumptionModel.swift; sourceTree = "<group>"; };
+		69B10E67263DBEAE00617D17 /* DateValueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateValueFormatter.swift; sourceTree = "<group>"; };
+		69B10E6C263DD95C00617D17 /* BaseFuelDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFuelDataModel.swift; sourceTree = "<group>"; };
 		69CAA35426275E8100333AA2 /* OilChecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OilChecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69CAA35726275E8100333AA2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69CAA36026275E8400333AA2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -162,6 +174,7 @@
 		69B10B86262DE80400617D17 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				69B10E08263B12E700617D17 /* Model */,
 				69B10D9A2635C70000617D17 /* View */,
 				69B10B8A262DE8FE00617D17 /* Controller */,
 			);
@@ -228,6 +241,7 @@
 				69B10CC6263324E300617D17 /* AddNewCarTableViewCell.swift */,
 				69B10CCB26332E7700617D17 /* MyCarInfoTableViewCell.swift */,
 				69B10D4C263465EE00617D17 /* MalfunctionTableViewCell.swift */,
+				6953CCFA26431F8100D48DA2 /* OCInputView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -246,6 +260,7 @@
 			children = (
 				69B10D5A26348BEB00617D17 /* FuelConsumptionView.swift */,
 				69B10D7126359E1000617D17 /* RefuelRecordView.swift */,
+				6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -254,6 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				69B10D64263499D200617D17 /* ButtonExtension.swift */,
+				69B10E67263DBEAE00617D17 /* DateValueFormatter.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -265,6 +281,16 @@
 				69B10DA02635D05600617D17 /* HomeChartView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		69B10E08263B12E700617D17 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				69B10E26263B237C00617D17 /* RefuelRecordModel.swift */,
+				69B10E45263B2AAC00617D17 /* FuelConsumptionModel.swift */,
+				69B10E6C263DD95C00617D17 /* BaseFuelDataModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		69CAA34B26275E8100333AA2 = {
@@ -527,6 +553,7 @@
 				69B10D912635A41A00617D17 /* FuelConsumptionDetailViewController.swift in Sources */,
 				69B10BAD262DF47900617D17 /* Macro.swift in Sources */,
 				69B10DA12635D05600617D17 /* HomeChartView.swift in Sources */,
+				69B10E6D263DD95C00617D17 /* BaseFuelDataModel.swift in Sources */,
 				69B10D432634480F00617D17 /* MalfunctionListViewController.swift in Sources */,
 				69B10C61262F5DE100617D17 /* GlobalConfigure.swift in Sources */,
 				69B10B81262DE7A200617D17 /* BaseBouncesContentView.swift in Sources */,
@@ -538,19 +565,24 @@
 				69B10C882631E41300617D17 /* AddSectionHeaderView.swift in Sources */,
 				69B10C59262F5B8700617D17 /* SettingTableViewCell.swift in Sources */,
 				69B10CCC26332E7700617D17 /* MyCarInfoTableViewCell.swift in Sources */,
+				69B10E46263B2AAC00617D17 /* FuelConsumptionModel.swift in Sources */,
 				69B10D6D2635825F00617D17 /* BaseEmptyView.swift in Sources */,
 				69B10C40262F517300617D17 /* SettingViewController.swift in Sources */,
 				69B10CC7263324E300617D17 /* AddNewCarTableViewCell.swift in Sources */,
 				69B10D7226359E1000617D17 /* RefuelRecordView.swift in Sources */,
 				69CAA35826275E8100333AA2 /* AppDelegate.swift in Sources */,
 				69B10B7C262DE76A00617D17 /* BaseTabBarItemContentView.swift in Sources */,
+				69B10E68263DBEAE00617D17 /* DateValueFormatter.swift in Sources */,
 				69B10D5326347F6A00617D17 /* StatisticalViewController.swift in Sources */,
 				69B10CBE2631F8B200617D17 /* UserAndCarModel.swift in Sources */,
 				69B10B8C262DE91700617D17 /* HomeViewController.swift in Sources */,
+				69B10E27263B237C00617D17 /* RefuelRecordModel.swift in Sources */,
 				69B10D4D263465EE00617D17 /* MalfunctionTableViewCell.swift in Sources */,
 				69B10D5B26348BEB00617D17 /* FuelConsumptionView.swift in Sources */,
 				69CAA3D12628B17E00333AA2 /* BaseNavigationController.swift in Sources */,
 				69B10D962635A42E00617D17 /* RefuelRecordDetailViewController.swift in Sources */,
+				6953CCE82642E5A100D48DA2 /* RecordTableViewCell.swift in Sources */,
+				6953CCFB26431F8100D48DA2 /* OCInputView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

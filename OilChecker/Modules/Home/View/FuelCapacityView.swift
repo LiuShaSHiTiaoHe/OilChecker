@@ -35,16 +35,17 @@ class FuelCapacityView: UIView {
         
         numberLabel.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(kMargin/2)
-//            make.top.equalTo(nameLabel.snp.bottom).offset(kMargin/4)
             make.bottom.equalToSuperview().offset(-kMargin/4)
-            make.right.equalToSuperview().offset(-kMargin*1.5)
-            make.height.equalTo(30)
+            make.right.equalToSuperview().offset(-kMargin*2)
+//            make.height.equalTo(30)
+            make.top.equalTo(nameLabel.snp.bottom)
         }
         
         unitsLabel.snp.makeConstraints { (make) in
             make.right.equalToSuperview()
-            make.left.equalTo(numberLabel.snp.right)
-            make.centerY.equalTo(numberLabel.snp.centerY)
+            make.left.equalTo(numberLabel.snp.right).offset(kMargin/2)
+//            make.centerY.equalTo(numberLabel.snp.centerY)
+            make.bottom.equalTo(numberLabel.snp.bottom)
             make.height.equalTo(30)
         }
     }
@@ -60,8 +61,8 @@ class FuelCapacityView: UIView {
     lazy var numberLabel: UILabel = {
         let label = UILabel.init()
         label.textColor = kSecondBlackColor
-        label.font = k14Font
-        label.textAlignment = .right
+        label.font = k20Font
+        label.textAlignment = .center
         return label
     }()
     

@@ -13,16 +13,19 @@ import RealmSwift
 class UserAndCarModel: Object {
 
     @objc dynamic var id = NSUUID().uuidString
-    @objc dynamic var name = ""
+    @objc dynamic var deviceID = ""
+    @objc dynamic var deviceScanTimeInterval: Int = 0
+    @objc dynamic var deviceCacheStorageDuration: Int = 0
+
+    @objc dynamic var userName = ""
     @objc dynamic var carNumber = ""
     @objc dynamic var carDescription = ""
-    @objc dynamic var fuelTankHeight: Float = 0.0
-    @objc dynamic var fuelTankBottomArea: Float = 0.0
+    @objc dynamic var fuelTankWidth: Float = 0.0
+    @objc dynamic var fuelTankLength: Float = 0.0
     @objc dynamic var fuelTankVolume: Float = 0.0
-    
     @objc dynamic var fuelTankInfo = ""
-    @objc dynamic var time = ""
-
+    
+    @objc dynamic var createTime = Date()
     @objc dynamic var isDeleted = false
     
     
@@ -44,13 +47,14 @@ extension UserAndCarModel: CKRecordConvertible {
 protocol SettingManagerRealmNotificationDelegate {
     func UpdateUserCarComplete()
     func UpdateMalfunctionInfoComplete()
+    func updateFuelLevelComplete()
     
 }
 
 extension SettingManagerRealmNotificationDelegate {
     func UpdateUserCarComplete(){}
     func UpdateMalfunctionInfoComplete(){}
-    
+    func updateFuelLevelComplete(){}
 }
 
 

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftDate
 
 class MyCarInfoTableViewCell: UITableViewCell {
 
@@ -32,8 +33,8 @@ class MyCarInfoTableViewCell: UITableViewCell {
     
     func updateCellValue(_ value: UserAndCarModel) {
         carNumberLabel.text = value.carNumber
-        userName.text = value.name
-        timeLabel.text = value.time
+        userName.text = value.userName
+        timeLabel.text = value.createTime.toString(.custom(BaseDateFormatString))
         fuelTankVolumeLabel.text = value.fuelTankVolume.string + "L"
         
     }
@@ -44,7 +45,7 @@ class MyCarInfoTableViewCell: UITableViewCell {
         bgView.addSubview(userName)
         bgView.addSubview(fuelTankVolumeLabel)
         bgView.addSubview(timeLabel)
-
+        fuelTankVolumeLabel.isHidden = true
         bgView.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(kMargin/2)
             make.top.equalToSuperview().offset(kMargin/4)
@@ -84,11 +85,12 @@ class MyCarInfoTableViewCell: UITableViewCell {
     lazy var bgView: UIView = {
         let view = UIView.init()
         view.backgroundColor = UIColor.init(hex: 0xE6E7FD)
-        view.shadowOffset = CGSize.init(width: 0, height: 2)
+        view.layer.cornerRadius = 10
+        view.shadowOffset = CGSize.init(width: 2, height: 2)
         view.shadowRadius = 5
-        view.shadowColor = .black
+        view.shadowColor = kBlackColor
         view.shadowOpacity = 0.2
-        view.layer.masksToBounds = false
+//        view.layer.masksToBounds = false
         
         return view
     }()

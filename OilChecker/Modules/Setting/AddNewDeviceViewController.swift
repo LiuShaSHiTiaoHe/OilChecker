@@ -7,7 +7,7 @@
 
 import UIKit
 import SkyFloatingLabelTextField
-import GMStepper
+//import GMStepper
 import SVProgressHUD
 
 let TextFieldHeight = 45
@@ -25,7 +25,7 @@ class AddNewDeviceViewController: UIViewController {
     lazy var rightSaveButton: UIButton = {
         let btn = UIButton.init(type: .custom)
         btn.frame = CGRect.init(x: 0, y: 0, width: 80, height: 30)
-        btn.backgroundColor = kThemeColor
+        btn.backgroundColor = kThemeGreenColor
         btn.layer.cornerRadius = 15
         btn.setTitle("Save", for: .normal)
         btn.setTitleColor(kWhiteColor, for: .normal)
@@ -35,115 +35,60 @@ class AddNewDeviceViewController: UIViewController {
     }()
     
     
-    lazy var userNameTextfield: SkyFloatingLabelTextField = {
-        let tf = SkyFloatingLabelTextField.init()
-        tf.placeholder = "Enter Your Name"
-        tf.title = "Name"
-        tf.placeholderFont = k14Font
-        tf.titleFont = k12Font
-        tf.font = k14Font
-        
-        tf.tintColor = kThemeColor
-        tf.selectedLineColor = kThemeColor
-        tf.selectedTitleColor = kThemeColor
-        return tf
+    
+    lazy var nameInput: OCInputView = {
+        let input = OCInputView.init()
+        input.titleLabel.text = "Name"
+        input.textfield.placeholder = "Enter Your Name"
+        return input
     }()
     
-    lazy var carNumberTextField: SkyFloatingLabelTextField = {
-        let tf = SkyFloatingLabelTextField.init()
-        tf.placeholder = "Enter Your Car Number"
-        tf.title = "Car Number"
-        tf.placeholderFont = k14Font
-        tf.titleFont = k12Font
-        tf.font = k14Font
-        
-        tf.tintColor = kThemeColor
-        tf.selectedLineColor = kThemeColor
-        tf.selectedTitleColor = kThemeColor
-        return tf
+    lazy var carNumberInput: OCInputView = {
+        let input = OCInputView.init()
+        input.titleLabel.text = "Plate Number"
+        input.textfield.placeholder = "Enter Your Plate Number"
+        return input
     }()
+    
+    
+    lazy var fuelTankLengthInput: OCInputView = {
+        let input = OCInputView.init()
+        input.titleLabel.text = "Length"
+        input.textfield.placeholder = "Length"
+        input.unitsLabel.text = "CM"
+        return input
+    }()
+    
+    
+    lazy var fuelTankWitdhInput: OCInputView = {
+        let input = OCInputView.init()
+        input.titleLabel.text = "Witdh"
+        input.textfield.placeholder = "Witdh"
+        input.unitsLabel.text = "CM"
+        return input
+    }()
+    
+    
+    lazy var scanTimeIntervalInput: OCInputView = {
+        let input = OCInputView.init()
+        input.titleLabel.text = "Scan TimeInterval"
+        input.textfield.placeholder = "Set Device Scan TimeInterval"
+        input.unitsLabel.text = "Second"
+        return input
+    }()
+    
+    
+    lazy var cacheStorageDurationInput: OCInputView = {
+        let input = OCInputView.init()
+        input.titleLabel.text = "Device Storage Duration"
+        input.textfield.placeholder = "Set Device Data Storage Duration"
+        input.unitsLabel.text = "Day"
+        return input
+    }()
+    
+    
+    //////////////////////////////////////
 
-    
-    lazy var tankTextField: SkyFloatingLabelTextField = {
-        let tf = SkyFloatingLabelTextField.init()
-        tf.placeholder = "Volume"
-        tf.title = "Volume"
-        tf.placeholderFont = k12Font
-        tf.titleFont = k12Font
-        tf.font = k14Font
-        
-        tf.tintColor = kThemeColor
-        tf.selectedLineColor = kThemeColor
-        tf.selectedTitleColor = kThemeColor
-        tf.keyboardType = .numberPad
-        tf.delegate = self
-
-        return tf
-    }()
-    
-    lazy var tankVolumeUnits: UILabel = {
-        let label = UILabel()
-        label.text = " = "
-        label.textColor = kThemeColor
-        label.textAlignment = .left
-        label.font = k12Font
-        return label
-    }()
-    
-    
-    lazy var tankAreaField: SkyFloatingLabelTextField = {
-        let tf = SkyFloatingLabelTextField.init()
-        tf.placeholder = "Area"
-        tf.title = "Area"
-        tf.placeholderFont = k12Font
-        tf.titleFont = k12Font
-        tf.font = k14Font
-        
-        tf.tintColor = kThemeColor
-        tf.selectedLineColor = kThemeColor
-        tf.selectedTitleColor = kThemeColor
-        tf.keyboardType = .numberPad
-        tf.delegate = self
-
-        return tf
-    }()
-    
-    lazy var tankAreaUnits: UILabel = {
-        let label = UILabel()
-        label.text = " X "
-        label.textColor = kThemeColor
-        label.textAlignment = .left
-        label.font = k12Font
-
-        return label
-    }()
-    
-    
-    lazy var tankHeightField: SkyFloatingLabelTextField = {
-        let tf = SkyFloatingLabelTextField.init()
-        tf.placeholder = "Height"
-        tf.title = "Height"
-        tf.placeholderFont = k12Font
-        tf.titleFont = k12Font
-        tf.font = k14Font
-        
-        tf.tintColor = kThemeColor
-        tf.selectedLineColor = kThemeColor
-        tf.selectedTitleColor = kThemeColor
-        tf.keyboardType = .numberPad
-        tf.delegate = self
-        return tf
-    }()
-    
-    lazy var tankHeightUnits: UILabel = {
-        let label = UILabel()
-        label.text = ""
-        label.textColor = kThemeColor
-        label.textAlignment = .left
-        label.font = k12Font
-        return label
-    }()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -156,99 +101,86 @@ class AddNewDeviceViewController: UIViewController {
     
     func initUI() {
         self.view.addSubview(scrollView)
-        scrollView.addSubview(userNameTextfield)
-        scrollView.addSubview(carNumberTextField)
-        scrollView.addSubview(tankTextField)
-        
-        scrollView.addSubview(tankVolumeUnits)
-        scrollView.addSubview(tankAreaField)
-        scrollView.addSubview(tankAreaUnits)
-        scrollView.addSubview(tankHeightField)
-        scrollView.addSubview(tankHeightUnits)
 
-        
+        scrollView.addSubview(nameInput)
+        scrollView.addSubview(carNumberInput)
+        scrollView.addSubview(fuelTankLengthInput)
+        scrollView.addSubview(fuelTankWitdhInput)
+        scrollView.addSubview(scanTimeIntervalInput)
+        scrollView.addSubview(cacheStorageDurationInput)
         
         scrollView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
         
-        userNameTextfield.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().offset(kMargin)
-            make.width.equalTo(200)
-            make.height.equalTo(TextFieldHeight)
+        nameInput.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(kMargin)
-        }
-        
-        carNumberTextField.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(kMargin)
-            make.width.equalTo(200)
-            make.height.equalTo(TextFieldHeight)
-            make.top.equalTo(userNameTextfield.snp.bottom).offset(kMargin*2)
+            make.height.equalTo(80)
+            make.width.equalTo(kScreenWidth - kMargin*3)
         }
         
-        
-        tankTextField.snp.makeConstraints { (make) in
+        carNumberInput.snp.makeConstraints { (make) in
+            make.top.equalTo(nameInput.snp.bottom).offset(kMargin)
             make.left.equalToSuperview().offset(kMargin)
-            make.width.equalTo(80)
-            make.height.equalTo(TextFieldHeight)
-            make.top.equalTo(carNumberTextField.snp.bottom).offset(kMargin*2)
+            make.height.equalTo(80)
+            make.width.equalTo(kScreenWidth - kMargin*3)
         }
         
-        tankVolumeUnits.snp.makeConstraints { (make) in
-            make.width.equalTo(30)
-            make.height.equalTo(20)
-            make.left.equalTo(tankTextField.snp.right).offset(kMargin/2)
-            make.bottom.equalTo(tankTextField.snp.bottom)
+        fuelTankLengthInput.snp.makeConstraints { (make) in
+            make.top.equalTo(carNumberInput.snp.bottom).offset(kMargin)
+            make.left.equalToSuperview().offset(kMargin)
+            make.height.equalTo(80)
+            make.width.equalTo(kScreenWidth - kMargin*3)
         }
         
-        tankAreaField.snp.makeConstraints { (make) in
-            make.width.equalTo(80)
-            make.height.equalTo(TextFieldHeight)
-            make.left.equalTo(tankVolumeUnits.snp.right)
-            make.bottom.equalTo(tankTextField.snp.bottom)
+        fuelTankWitdhInput.snp.makeConstraints { (make) in
+            make.top.equalTo(fuelTankLengthInput.snp.bottom).offset(kMargin)
+            make.left.equalToSuperview().offset(kMargin)
+            make.height.equalTo(80)
+            make.width.equalTo(kScreenWidth - kMargin*3)
+        }
+        
+        
+        scanTimeIntervalInput.snp.makeConstraints { (make) in
+            make.top.equalTo(fuelTankWitdhInput.snp.bottom).offset(kMargin)
+            make.left.equalToSuperview().offset(kMargin)
+            make.height.equalTo(80)
+            make.width.equalTo(kScreenWidth - kMargin*3)
+        }
+        
+        cacheStorageDurationInput.snp.makeConstraints { (make) in
+            make.top.equalTo(scanTimeIntervalInput.snp.bottom).offset(kMargin)
+            make.left.equalToSuperview().offset(kMargin)
+            make.height.equalTo(80)
+            make.width.equalTo(kScreenWidth - kMargin*3)
+        }
 
-        }
-        
-        tankAreaUnits.snp.makeConstraints { (make) in
-            make.bottom.equalTo(tankTextField.snp.bottom)
-            make.width.equalTo(30)
-            make.height.equalTo(20)
-            make.left.equalTo(tankAreaField.snp.right).offset(kMargin/2)
-        }
-        
-        tankHeightField.snp.makeConstraints { (make) in
-            make.width.equalTo(80)
-            make.height.equalTo(TextFieldHeight)
-            make.bottom.equalTo(tankTextField.snp.bottom)
-            make.left.equalTo(tankAreaUnits.snp.right)
-        }
-        
-        tankHeightUnits.snp.makeConstraints { (make) in
-            make.bottom.equalTo(tankTextField.snp.bottom)
-            make.width.equalTo(30)
-            make.height.equalTo(20)
-            make.left.equalTo(tankHeightField.snp.right)
-        }
     }
 
     
     @objc
     func saveButtonAction() {
         logger.info("saveButtonAction")
-        let nameString = userNameTextfield.text
-        let carNumberSting = carNumberTextField.text
-        let volumeString = tankTextField.text
-        let tankBottomArea = tankAreaField.text
-        let tankHeight = tankHeightField.text
+        let nameString = nameInput.textfield.text
+        let carNumberSting = carNumberInput.textfield.text
+        let tankLength = fuelTankLengthInput.textfield.text
+        let tankWitdh = fuelTankWitdhInput.textfield.text
+        let scanTimeIntervalString = scanTimeIntervalInput.textfield.text
+        let storageDurationString = cacheStorageDurationInput.textfield.text
         
-        if !nameString!.isEmpty && !carNumberSting!.isEmpty && !volumeString!.isEmpty && !tankBottomArea!.isEmpty && !tankHeight!.isEmpty {
+        
+        
+        if !nameString!.isEmpty && !carNumberSting!.isEmpty && !tankLength!.isEmpty && !tankWitdh!.isEmpty && !scanTimeIntervalString!.isEmpty && !storageDurationString!.isEmpty {
             let userModel = UserAndCarModel()
+            userModel.deviceID = "999"
             userModel.carNumber = carNumberSting!
-            userModel.fuelTankHeight = tankHeight!.float()!
-            userModel.fuelTankBottomArea = tankBottomArea!.float()!
-            userModel.fuelTankVolume = volumeString!.float()!
-            userModel.time = NSDate.now.string(withFormat: "yyyy-MM-dd HH:mm:ss")
-            userModel.name = nameString!
+            userModel.fuelTankLength = tankLength!.float()!
+            userModel.fuelTankWidth = tankWitdh!.float()!
+            userModel.createTime = NSDate.now
+            userModel.userName = nameString!
+            userModel.deviceScanTimeInterval = scanTimeIntervalString!.float()!.int
+            userModel.deviceCacheStorageDuration = storageDurationString!.float()!.int
             SettingManager.shared.updateUserCarInfo(userModel)
             SVProgressHUD.showSuccess(withStatus: "Add Success")
             self.navigationController?.popViewController(animated: true)
@@ -256,56 +188,6 @@ class AddNewDeviceViewController: UIViewController {
             SVProgressHUD.showError(withStatus: "Please Enter Correctly")
         }
         
-        
-        
-        
     }
 }
 
-extension AddNewDeviceViewController: UITextFieldDelegate {
-    
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        var updatedText = ""
-        if let text = textField.text,let textRange = Range(range, in: text) {
-                updatedText = text.replacingCharacters(in: textRange,with: string)
-        }
-        if updatedText.isEmpty || updatedText == "0"{
-            return true
-        }
-        
-        if textField == tankTextField {
-
-            if !tankAreaField.text!.isEmpty{
-                let height = NSDecimalNumber.init(string: updatedText).dividing(by: NSDecimalNumber.init(string: tankAreaField.text)).stringValue
-                tankHeightField.text = height
-            }
-        }
-        
-        if textField == tankAreaField {
-            
-            if !tankTextField.text!.isEmpty {
-                let height = NSDecimalNumber.init(string: tankTextField.text).dividing(by: NSDecimalNumber.init(string: updatedText)).stringValue
-                tankHeightField.text = height
-            }else{
-                if !tankHeightField.text!.isEmpty {
-                    let height = NSDecimalNumber.init(string: tankHeightField.text).multiplying(by: NSDecimalNumber.init(string: updatedText)).stringValue
-                    tankTextField.text = height
-                }
-            }
-        }
-        if textField == tankHeightField {
-            if !tankAreaField.text!.isEmpty {
-                let height = NSDecimalNumber.init(string: tankAreaField.text).multiplying(by: NSDecimalNumber.init(string: updatedText)).stringValue
-                tankTextField.text = height
-            }else{
-                if !tankTextField.text!.isEmpty {
-                    let height = NSDecimalNumber.init(string: tankTextField.text).dividing(by: NSDecimalNumber.init(string: updatedText)).stringValue
-                    tankAreaField.text = height
-                }
-            }
-        }
-        return true
-    }
-}

@@ -9,6 +9,9 @@ import UIKit
 import SnapKit
 import ESTabBarController_swift
 import IQKeyboardManagerSwift
+import SwiftDate
+import SwifterSwift
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -26,6 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //               ])
 //        application.registerForRemoteNotifications()
         
+//        addFakeData()
+//        addFakeReFuelData()
+        logger.info("\(NSHomeDirectory())")
         return true
     }
 
@@ -56,8 +62,79 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
         UIApplication.shared.keyWindow!.rootViewController = initializeRootViewController()
     }
-
     
+    func addFakeReFuelData() {
+        
+        let startDate = DateInRegion.init(Date(), region: .UTC).date.nearestHour - 500.hours//getDataRegion().date.nearestHour - 500.hours
+
+        for index in 1...100 {
+            let data = Double(arc4random_uniform(100))+50
+            let date = startDate + (index*24).hours
+            let fuelMode = RefuelRecordModel.init()
+            fuelMode.deviceID = "999"
+            fuelMode.refuelLevel = data
+            fuelMode.time = date
+            SettingManager.shared.updateRefuelRecordModel(fuelMode)
+        }
+
+        for index in 1...100 {
+            let data = Double(arc4random_uniform(100))+50
+            let date = startDate + (index*24).hours
+            let fuelMode = FuelConsumptionModel.init()
+            fuelMode.deviceID = "999"
+            fuelMode.consumption = data
+            fuelMode.time = date
+            SettingManager.shared.updateFuelConsumptionModel(fuelMode)
+        }
+        
+    }
+
+    func addFakeData() {
+//        let startDate = Date().nearestHour - 500.hours
+
+        let startDate = DateInRegion.init(Date(), region: .UTC).date.nearestHour - 1500.hours//getDataRegion().date.nearestHour - 500.hours
+        
+        for index in 1...4000 {
+            let data = Double(arc4random_uniform(100))+50
+            let date = startDate + (index*8).hours
+            let baseFuelModel = BaseFuelDataModel.init()
+            baseFuelModel.deviceID = "999"
+            baseFuelModel.fuelLevel = data.float
+            baseFuelModel.rTime = date
+            SettingManager.shared.updateBaseFuelDataModel(baseFuelModel)
+            
+        }
+//        for index in 1...100 {
+//            let data = Double(arc4random_uniform(100))
+//            let date = startDate + (index*2).hours
+//            let fuelMode = FuelLevelModel.init()
+//            fuelMode.deviceID = "998"
+//            fuelMode.fuelLevel = data
+//            fuelMode.time = date
+//            SettingManager.shared.updateFuelLevelModel(fuelMode)
+//        }
+//
+//        for index in 1...100 {
+//            let data = Double(arc4random_uniform(10))
+//            let date = startDate + index.hours
+//            let fuelMode = FuelConsumptionModel.init()
+//            fuelMode.deviceID = "998"
+//            fuelMode.consumption = data
+//            fuelMode.time = date
+//            SettingManager.shared.updateFuelConsumptionModel(fuelMode)
+//        }
+        
+        for index in 1...10 {
+            let data = Double(arc4random_uniform(100))
+            let date = startDate + (index*2).hours
+            let malfuntion = MalfunctionModel.init()
+            malfuntion.deviceID = "999"
+            malfuntion.mcode = data.toString()
+            malfuntion.mName = "device error"
+            malfuntion.mtime = date
+            SettingManager.shared.updateMalfunctionInfo(malfuntion)
+        }
+    }
 
      func initializeRootViewController() -> ESTabBarController {
         let tabBarController = ESTabBarController()

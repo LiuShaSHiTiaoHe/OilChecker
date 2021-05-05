@@ -4,10 +4,9 @@ PODS:
   - Charts (3.6.0):
     - Charts/Core (= 3.6.0)
   - Charts/Core (3.6.0)
-  - DateTimePicker (2.5.3)
+  - DatePickerDialog (4.0)
   - DropDown (2.3.13)
   - ESTabBarController-swift (2.8.0)
-  - GMStepper (2.2)
   - IceCream (2.0.0):
     - RealmSwift
   - IQKeyboardManagerSwift (6.5.6)
@@ -30,6 +29,7 @@ PODS:
     - SPPermissions/Core
   - SPPermissions/Core (5.4.2)
   - SVProgressHUD (2.2.5)
+  - SwiftDate (6.3.1)
   - SwiftEntryKit (1.2.7):
     - QuickLayout (= 3.0.0)
   - SwifterSwift (5.2.0):
@@ -64,10 +64,9 @@ DEPENDENCIES:
   - BetterSegmentedControl
   - BluetoothKit
   - Charts
-  - DateTimePicker
+  - DatePickerDialog
   - DropDown
   - ESTabBarController-swift
-  - GMStepper
   - IceCream
   - IQKeyboardManagerSwift
   - Localize-Swift
@@ -77,6 +76,7 @@ DEPENDENCIES:
   - SnapKit
   - SPPermissions/Bluetooth
   - SVProgressHUD
+  - SwiftDate
   - SwiftEntryKit
   - SwifterSwift
   - SwiftyUserDefaults
@@ -87,10 +87,9 @@ SPEC REPOS:
     - BetterSegmentedControl
     - BluetoothKit
     - Charts
-    - DateTimePicker
+    - DatePickerDialog
     - DropDown
     - ESTabBarController-swift
-    - GMStepper
     - IceCream
     - IQKeyboardManagerSwift
     - Localize-Swift
@@ -102,6 +101,7 @@ SPEC REPOS:
     - SnapKit
     - SPPermissions
     - SVProgressHUD
+    - SwiftDate
     - SwiftEntryKit
     - SwifterSwift
     - SwiftyUserDefaults
@@ -111,10 +111,9 @@ SPEC CHECKSUMS:
   BetterSegmentedControl: 09607b27861d49cbce48b7673b74f9150a3d371a
   BluetoothKit: 00e189e01ba765e2689c46fbd8d0ede62984441b
   Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
-  DateTimePicker: 52701ddf656a50856d3510955933f767cd2c947c
+  DatePickerDialog: ccff2f91ff7a018057a4d72fa5ad6de49c8cb0cd
   DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
   ESTabBarController-swift: 05593a6ad64700b03c0eb60ff625916370aa4136
-  GMStepper: 89fb106944dfcc3aa3add7164e3ebd463ea2104b
   IceCream: a7d6ffdef8e36ce1d089738e51d5e918c4862fd8
   IQKeyboardManagerSwift: c7df9d2deb356c04522f5c4b7b6e4ce4d8ed94fe
   Localize-Swift: 6f4475136bdb0d7b2882ea3d4ea919d70142b232
@@ -126,11 +125,12 @@ SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SPPermissions: f516d117ced15316a5d4dd667274d12e1c3e8a4b
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  SwiftDate: 72d28954e8e1c6c1c0f917ccc8005e4f83c7d4b2
   SwiftEntryKit: 537c92699d6034efb1ef9c32b11e0b37c97aa589
   SwifterSwift: 334181863c416882d97b7a60c05054d9e4d799e2
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
   WoodPeckeriOS: 29f6fb07de24c8c8716b56a8764876a739c6e8e3
 
-PODFILE CHECKSUM: 32da5fda3cb9737312f3201a1c669db8c8d55791
+PODFILE CHECKSUM: d9da4f3e242a49c61e75aa1307db1db2692f97e2
 
 COCOAPODS: 1.10.0

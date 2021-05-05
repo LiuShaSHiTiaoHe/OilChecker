@@ -58,8 +58,10 @@ let kThemeColor = UIColor.init(hex: 0x5944DD)!
 /// 通用背景颜色
 let kBackgroundColor : UIColor = UIColor.init(hex: 0xf2f2f2)!
 /// 导航栏背景颜色
-//let kNavBarColor : UIColor = UIColor.init(hex: 0x2dae99)!
+let kThemeGreenColor : UIColor = UIColor.init(hex: 0x2dae99)!
 let kNavBarColor : UIColor = UIColor.init(hex: 0x5944DD)!
+let kOrangeColor: UIColor = UIColor.init(hex: 0xfe7f4a)!
+
 
 /// 黑色字体颜色
 let kBlackFontColor : UIColor = UIColor.init(hex: 0x1d1d1d)!

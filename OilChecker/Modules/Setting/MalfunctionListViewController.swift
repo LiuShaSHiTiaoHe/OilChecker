@@ -7,7 +7,7 @@
 
 import UIKit
 import RealmSwift
-
+import SwiftyUserDefaults
 let MalfunctionTableViewCellIdentifier = "MalfunctionTableViewCellIdentifier"
 
 
@@ -41,7 +41,13 @@ class MalfunctionListViewController: UIViewController {
     }
     
     func initData(){
-        let models = realm.objects(MalfunctionModel.self)
+        let currentCarModel = realm.objects(UserAndCarModel.self).filter({ (model) -> Bool in
+            model.id == Defaults[\.currentCarID]
+        }).first
+        guard let _ = currentCarModel else {
+            return
+        }
+        let models = realm.objects(MalfunctionModel.self).filter("deviceID ==  %@", currentCarModel!.deviceID)
         dataArray = models.filter({ (model) -> Bool in
             !model.isDeleted
         })
@@ -54,7 +60,7 @@ class MalfunctionListViewController: UIViewController {
         table.backgroundColor = kWhiteColor
         table.dataSource = self
         table.delegate = self
-        table.separatorStyle = .none
+        table.separatorStyle = .singleLine
         return table
     }()
 
@@ -71,7 +77,7 @@ extension MalfunctionListViewController: UITableViewDelegate, UITableViewDataSou
 
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 80
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

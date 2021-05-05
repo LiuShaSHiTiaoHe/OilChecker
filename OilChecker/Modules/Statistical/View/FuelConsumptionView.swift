@@ -6,9 +6,13 @@
 //
 
 import UIKit
+import Charts
+import RealmSwift
 
 class FuelConsumptionView: UIView {
-
+    let realm = try! Realm()
+    var currentDevice: UserAndCarModel!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         initUI()
@@ -18,6 +22,70 @@ class FuelConsumptionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func updateCurrentDevice(model: UserAndCarModel) {
+        currentDevice = model
+        let startDate = getDataRegion().dateAt(.startOfWeek).date
+        let endDate = getDataRegion().dateAt(.endOfWeek).date
+        let fuelLeverDataSource = realm.objects(FuelConsumptionModel.self).filter("time BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, currentDevice!.deviceID).sorted(byKeyPath: "time")
+        let start = startDate.timeIntervalSince1970
+        let end = endDate.dateAt(.startOfDay).timeIntervalSince1970
+        let xAxis = fuelChartView.xAxis
+        xAxis.axisMinimum = start
+        xAxis.axisMaximum = end
+        xAxis.valueFormatter = WeekValueFormatter()
+        xAxis.setLabelCount(7, force: true)
+        updateChartData(Array(fuelLeverDataSource))
+    }
+    
+    func updateChartData(_ dataSource: [FuelConsumptionModel]) {
+ 
+        let values = dataSource.map { (model) -> ChartDataEntry in
+            return ChartDataEntry.init(x: model.time.dateAt(.startOfDay).timeIntervalSince1970, y: model.consumption)
+        }
+        
+        let set1 = LineChartDataSet(entries: values, label: "DataSet 1")
+        set1.axisDependency = .left
+        set1.setColor(kRedFontColor)
+        set1.lineWidth = 1.0
+        set1.mode = .cubicBezier
+        set1.drawValuesEnabled = true
+        set1.fillAlpha = 0.1
+        set1.fillColor = kRedFontColor
+        set1.drawFilledEnabled = true
+        set1.drawCirclesEnabled = true
+        set1.drawCircleHoleEnabled = false
+        set1.setCircleColor(kRedFontColor)
+        set1.circleRadius = 2
+        let data = LineChartData(dataSet: set1)
+        data.setValueTextColor(kRedFontColor)
+        data.setValueFont(k12Font)
+        
+        fuelChartView.data = data
+    }
+    
+    
+    func updateChartAxis() {
+        let xAxis = fuelChartView.xAxis
+        xAxis.labelPosition = .bottom
+        xAxis.labelFont = k10Font
+        xAxis.labelTextColor = kSecondBlackColor
+        xAxis.drawAxisLineEnabled = false
+        xAxis.drawGridLinesEnabled = false
+//        xAxis.gridColor = kLightGaryFontColor
+
+        
+        let leftAxis = fuelChartView.leftAxis
+        leftAxis.labelPosition = .outsideChart
+        leftAxis.labelFont = k12Font
+        leftAxis.axisMinimum = 0
+        leftAxis.axisMaximum = 170
+        leftAxis.yOffset = -9
+        leftAxis.labelTextColor = kSecondBlackColor
+        leftAxis.gridColor = kLightGaryFontColor
+//        leftAxis.zeroLineColor = kRedFontColor
+    }
+    
+    
     func initUI() {
         self.layer.cornerRadius = 10
         self.backgroundColor = kWhiteColor
@@ -25,8 +93,9 @@ class FuelConsumptionView: UIView {
         self.addSubview(titleLabel)
         self.addSubview(detailButton)
         self.addSubview(lineView)
-        self.addSubview(emptyView)
-        
+        self.addSubview(fuelChartView)
+        updateChartAxis()
+        lineView.isHidden = true
         titleLabel.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(kMargin/2)
             make.top.equalToSuperview().offset(kMargin/2)
@@ -48,17 +117,18 @@ class FuelConsumptionView: UIView {
             make.top.equalTo(titleLabel.snp.bottom).offset(kMargin/4)
         }
         
-        emptyView.snp.makeConstraints { (make) in
+        fuelChartView.snp.makeConstraints { (make) in
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.top.equalTo(lineView.snp.bottom)
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-kMargin/2)
         }
+        
     }
     
     lazy var titleLabel: UILabel = {
         let label = UILabel.init()
-        label.textColor = kBlackColor
+        label.textColor = kSecondBlackColor
         label.font = k15Font
         label.text = "Fuel Consumption"
         return label
@@ -66,7 +136,6 @@ class FuelConsumptionView: UIView {
     
     lazy var detailButton: UIButton = {
         let btn = UIButton.init(type: .custom)
-//        btn.setTitle("details", for: .normal)
         btn.setImage(UIImage.init(named: "icon_arrow"), for: .normal)
         btn.setTitleColor(kBlackColor, for: .normal)
         btn.titleLabel?.font = k13BoldFont
@@ -77,6 +146,24 @@ class FuelConsumptionView: UIView {
         let view = UIView.init()
         view.backgroundColor = UIColor.init(hex: 0x515151, transparency: 0.2)
         return view
+    }()
+    
+    lazy var fuelChartView: LineChartView = {
+        let chartView = LineChartView.init()
+//        chartView.delegate = self
+        chartView.chartDescription?.enabled = false
+        chartView.dragEnabled = false
+        chartView.setScaleEnabled(false)
+        chartView.pinchZoomEnabled = false
+        chartView.highlightPerDragEnabled = true
+        chartView.rightAxis.enabled = false
+        chartView.backgroundColor = .white
+        chartView.legend.enabled = false
+        chartView.drawGridBackgroundEnabled = false
+        chartView.animate(xAxisDuration: 0.5)
+//        chartView.gridBackgroundColor = kLightGaryFontColor
+        
+        return chartView
     }()
     
     lazy var emptyView: BaseEmptyView = {
