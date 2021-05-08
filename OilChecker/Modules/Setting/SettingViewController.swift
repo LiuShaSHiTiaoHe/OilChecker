@@ -138,7 +138,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource{
             if indexPath.row == 0 {
                 self.navigationController?.pushViewController(MalfunctionListViewController())
             }else{
-                
+                self.navigationController?.pushViewController(ScanBleDeviceViewController(), animated: true)
             }
         default:
             fatalError()

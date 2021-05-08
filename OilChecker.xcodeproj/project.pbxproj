@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6953CCE82642E5A100D48DA2 /* RecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */; };
 		6953CCFB26431F8100D48DA2 /* OCInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CCFA26431F8100D48DA2 /* OCInputView.swift */; };
+		6953CD03264458B100D48DA2 /* ScanBleDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CD02264458B100D48DA2 /* ScanBleDeviceViewController.swift */; };
 		69B10B7C262DE76A00617D17 /* BaseTabBarItemContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10B7B262DE76A00617D17 /* BaseTabBarItemContentView.swift */; };
 		69B10B81262DE7A200617D17 /* BaseBouncesContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10B80262DE7A200617D17 /* BaseBouncesContentView.swift */; };
 		69B10B8C262DE91700617D17 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B10B8B262DE91700617D17 /* HomeViewController.swift */; };
@@ -70,6 +71,7 @@
 		056F54F2EA47FA6C37668A74 /* Pods-OilChecker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OilChecker.release.xcconfig"; path = "Target Support Files/Pods-OilChecker/Pods-OilChecker.release.xcconfig"; sourceTree = "<group>"; };
 		6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTableViewCell.swift; sourceTree = "<group>"; };
 		6953CCFA26431F8100D48DA2 /* OCInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCInputView.swift; sourceTree = "<group>"; };
+		6953CD02264458B100D48DA2 /* ScanBleDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanBleDeviceViewController.swift; sourceTree = "<group>"; };
 		69B10B7B262DE76A00617D17 /* BaseTabBarItemContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarItemContentView.swift; sourceTree = "<group>"; };
 		69B10B80262DE7A200617D17 /* BaseBouncesContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBouncesContentView.swift; sourceTree = "<group>"; };
 		69B10B8B262DE91700617D17 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				69B10C3F262F517300617D17 /* SettingViewController.swift */,
 				69B10CD02633F6E200617D17 /* AddNewDeviceViewController.swift */,
 				69B10D422634480F00617D17 /* MalfunctionListViewController.swift */,
+				6953CD02264458B100D48DA2 /* ScanBleDeviceViewController.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -574,6 +577,7 @@
 				69B10B7C262DE76A00617D17 /* BaseTabBarItemContentView.swift in Sources */,
 				69B10E68263DBEAE00617D17 /* DateValueFormatter.swift in Sources */,
 				69B10D5326347F6A00617D17 /* StatisticalViewController.swift in Sources */,
+				6953CD03264458B100D48DA2 /* ScanBleDeviceViewController.swift in Sources */,
 				69B10CBE2631F8B200617D17 /* UserAndCarModel.swift in Sources */,
 				69B10B8C262DE91700617D17 /* HomeViewController.swift in Sources */,
 				69B10E27263B237C00617D17 /* RefuelRecordModel.swift in Sources */,
@@ -763,6 +767,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UW2XRZ2Z5;
 				INFOPLIST_FILE = OilChecker/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -784,6 +789,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UW2XRZ2Z5;
 				INFOPLIST_FILE = OilChecker/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (

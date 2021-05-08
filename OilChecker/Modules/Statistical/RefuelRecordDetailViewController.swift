@@ -40,6 +40,10 @@ class RefuelRecordDetailViewController: UIViewController {
     }
     
     func initData() {
+        
+        guard let _ =  currentCarModel else {
+            return
+        }
         startTimeButton.setTitle(startDate.string(withFormat: "yyyy-MM-dd"), for: .normal)
         endTimeButton.setTitle(endDate.string(withFormat: "yyyy-MM-dd"), for: .normal)
         let dataSource = realm.objects(RefuelRecordModel.self).filter("time BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, currentCarModel!.deviceID).sorted(byKeyPath: "time")

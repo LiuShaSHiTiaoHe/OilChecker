@@ -23,7 +23,6 @@ target 'OilChecker' do
   pod 'SPPermissions/Bluetooth'
   pod 'IQKeyboardManagerSwift'
   pod 'SVProgressHUD'
-#  pod 'DateTimePicker'
   pod 'DatePickerDialog'
   pod 'SwiftyUserDefaults'
   pod 'SwiftDate'

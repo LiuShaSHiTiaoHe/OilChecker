@@ -43,9 +43,9 @@ class StatisticalViewController: UIViewController {
         })
         
         if userCarArray.count == 0 {
-            carNumberButton.setTitle("Add New Car", for: .normal)
-            carNumberButton.setImage(UIImage.init(named: "btn_addCar"), for: .normal)
-            carNumberButton.imageEdgeInsets = UIEdgeInsets.init(top: 0, left: kMargin/2, bottom: 0, right: kMargin)
+//            carNumberButton.setTitle("Add New Car", for: .normal)
+//            carNumberButton.setImage(UIImage.init(named: "btn_addCar"), for: .normal)
+//            carNumberButton.imageEdgeInsets = UIEdgeInsets.init(top: 0, left: kMargin/2, bottom: 0, right: kMargin)
 
         }else{
             if Defaults[\.currentCarID]!.isEmpty {
@@ -126,7 +126,7 @@ class StatisticalViewController: UIViewController {
         scrollContentView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
             make.width.equalTo(kScreenWidth)
-            make.height.greaterThanOrEqualTo(scrollView).offset(1)
+            make.height.equalTo(900)
         }
         
         carNumberButton.snp.makeConstraints { (make) in
