@@ -13,9 +13,9 @@ class BaseNavigationController: UINavigationController, UIGestureRecognizerDeleg
         super.viewDidLoad()
         /// 设置导航栏标题
         let navBar = UINavigationBar.appearance()
-//        navBar.tintColor = kWhiteColor
+        navBar.tintColor = kThemeGreenColor
 //        navBar.barTintColor = kNavBarColor
-        navBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: kBlackColor, NSAttributedString.Key.font: k18Font]
+//        navBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: kBlackColor, NSAttributedString.Key.font: k18Font]
 
         navBar.isTranslucent = true
         // 右滑返回代理

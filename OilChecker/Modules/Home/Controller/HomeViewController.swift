@@ -8,16 +8,14 @@
 import UIKit
 import RealmSwift
 import SwiftyUserDefaults
-import DropDown
+import SVProgressHUD
 
 class HomeViewController: UIViewController {
 
     let realm = try! Realm()
     var userCarArray: [UserAndCarModel] = []
     var currentCarModel: UserAndCarModel?
-    let dropDown = DropDown()
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -25,28 +23,44 @@ class HomeViewController: UIViewController {
         view.backgroundColor = kBackgroundColor
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.title = "Home".localized()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightAddButton)
-        
         initUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         initData()
-
     }
     
     @objc
     func addButtonAction() {
         self.navigationController?.pushViewController(AddNewDeviceViewController())
-        logger.info("addButtonAction")
     }
     
     @objc
     func carNumberButtonAction() {
         if userCarArray.count > 1 {
-            setUpDropDownView()
-            dropDown.show()
+            let deviceListVC = MyDeviceListViewController()
+            deviceListVC.delegate = self
+            self.present(deviceListVC, animated: true) {
+                
+            }
+        }else{
+            addButtonAction()
+        }
+    }
+    
+    @objc
+    func syncDataFromDevice() {
+        if Defaults[\.currentCarID]!.isEmpty {
+            SVProgressHUD.showInfo(withStatus: "please add a device first".localized())
+            self.navigationController?.pushViewController(ScanBleDeviceViewController())
+            return
+        }
+        //TODO
+        if OCBlueToothManager.shared.remotePeripheral != nil {
+            //sync data via ble
+        }else{
+            //try connect current selected device
         }
     }
     
@@ -57,11 +71,8 @@ class HomeViewController: UIViewController {
         })
         
         if userCarArray.count == 0 {
-//            carNumberButton.setTitle("Add New Car", for: .normal)
-//            carNumberButton.setImage(UIImage.init(named: "btn_addCar"), for: .normal)
-//            carNumberButton.imageEdgeInsets = UIEdgeInsets.init(top: 0, left: kMargin/2, bottom: 0, right: kMargin)
-            carNumberLabel.text = "- -"
-
+            carNumberLabel.textColor = kThemeGreenColor
+            carNumberLabel.text = "Add A Device".localized()
         }else{
             if Defaults[\.currentCarID]!.isEmpty {
                 currentCarModel = userCarArray[0]
@@ -71,13 +82,9 @@ class HomeViewController: UIViewController {
                     model.id == Defaults[\.currentCarID]
                 }).first
                 chartView.updateCurrentDevice(model: currentCarModel!)
-
             }
-//            carNumberButton.setImage(nil, for: .normal)
-//            carNumberButton.setTitle(currentCarModel?.carNumber, for: .normal)
             carNumberLabel.text = currentCarModel?.carNumber
             updateLatestFuelCapacityAndConsumption(deviceID: currentCarModel?.deviceID)
-
         }
     }
     
@@ -85,45 +92,22 @@ class HomeViewController: UIViewController {
         guard let _ = deviceID else {
             return
         }
-        let startDate = getDataRegion().dateAt(.startOfDay).date
-        let endDate = getDataRegion().dateAt(.endOfDay).date
-        let capacity = realm.objects(BaseFuelDataModel.self).filter("rTime BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, deviceID!).sorted(byKeyPath: "rTime").last
-        capacityView.numberLabel.text = capacity?.fuelLevel.string
+        capacityView.statusLabel.text  = "normal".localized()
+        consumptionView.statusLabel.text = DefaultEmptyNumberString
+//        let startDate = getDataRegion().dateAt(.startOfDay).date
+//        let endDate = getDataRegion().dateAt(.endOfDay).date
+//        let capacity = realm.objects(BaseFuelDataModel.self).filter("rTime BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, deviceID!).sorted(byKeyPath: "rTime").last
+//        capacityView.numberLabel.text = capacity?.fuelLevel.string
+//
+//        let consumption = realm.objects(FuelConsumptionModel.self).filter("time BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, deviceID!).sorted(byKeyPath: "time").last
+//        consumptionView.numberLabel.text = consumption?.consumption.string
         
-        let consumption = realm.objects(FuelConsumptionModel.self).filter("time BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, deviceID!).sorted(byKeyPath: "time").last
-        consumptionView.numberLabel.text = consumption?.consumption.string
     }
     
-    func setUpDropDownView() {
-//        dropDown.anchorView = carNumberButton
-        dropDown.anchorView = carNumberLabel
-        var titles:[String] = []
-        for item in userCarArray {
-            titles.append(item.carNumber)
-        }
-        dropDown.dataSource = titles
-        dropDown.backgroundColor = kBackgroundColor
-        dropDown.bottomOffset = CGPoint.init(x: 0, y: (dropDown.anchorView?.plainView.bounds.height)!)
-        dropDown.direction = .bottom
-        dropDown.width = 100
-        dropDown.setupCornerRadius(10)
-        dropDown.textColor = kSecondBlackColor
-        dropDown.selectedTextColor = kGreenFontColor
-        dropDown.selectionAction = { [self] (index: Int, item: String) in
-            print("Selected item: \(item) at index: \(index)")
-            let model = userCarArray[index]
-//            carNumberButton.setTitle(model.carNumber, for: .normal)
-            carNumberLabel.text = model.carNumber
-            Defaults[\.currentCarID] = model.id
-            chartView.updateCurrentDevice(model: model)
-            updateLatestFuelCapacityAndConsumption(deviceID: model.deviceID)
-        }
-    }
-    
+ 
     func initUI() {
         self.view.addSubview(scrollView)
         scrollView.addSubview(scrollContentView)
-//        scrollContentView.addSubview(carNumberButton)
         scrollContentView.addSubview(carNumberLabel)
         scrollContentView.addSubview(deviceSwitchButton)
         scrollContentView.addSubview(capacityView)
@@ -137,15 +121,8 @@ class HomeViewController: UIViewController {
         scrollContentView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
             make.width.equalTo(kScreenWidth)
-            make.height.greaterThanOrEqualTo(scrollView).offset(1)
+            make.height.greaterThanOrEqualTo(scrollView).offset(kMargin)
         }
-        
-//        carNumberButton.snp.makeConstraints { (make) in
-//            make.left.equalToSuperview().offset(kMargin/2)
-//            make.top.equalToSuperview().offset(kMargin)
-//            make.right.equalTo(scrollContentView.snp.centerX).offset(-kMargin/2)
-//            make.height.equalTo(60)
-//        }
         
         carNumberLabel.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(kMargin/2)
@@ -179,21 +156,11 @@ class HomeViewController: UIViewController {
             make.top.equalTo(capacityView.snp.bottom).offset(kMargin)
             make.left.equalToSuperview().offset(kMargin/2)
             make.right.equalToSuperview().offset(-kMargin/2)
-            make.height.equalTo(400)
+            make.height.equalTo(450)
+            make.bottom.equalToSuperview().offset(-kMargin)
         }
     }
     
-    lazy var rightAddButton: UIButton = {
-        let btn = UIButton.init(type: .custom)
-        btn.frame = CGRect.init(x: 0, y: 0, width: 80, height: 30)
-        btn.backgroundColor = kThemeGreenColor
-        btn.layer.cornerRadius = 15
-        btn.setTitle("Add", for: .normal)
-        btn.setTitleColor(kWhiteColor, for: .normal)
-        btn.titleLabel?.font = k13Font
-        btn.addTarget(self, action: #selector(addButtonAction), for: .touchUpInside)
-        return btn
-    }()
     lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView.init()
         return scroll
@@ -205,21 +172,11 @@ class HomeViewController: UIViewController {
         return view
     }()
     
-//    lazy var carNumberButton: UIButton = {
-//        let btn = UIButton.init(type: .custom)
-//        btn.setTitle("Add New Car", for: .normal)
-//        btn.setTitleColor(kGreenFontColor, for: .normal)
-//        btn.titleLabel?.font = k15Font
-//        btn.backgroundColor = kWhiteColor
-//        btn.layer.cornerRadius = 10
-//        btn.addTarget(self, action: #selector(carNumberButtonAction), for: .touchUpInside)
-//        return btn
-//    }()
     
     lazy var carNumberLabel: UILabel = {
         let label = UILabel.init()
         label.backgroundColor = kWhiteColor
-        label.font = UIFont.systemFont(ofSize: 30)
+        label.font = UIFont.systemFont(ofSize: 20)
         label.layer.cornerRadius = 10
         label.clipsToBounds = true
         label.textAlignment = .center
@@ -231,32 +188,30 @@ class HomeViewController: UIViewController {
     
     lazy var deviceSwitchButton: UIButton = {
         let btn = UIButton.init(type: .custom)
-        btn.setTitle("Off", for: .normal)
-        btn.setTitle("On", for: .selected)
-        btn.setTitleColor(kRedFontColor, for: .normal)
-        btn.setTitleColor(kGreenFontColor, for: .selected)
-        btn.setImage(UIImage.init(named: "btn_off_red"), for: .normal)
-        btn.setImage(UIImage.init(named: "btn_on_green"), for: .selected)
+        btn.setTitle("Sync".localized(), for: .normal)
+        btn.setTitleColor(kGreenFontColor, for: .normal)
+        btn.setImage(UIImage.init(named: "btn_sync"), for: .normal)
         btn.imageEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: kMargin)
         btn.backgroundColor = kWhiteColor
         btn.titleLabel?.font = k15BoldFont
         btn.layer.cornerRadius = 10
+        btn.addTarget(self, action: #selector(syncDataFromDevice), for: .touchUpInside)
         return btn
     }()
     
     lazy var capacityView: FuelCapacityView = {
         let view = FuelCapacityView()
-        view.nameLabel.text = "Fuel Capacity"
-        view.numberLabel.textColor = kThemeGreenColor
-        view.unitsLabel.text = "L"
+        view.nameLabel.text = "Fuel Capacity Status".localized()
+        view.statusLabel.textColor = kThemeGreenColor
+        view.statusLabel.text = FuelCapacityState.Unknown.rawValue.localized()
         return view
     }()
     
     lazy var consumptionView: FuelCapacityView = {
         let view = FuelCapacityView()
-        view.nameLabel.text = "Fuel Consumption"
-        view.numberLabel.textColor = kRedFontColor
-        view.unitsLabel.text = "L"
+        view.nameLabel.text = "Average Fuel Consumption".localized()
+        view.statusLabel.textColor = kRedFontColor
+        view.statusLabel.text = DefaultEmptyNumberString + "L"
         return view
     }()
     
@@ -264,10 +219,16 @@ class HomeViewController: UIViewController {
         let view = HomeChartView.init()
         return view
     }()
-    
-
-
 }
 
+extension HomeViewController: MyDeviceListViewControllerDelegate {
+
+    func selectedCarInfo(_ data: UserAndCarModel) {
+        carNumberLabel.text = data.carNumber
+        Defaults[\.currentCarID] = data.id
+        chartView.updateCurrentDevice(model: data)
+        updateLatestFuelCapacityAndConsumption(deviceID: data.deviceID)
+    }
+}
 
 

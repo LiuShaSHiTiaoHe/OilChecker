@@ -12,8 +12,9 @@ class RefuelRecordModel: Object {
 
     @objc dynamic var id = NSUUID().uuidString
     @objc dynamic var deviceID = ""
-    @objc dynamic var time = Date()
-    @objc dynamic var refuelLevel = 0.0
+    @objc dynamic var recordIDFromDevice: Int64 = 0
+    @objc dynamic var refuelLevel: Double = 0.0
+    @objc dynamic var fuelCount: Int64 = 0
     @objc dynamic var isDeleted = false
     override class func primaryKey() -> String? {
         return "id"

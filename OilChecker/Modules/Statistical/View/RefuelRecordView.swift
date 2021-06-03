@@ -25,25 +25,32 @@ class RefuelRecordView: UIView {
     
     func updateCurrentDevice(model: UserAndCarModel) {
         currentDevice = model
-        let startDate = getDataRegion().dateAt(.startOfWeek).date
-        let endDate = getDataRegion().dateAt(.endOfWeek).date
-        let fuelLeverDataSource = realm.objects(RefuelRecordModel.self).filter("time BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, currentDevice!.deviceID).sorted(byKeyPath: "time")
-        let start = startDate.timeIntervalSince1970
-        let end = endDate.dateAt(.startOfDay).timeIntervalSince1970
-        let xAxis = fuelChartView.xAxis
-        xAxis.axisMinimum = start
-        xAxis.axisMaximum = end
-        xAxis.valueFormatter = WeekValueFormatter()
-        xAxis.setLabelCount(7, force: true)
-        updateChartData(Array(fuelLeverDataSource))
+        let dataSource = OCRealmManager.shared().realmQueryWith(object: RefuelRecordModel.self).suffix(60)
+        let fuelLeverDataSource = Array(dataSource)
+        updateChartData(Array(fuelLeverDataSource) as! [RefuelRecordModel] )
+        
+//        let startDate = getDataRegion().dateAt(.startOfWeek).date
+//        let endDate = getDataRegion().dateAt(.endOfWeek).date
+//        let fuelLeverDataSource = realm.objects(RefuelRecordModel.self).filter("time BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, currentDevice!.deviceID).sorted(byKeyPath: "time")
+//        let start = startDate.timeIntervalSince1970
+//        let end = endDate.dateAt(.startOfDay).timeIntervalSince1970
+//        let xAxis = fuelChartView.xAxis
+//        xAxis.axisMinimum = start
+//        xAxis.axisMaximum = end
+//        xAxis.valueFormatter = WeekValueFormatter()
+//        xAxis.setLabelCount(7, force: true)
+//        updateChartData(Array(fuelLeverDataSource))
     }
     
     func updateChartData(_ dataSource: [RefuelRecordModel]) {
  
+//        let values = dataSource.map { (model) -> ChartDataEntry in
+//            logger.info("\(model.time)")
+//            logger.info("\(model.refuelLevel)")
+//            return ChartDataEntry.init(x: model.time.dateAt(.startOfDay).timeIntervalSince1970, y: model.refuelLevel)
+//        }
         let values = dataSource.map { (model) -> ChartDataEntry in
-            logger.info("\(model.time)")
-            logger.info("\(model.refuelLevel)")
-            return ChartDataEntry.init(x: model.time.dateAt(.startOfDay).timeIntervalSince1970, y: model.refuelLevel)
+            return ChartDataEntry(x: Double(model.recordIDFromDevice), y: model.refuelLevel)
         }
         
         let set1 = LineChartDataSet(entries: values, label: "DataSet 1")
@@ -134,7 +141,7 @@ class RefuelRecordView: UIView {
         let label = UILabel.init()
         label.textColor = kSecondBlackColor
         label.font = k15Font
-        label.text = "Refuel Record"
+        label.text = "Refuel Record".localized()
         return label
     }()
     

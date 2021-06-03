@@ -60,13 +60,13 @@ class AddNewCarTableViewCell: UITableViewCell {
     
     lazy var bgView: UIView = {
         let view = UIView.init()
-        view.backgroundColor = UIColor.init(hex: 0xE6E7FD)
-        view.shadowOffset = CGSize.init(width: 0, height: 2)
-        view.shadowRadius = 5
-        view.shadowColor = .black
-        view.shadowOpacity = 0.2
-        view.layer.masksToBounds = false
-//        view.cornerRadius = 10
+        view.backgroundColor = kThemeGreenColor
+//        view.shadowOffset = CGSize.init(width: 0, height: 2)
+//        view.shadowRadius = 5
+//        view.shadowColor = .black
+//        view.shadowOpacity = 0.2
+//        view.layer.masksToBounds = false
+        view.cornerRadius = 10
         return view
     }()
     
@@ -77,9 +77,9 @@ class AddNewCarTableViewCell: UITableViewCell {
     
     lazy var tipsLabel: UILabel = {
         let label = UILabel.init()
-        label.text = "Add New Device".localized()
-        label.textColor = kSecondBlackColor
-        label.font = k12Font
+        label.text = "Add A Device".localized()
+        label.textColor = kWhiteColor
+        label.font = k16Font
         label.textAlignment = .left
         return label
     }()

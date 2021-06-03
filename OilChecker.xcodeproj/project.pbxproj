@@ -47,6 +47,9 @@
 		69CAA37A26275E8400333AA2 /* OilCheckerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CAA37926275E8400333AA2 /* OilCheckerUITests.swift */; };
 		69CAA3D12628B17E00333AA2 /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CAA3D02628B17D00333AA2 /* BaseNavigationController.swift */; };
 		69CAA3DA2628B19600333AA2 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CAA3D92628B19600333AA2 /* BaseViewController.swift */; };
+		69CB1ABF266404D2001BE0D3 /* OCRealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CB1ABE266404D2001BE0D3 /* OCRealmManager.swift */; };
+		69CB1AC1266534F6001BE0D3 /* MyDeviceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CB1AC0266534F6001BE0D3 /* MyDeviceListViewController.swift */; };
+		69CB1B072667E632001BE0D3 /* OCBlueToothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CB1B062667E632001BE0D3 /* OCBlueToothManager.swift */; };
 		AF3740654BE833F7AB31A402 /* Pods_OilChecker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C031E0B931EC9CAECCC58A6 /* Pods_OilChecker.framework */; };
 /* End PBXBuildFile section */
 
@@ -116,6 +119,9 @@
 		69CAA37B26275E8400333AA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		69CAA3D02628B17D00333AA2 /* BaseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 		69CAA3D92628B19600333AA2 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		69CB1ABE266404D2001BE0D3 /* OCRealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRealmManager.swift; sourceTree = "<group>"; };
+		69CB1AC0266534F6001BE0D3 /* MyDeviceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDeviceListViewController.swift; sourceTree = "<group>"; };
+		69CB1B062667E632001BE0D3 /* OCBlueToothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCBlueToothManager.swift; sourceTree = "<group>"; };
 		9C031E0B931EC9CAECCC58A6 /* Pods_OilChecker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OilChecker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E77FFEB2FE77314B5AC3A207 /* Pods-OilChecker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OilChecker.debug.xcconfig"; path = "Target Support Files/Pods-OilChecker/Pods-OilChecker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -211,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				69B10B8B262DE91700617D17 /* HomeViewController.swift */,
+				69CB1AC0266534F6001BE0D3 /* MyDeviceListViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -222,6 +229,8 @@
 				69B10BAC262DF47900617D17 /* Macro.swift */,
 				69B10C60262F5DE100617D17 /* GlobalConfigure.swift */,
 				69B10DBF26371AE300617D17 /* UserDefaultsKeys.swift */,
+				69CB1ABE266404D2001BE0D3 /* OCRealmManager.swift */,
+				69CB1B062667E632001BE0D3 /* OCBlueToothManager.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -554,6 +563,7 @@
 			files = (
 				69B10D65263499D200617D17 /* ButtonExtension.swift in Sources */,
 				69B10D912635A41A00617D17 /* FuelConsumptionDetailViewController.swift in Sources */,
+				69CB1B072667E632001BE0D3 /* OCBlueToothManager.swift in Sources */,
 				69B10BAD262DF47900617D17 /* Macro.swift in Sources */,
 				69B10DA12635D05600617D17 /* HomeChartView.swift in Sources */,
 				69B10E6D263DD95C00617D17 /* BaseFuelDataModel.swift in Sources */,
@@ -565,6 +575,7 @@
 				69B10D482634615B00617D17 /* MalfunctionModel.swift in Sources */,
 				69B10CD12633F6E200617D17 /* AddNewDeviceViewController.swift in Sources */,
 				69CAA3DA2628B19600333AA2 /* BaseViewController.swift in Sources */,
+				69CB1ABF266404D2001BE0D3 /* OCRealmManager.swift in Sources */,
 				69B10C882631E41300617D17 /* AddSectionHeaderView.swift in Sources */,
 				69B10C59262F5B8700617D17 /* SettingTableViewCell.swift in Sources */,
 				69B10CCC26332E7700617D17 /* MyCarInfoTableViewCell.swift in Sources */,
@@ -587,6 +598,7 @@
 				69B10D962635A42E00617D17 /* RefuelRecordDetailViewController.swift in Sources */,
 				6953CCE82642E5A100D48DA2 /* RecordTableViewCell.swift in Sources */,
 				6953CCFB26431F8100D48DA2 /* OCInputView.swift in Sources */,
+				69CB1AC1266534F6001BE0D3 /* MyDeviceListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,6 +11,7 @@ import ESTabBarController_swift
 import IQKeyboardManagerSwift
 import SwiftDate
 import SwifterSwift
+import CoreBluetooth
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,8 +21,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         initializeApp()
-        IQKeyboardManager.shared.enable = true
-        IQKeyboardManager.shared.shouldResignOnTouchOutside = true
+
+//        let bytess = [UInt8]("FFE0".utf8)
+//        var buf : [UInt8] = Array("FFE0".utf8)
+//        
+//        let bufString = NSUUID.init(uuidBytes: buf)
+//
+//        let stringUUID = CBUUID.init(string: "FFE0")
+//        let data: Data = stringUUID.data
+//        let uuid = stringUUID.uuidString
+//        let uuidString = NSUUID.init(uuidBytes: data.bytes)
+////        let stringUUID = CBUUID.init(string: "FFE0")
+//        var sValue = swapInt(0xFFE0)
+//        let sData = NSData.init(bytes: &sValue, length: 2)
+//        let s = Data.init(bytes: &sValue, count: 2)
+//        
+//        let sssss = Data.init(bytes: bytess, count: 2)
+
+        
+//        let ssss = UUID
+        
+//        let serviceUUID = CBUUID.init(data: s)
 //        syncEngine = SyncEngine(objects: [
 //                   SyncObject(type: Dog.self),
 //                   SyncObject(type: Cat.self),
@@ -29,10 +49,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //               ])
 //        application.registerForRemoteNotifications()
         
-//        addFakeData()
+        addFakeData()
 //        addFakeReFuelData()
         logger.info("\(NSHomeDirectory())")
         return true
+    }
+    
+    func swapInt(_ data: UInt16) -> UInt16 {
+        var temp = data << 8
+        temp |= data >> 8
+        return temp
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -59,8 +85,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func initializeApp() {
         self.window = UIWindow.init(frame: UIScreen.main.bounds)
+        self.window!.rootViewController = initializeRootViewController()
+        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.shouldResignOnTouchOutside = true
         self.window?.makeKeyAndVisible()
-        UIApplication.shared.keyWindow!.rootViewController = initializeRootViewController()
     }
     
     func addFakeReFuelData() {
@@ -69,71 +97,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         for index in 1...100 {
             let data = Double(arc4random_uniform(100))+50
-            let date = startDate + (index*24).hours
             let fuelMode = RefuelRecordModel.init()
             fuelMode.deviceID = "999"
             fuelMode.refuelLevel = data
-            fuelMode.time = date
             SettingManager.shared.updateRefuelRecordModel(fuelMode)
         }
 
         for index in 1...100 {
             let data = Double(arc4random_uniform(100))+50
-            let date = startDate + (index*24).hours
             let fuelMode = FuelConsumptionModel.init()
             fuelMode.deviceID = "999"
             fuelMode.consumption = data
-            fuelMode.time = date
             SettingManager.shared.updateFuelConsumptionModel(fuelMode)
         }
         
     }
 
     func addFakeData() {
-//        let startDate = Date().nearestHour - 500.hours
-
-        let startDate = DateInRegion.init(Date(), region: .UTC).date.nearestHour - 1500.hours//getDataRegion().date.nearestHour - 500.hours
         
-        for index in 1...4000 {
+        for index in 1...1000 {
             let data = Double(arc4random_uniform(100))+50
-            let date = startDate + (index*8).hours
             let baseFuelModel = BaseFuelDataModel.init()
             baseFuelModel.deviceID = "999"
-            baseFuelModel.fuelLevel = data.float
-            baseFuelModel.rTime = date
+            baseFuelModel.fuelLevel = data
+            baseFuelModel.recordIDFromDevice = Int64(index)
             SettingManager.shared.updateBaseFuelDataModel(baseFuelModel)
             
         }
-//        for index in 1...100 {
+
+        
+//        for index in 1...10 {
 //            let data = Double(arc4random_uniform(100))
 //            let date = startDate + (index*2).hours
-//            let fuelMode = FuelLevelModel.init()
-//            fuelMode.deviceID = "998"
-//            fuelMode.fuelLevel = data
-//            fuelMode.time = date
-//            SettingManager.shared.updateFuelLevelModel(fuelMode)
+//            let malfuntion = MalfunctionModel.init()
+//            malfuntion.deviceID = "999"
+//            malfuntion.mcode = data.toString()
+//            malfuntion.mName = "device error"
+//            malfuntion.mtime = date
+//            SettingManager.shared.updateMalfunctionInfo(malfuntion)
 //        }
-//
-//        for index in 1...100 {
-//            let data = Double(arc4random_uniform(10))
-//            let date = startDate + index.hours
-//            let fuelMode = FuelConsumptionModel.init()
-//            fuelMode.deviceID = "998"
-//            fuelMode.consumption = data
-//            fuelMode.time = date
-//            SettingManager.shared.updateFuelConsumptionModel(fuelMode)
-//        }
-        
-        for index in 1...10 {
-            let data = Double(arc4random_uniform(100))
-            let date = startDate + (index*2).hours
-            let malfuntion = MalfunctionModel.init()
-            malfuntion.deviceID = "999"
-            malfuntion.mcode = data.toString()
-            malfuntion.mName = "device error"
-            malfuntion.mtime = date
-            SettingManager.shared.updateMalfunctionInfo(malfuntion)
-        }
     }
 
      func initializeRootViewController() -> ESTabBarController {
@@ -144,7 +146,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         v1.tabBarItem = ESTabBarItem.init(BaseBouncesContentView(), title: "Home".localized(), image: UIImage(named: "tab_home"), selectedImage: UIImage(named: "tab_home"))
         v2.tabBarItem = ESTabBarItem.init(BaseBouncesContentView(), title: "Statistics".localized(), image: UIImage(named: "tab_statistical"), selectedImage: UIImage(named: "tab_statistical"))
-        v4.tabBarItem = ESTabBarItem.init(BaseBouncesContentView(), title: "Mine".localized(), image: UIImage(named: "tab_setting"), selectedImage: UIImage(named: "tab_setting"))
+        v4.tabBarItem = ESTabBarItem.init(BaseBouncesContentView(), title: "Setting".localized(), image: UIImage(named: "tab_setting"), selectedImage: UIImage(named: "tab_setting"))
         
         tabBarController.viewControllers = [v1, v2,v4]
         return tabBarController

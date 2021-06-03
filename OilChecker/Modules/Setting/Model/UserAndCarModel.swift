@@ -14,17 +14,11 @@ class UserAndCarModel: Object {
 
     @objc dynamic var id = NSUUID().uuidString
     @objc dynamic var deviceID = ""
-    @objc dynamic var deviceScanTimeInterval: Int = 0
-    @objc dynamic var deviceCacheStorageDuration: Int = 0
-
-    @objc dynamic var userName = ""
     @objc dynamic var carNumber = ""
-    @objc dynamic var carDescription = ""
     @objc dynamic var fuelTankWidth: Float = 0.0
     @objc dynamic var fuelTankLength: Float = 0.0
-    @objc dynamic var fuelTankVolume: Float = 0.0
-    @objc dynamic var fuelTankInfo = ""
-    
+    @objc dynamic var fuelTankHeight: Float = 0.0
+    @objc dynamic var voltage: Int = 1552
     @objc dynamic var createTime = Date()
     @objc dynamic var isDeleted = false
     

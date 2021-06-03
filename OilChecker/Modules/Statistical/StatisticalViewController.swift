@@ -16,9 +16,6 @@ class StatisticalViewController: UIViewController {
     let realm = try! Realm()
     var currentCarModel: UserAndCarModel?
     var userCarArray: [UserAndCarModel] = []
-    let dropDown = DropDown()
-//    var fuelLeveData :[FuelLevelModel] = []
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,50 +55,10 @@ class StatisticalViewController: UIViewController {
                 refuelLevelView.updateCurrentDevice(model: currentCarModel!)
                 fuelConsumptionView.updateCurrentDevice(model: currentCarModel!)
             }
-            carNumberButton.setImage(nil, for: .normal)
-            carNumberButton.setTitle(currentCarModel?.carNumber, for: .normal)
         }
     }
     
     
-    func setUpDropDownView() {
-        dropDown.anchorView = carNumberButton
-        var titles:[String] = []
-        for item in userCarArray {
-            titles.append(item.carNumber)
-        }
-        dropDown.dataSource = titles
-        dropDown.backgroundColor = kBackgroundColor
-        dropDown.bottomOffset = CGPoint.init(x: 0, y: (dropDown.anchorView?.plainView.bounds.height)!)
-        dropDown.direction = .bottom
-        dropDown.width = 100
-        dropDown.setupCornerRadius(10)
-        dropDown.textColor = kSecondBlackColor
-        dropDown.selectedTextColor = kGreenFontColor
-        dropDown.selectionAction = { [self] (index: Int, item: String) in
-            print("Selected item: \(item) at index: \(index)")
-            let model = userCarArray[index]
-            carNumberButton.setTitle(model.carNumber, for: .normal)
-            Defaults[\.currentCarID] = model.id
-            refuelLevelView.updateCurrentDevice(model: model)
-            fuelConsumptionView.updateCurrentDevice(model: model)
-        }
-    }
-    
-    
-    @objc
-    func addButtonAction() {
-        self.navigationController?.pushViewController(AddNewDeviceViewController())
-        logger.info("addButtonAction")
-    }
-    
-    @objc
-    func carNumberButtonAction() {
-        if userCarArray.count > 1 {
-            setUpDropDownView()
-            dropDown.show()
-        }
-    }
     @objc
     func showFuelConsumptionDetail() {
         self.navigationController?.pushViewController(FuelConsumptionDetailViewController())
@@ -115,7 +72,6 @@ class StatisticalViewController: UIViewController {
     func initUI() {
         self.view.addSubview(scrollView)
         scrollView.addSubview(scrollContentView)
-        scrollContentView.addSubview(carNumberButton)
         scrollContentView.addSubview(fuelConsumptionView)
         scrollContentView.addSubview(refuelLevelView)
         
@@ -129,25 +85,20 @@ class StatisticalViewController: UIViewController {
             make.height.equalTo(900)
         }
         
-        carNumberButton.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().offset(kMargin)
-            make.width.equalTo(120)
-            make.height.equalTo(30)
-            make.top.equalToSuperview().offset(kMargin)
-        }
-        
         fuelConsumptionView.snp.makeConstraints { (make) in
-            make.top.equalTo(carNumberButton.snp.bottom).offset(kMargin/2)
-            make.left.equalToSuperview().offset(kMargin)
-            make.right.equalToSuperview().offset(-kMargin)
+//            make.top.equalTo(carNumberButton.snp.bottom).offset(kMargin/2)
+            make.top.equalToSuperview().offset(kMargin)
+            make.left.equalToSuperview().offset(kMargin/2)
+            make.right.equalToSuperview().offset(-kMargin/2)
             make.height.equalTo(400)
         }
         
         refuelLevelView.snp.makeConstraints { (make) in
             make.top.equalTo(fuelConsumptionView.snp.bottom).offset(kMargin)
-            make.left.equalToSuperview().offset(kMargin)
-            make.right.equalToSuperview().offset(-kMargin)
+            make.left.equalToSuperview().offset(kMargin/2)
+            make.right.equalToSuperview().offset(-kMargin/2)
             make.height.equalTo(400)
+            make.bottom.equalToSuperview().offset(-kMargin)
         }
         
     }
@@ -163,21 +114,11 @@ class StatisticalViewController: UIViewController {
         return view
     }()
     
-    lazy var carNumberButton: UIButton = {
-        let btn = UIButton.init(type: .custom)
-        btn.setTitle("", for: .normal)
-        btn.setTitleColor(kSecondBlackColor, for: .normal)
-        btn.titleLabel?.font = k20BoldFont
-        btn.addTarget(self, action: #selector(carNumberButtonAction), for: .touchUpInside)
-//        btn.semanticContentAttribute = .forceRightToLeft
-        return btn
-    }()
     
     lazy var fuelConsumptionView: FuelConsumptionView = {
         let view = FuelConsumptionView.init()
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(showFuelConsumptionDetail)))
-//        view.detailButton.addTarget(self, action: #selector(showFuelConsumptionDetail), for: .touchUpInside)
         return view
     }()
     
@@ -185,7 +126,6 @@ class StatisticalViewController: UIViewController {
         let view = RefuelRecordView.init()
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(showRefuelRecordDetail)))
-//        view.detailButton.addTarget(self, action: #selector(showRefuelRecordDetail), for: .touchUpInside)
         return view
     }()
 }

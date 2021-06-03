@@ -5,3 +5,57 @@
   Created by 顾桂俊 on 2021/4/20.
   
 */
+"Home" = "首页";
+"Statistics" = "统计";
+"Malfunction" = "故障";
+"Setting" = "设置";
+
+
+//home
+"Current Fuel" = "当前油量";
+"Add A Device" = "添加设备";
+"Select A Car" = "选择一辆车";
+"Unknown" = "未知";
+"Normal" = "正常";
+"Irregular" = "异常";
+"Sync" = "同步数据";
+"please add a device first" = "请先添加一个设备";
+"connect a device first" = "请先连接一个设备";
+"Fuel Capacity Status" = "油量状态";
+"Average Fuel Consumption" = "平均油耗";
+
+//Statistical
+"Statistical" = "统计";
+"Refuel Record" = "加油记录";
+"Fuel Consumption" = "油耗记录";
+
+
+//Setting
+"Equipment Malfunction Record" = "设备故障列表";
+"Search Device" = "搜索设备";
+"BLE Devices" = "油量检测设备";
+
+"Malfuntion" = "故障记录";
+
+"Week" = "周";
+"Month" = "月";
+"Quarter" = "季度";
+"Year" = "年";
+
+"Add" = "添加";
+"Save" = "保存";
+"Add Success" = "添加成功";
+"Please Enter Correctly" = "请输入正确参数";
+
+"Parameter Setting" = "参数设置";
+"Statistical Information" = "统计信息";
+"Equipment Failure Information" = "设备故障信息";
+
+"Plate Number" = "车牌号码";
+"Enter Your Plate Number" = "输入车牌号码";
+"Device Identify" = "设备标志符";
+"Set Device Identify" = "设置设备唯一标志符";
+"Length" = "油箱长度";
+"Witdh" = "油箱宽度";
+"Height" = "油箱高度";
+"Compare Voltage" = "比较电压";

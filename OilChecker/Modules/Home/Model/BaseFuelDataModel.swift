@@ -11,9 +11,12 @@ import RealmSwift
 class BaseFuelDataModel: Object {
     @objc dynamic var id = NSUUID().uuidString
     @objc dynamic var deviceID = ""
-    @objc dynamic var rTime = Date()
-    @objc dynamic var echoTimeInterval : Float = 0.0
-    @objc dynamic var fuelLevel: Float = 0.0
+    @objc dynamic var recordIDFromDevice: Int64 = 0
+    @objc dynamic var fuelLevel: Double = 0.0
+    @objc dynamic var fueltankHeight: Double = 0.0
+    @objc dynamic var fueltankWidth: Double = 0.0
+    @objc dynamic var fueltankLength: Double = 0.0
+    @objc dynamic var isFirstActive = false
     @objc dynamic var isDeleted = false
     override class func primaryKey() -> String? {
         return "id"

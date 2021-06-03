@@ -179,8 +179,8 @@ extension FuelConsumptionDetailViewController: UITableViewDelegate, UITableViewD
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecordTableViewCell") as! RecordTableViewCell
         let model = dataArray[indexPath.row]
         cell.contentTitle.text = "Consumption"
-        cell.dateLabel.text = model.time.string(withFormat: "yyyy")
-        cell.recordDateLabel.text = model.time.string(withFormat: "MM-dd")
+        cell.dateLabel.text = model.deviceID
+        cell.recordDateLabel.text = model.recordIDFromDevice.string
         cell.contentMessage.text = model.consumption.string + "  L"
         cell.contentMessage.textColor = kRedFontColor
         return cell

@@ -27,7 +27,7 @@ target 'OilChecker' do
   pod 'SwiftyUserDefaults'
   pod 'SwiftDate'
   
-  pod 'WoodPeckeriOS', :configurations => ['Debug']
+#  pod 'WoodPeckeriOS', :configurations => ['Debug']
 
 #  pod "GMStepper"
 #  pod 'SegementSlide'

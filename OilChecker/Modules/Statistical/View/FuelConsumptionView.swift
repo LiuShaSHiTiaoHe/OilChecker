@@ -24,25 +24,32 @@ class FuelConsumptionView: UIView {
     
     func updateCurrentDevice(model: UserAndCarModel) {
         currentDevice = model
-        let startDate = getDataRegion().dateAt(.startOfWeek).date
-        let endDate = getDataRegion().dateAt(.endOfWeek).date
-        let fuelLeverDataSource = realm.objects(FuelConsumptionModel.self).filter("time BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, currentDevice!.deviceID).sorted(byKeyPath: "time")
-        let start = startDate.timeIntervalSince1970
-        let end = endDate.dateAt(.startOfDay).timeIntervalSince1970
-        let xAxis = fuelChartView.xAxis
-        xAxis.axisMinimum = start
-        xAxis.axisMaximum = end
-        xAxis.valueFormatter = WeekValueFormatter()
-        xAxis.setLabelCount(7, force: true)
-        updateChartData(Array(fuelLeverDataSource))
+        
+        let dataSource = OCRealmManager.shared().realmQueryWith(object: FuelConsumptionModel.self).suffix(60)
+        let fuelLeverDataSource = Array(dataSource)
+        updateChartData(Array(fuelLeverDataSource) as! [FuelConsumptionModel] )
+        
+//        let startDate = getDataRegion().dateAt(.startOfWeek).date
+//        let endDate = getDataRegion().dateAt(.endOfWeek).date
+//        let fuelLeverDataSource = realm.objects(FuelConsumptionModel.self).filter("time BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, currentDevice!.deviceID).sorted(byKeyPath: "time")
+//        let start = startDate.timeIntervalSince1970
+//        let end = endDate.dateAt(.startOfDay).timeIntervalSince1970
+//        let xAxis = fuelChartView.xAxis
+//        xAxis.axisMinimum = start
+//        xAxis.axisMaximum = end
+//        xAxis.valueFormatter = WeekValueFormatter()
+//        xAxis.setLabelCount(7, force: true)
+//        updateChartData(Array(fuelLeverDataSource))
     }
     
     func updateChartData(_ dataSource: [FuelConsumptionModel]) {
  
+//        let values = dataSource.map { (model) -> ChartDataEntry in
+//            return ChartDataEntry.init(x: model.time.dateAt(.startOfDay).timeIntervalSince1970, y: model.consumption)
+//        }
         let values = dataSource.map { (model) -> ChartDataEntry in
-            return ChartDataEntry.init(x: model.time.dateAt(.startOfDay).timeIntervalSince1970, y: model.consumption)
+            return ChartDataEntry(x: Double(model.recordIDFromDevice), y: model.consumption)
         }
-        
         let set1 = LineChartDataSet(entries: values, label: "DataSet 1")
         set1.axisDependency = .left
         set1.setColor(kRedFontColor)
@@ -130,7 +137,7 @@ class FuelConsumptionView: UIView {
         let label = UILabel.init()
         label.textColor = kSecondBlackColor
         label.font = k15Font
-        label.text = "Fuel Consumption"
+        label.text = "Fuel Consumption".localized()
         return label
     }()
     

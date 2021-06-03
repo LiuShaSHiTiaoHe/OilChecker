@@ -23,8 +23,7 @@ class FuelCapacityView: UIView {
         self.backgroundColor = kWhiteColor
         
         self.addSubview(nameLabel)
-        self.addSubview(numberLabel)
-        self.addSubview(unitsLabel)
+        self.addSubview(statusLabel)
         
         nameLabel.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(kMargin/2)
@@ -33,44 +32,30 @@ class FuelCapacityView: UIView {
             make.height.equalTo(20)
         }
         
-        numberLabel.snp.makeConstraints { (make) in
+        statusLabel.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(kMargin/2)
             make.bottom.equalToSuperview().offset(-kMargin/4)
-            make.right.equalToSuperview().offset(-kMargin*2)
-//            make.height.equalTo(30)
+            make.right.equalToSuperview().offset(-kMargin)
             make.top.equalTo(nameLabel.snp.bottom)
         }
         
-        unitsLabel.snp.makeConstraints { (make) in
-            make.right.equalToSuperview()
-            make.left.equalTo(numberLabel.snp.right).offset(kMargin/2)
-//            make.centerY.equalTo(numberLabel.snp.centerY)
-            make.bottom.equalTo(numberLabel.snp.bottom)
-            make.height.equalTo(30)
-        }
     }
     
     lazy var nameLabel: UILabel = {
         let label = UILabel.init()
         label.textColor = kSecondBlackColor
-        label.font = k12Font
+        label.font = k16Font
         label.textAlignment = .left
         return label
     }()
 
-    lazy var numberLabel: UILabel = {
+    lazy var statusLabel: UILabel = {
         let label = UILabel.init()
-        label.textColor = kSecondBlackColor
+        label.textColor = kThemeGreenColor
         label.font = k20Font
-        label.textAlignment = .center
+        label.textAlignment = .right
         return label
     }()
     
-    lazy var unitsLabel: UILabel = {
-        let label = UILabel.init()
-        label.textColor = kSecondBlackColor
-        label.font = k12Font
-        label.textAlignment = .left
-        return label
-    }()
+
 }

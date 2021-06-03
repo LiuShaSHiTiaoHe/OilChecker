@@ -8,13 +8,57 @@
 "Home" = "Home";
 "Statistics" = "Statistics";
 "Malfunction" = "Malfunction";
-
-
 "Setting" = "Setting";
+
+//home
+"Current Fuel" = "Current Fuel";
+"Add A Device" = "Add Device";
+"Select A Car" = "Select Car";
+"Unknown" = "Unknown";
+"Normal" = "Normal";
+"Irregular" = "Irregular";
+"Sync" = "Sync Data";
+
+"please add a device first" = "please add a device first";
+"connect a device first" = "connect a device first";
+"Fuel Capacity Status" = "Fuel Capacity Status";
+"Average Fuel Consumption" = "Average Consumption";
+
+//Statistical
+"Statistical" = "Statistical";
+"Refuel Record" = "Refuel Record";
+"Fuel Consumption" = "Consumption Record";
+
+
+//Setting
+"Equipment Malfunction Record" = "Equipment Malfunction Record";
+"Search Device" = "Search Device";
+"BLE Devices" = "OilChecker Devices";
+
 "Parameter Setting" = "Parameter Setting";
 "Statistical Information" = "Statistical Information";
 "Equipment Failure Information" = "Equipment Failure Information";
 
+"Malfuntion" = "Malfuntion";
+
+"Week" = "Week";
+"Month" = "Month";
+"Quarter" = "Quarter";
+"Year" = "Year";
+
+"Add" = "Add";
+"Save" = "Save";
+"Add Success" = "Add Success";
+"Please Enter Correctly" = "Please Enter Correctly";
+
+"Plate Number" = "Plate Number";
+"Enter Your Plate Number" = "Enter Your Plate Number";
+"Device Identify" = "Device Identify";
+"Set Device Identify" = "Set Device Identify";
+"Length" = "Length";
+"Witdh" = "Witdh";
+"Height" = "Height";
+"Compare Voltage" = "Compare Voltage";
 
 "error1" = "error1";
 "error2" = "error2";

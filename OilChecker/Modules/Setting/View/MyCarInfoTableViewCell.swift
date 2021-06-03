@@ -33,10 +33,9 @@ class MyCarInfoTableViewCell: UITableViewCell {
     
     func updateCellValue(_ value: UserAndCarModel) {
         carNumberLabel.text = value.carNumber
-        userName.text = value.userName
+        userName.text = value.deviceID
         timeLabel.text = value.createTime.toString(.custom(BaseDateFormatString))
-        fuelTankVolumeLabel.text = value.fuelTankVolume.string + "L"
-        
+        fuelTankVolumeLabel.text = NSDecimalNumber.init(value: value.fuelTankHeight).multiplying(by: NSDecimalNumber.init(value: value.fuelTankLength)).multiplying(by: NSDecimalNumber.init(value: value.fuelTankWidth)).stringValue + "L"
     }
     
     func setupUI(){

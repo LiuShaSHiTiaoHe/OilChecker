@@ -16,24 +16,45 @@ let KeyWindow : UIWindow = UIApplication.shared.keyWindow!
 let kScreenWidth = UIScreen.main.bounds.size.width
 /// 屏幕的高
 let kScreenHeight = UIScreen.main.bounds.size.height
+
+let kIs_iphone = (UIDevice().userInterfaceIdiom == .phone)
+
+let kIs_iPhoneX = (kScreenWidth >= 375.0 && kScreenHeight >= 812.0 && kIs_iphone)
+
 /// 间距
 let kMargin: CGFloat = 20.0
+
+let kCellMargin: CGFloat = 10.0
+
 /// 圆角
-let kCornerRadius: CGFloat = 5.0
+let kCornerRadius: CGFloat = 10.0
 /// 线宽
 let klineWidth: CGFloat = 0.5
 /// 双倍线宽
 let klineDoubleWidth: CGFloat = 1.0
 /// 状态栏高度
-let kStateHeight : CGFloat = UIApplication.shared.statusBarFrame.size.height
+let kStateHeight : CGFloat = getStatusBarHeight()
 /// 标题栏高度
 let kTitleHeight : CGFloat = 44.0
 /// 状态栏和标题栏高度
 let kTitleAndStateHeight : CGFloat = kStateHeight + kTitleHeight
 /// 底部导航栏高度
-let kTabBarHeight: CGFloat = kStateHeight > 20.0 ? 83.0 : 49.0
+let kTabBarHeight: CGFloat =  (kIs_iphone ? (kIs_iPhoneX ? 83 : 49) : 49)  //(UIScreen.main.bounds.size.height >= 812 ? 83 : 49) as CGFloat
 /// 底部按钮高度
 let kBottomTabbarHeight : CGFloat = 49.0
+
+
+
+func getStatusBarHeight() -> CGFloat {
+   var statusBarHeight: CGFloat = 0
+   if #available(iOS 13.0, *) {
+       let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+       statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+   } else {
+       statusBarHeight = UIApplication.shared.statusBarFrame.height
+   }
+   return statusBarHeight
+}
 
 /// 按钮高度
 let kUIButtonHeight : Float = 44.0
@@ -97,6 +118,7 @@ let k12Font = UIFont.systemFont(ofSize: 12.0)
 let k13Font = UIFont.systemFont(ofSize: 13.0)
 let k14Font = UIFont.systemFont(ofSize: 14.0)
 let k15Font = UIFont.systemFont(ofSize: 15.0)
+let k16Font = UIFont.systemFont(ofSize: 16.0)
 let k18Font = UIFont.systemFont(ofSize: 18.0)
 let k20Font = UIFont.systemFont(ofSize: 20.0)
 
@@ -107,3 +129,17 @@ let k14BoldFont = UIFont.boldSystemFont(ofSize: 14.0)
 let k15BoldFont = UIFont.boldSystemFont(ofSize: 15.0)
 let k18BoldFont = UIFont.boldSystemFont(ofSize: 18.0)
 let k20BoldFont = UIFont.boldSystemFont(ofSize: 20.0)
+
+
+let DefaultEmptyNumberString = "0.0"
+
+let ServiceUUID = 0xFFE0
+let CharacteristicUUID = 0xFFE1
+
+
+
+enum FuelCapacityState: String {
+    case Unknown = "Unknown"
+    case Normal =  "Normal"
+    case Irregular = "Irregular"
+}

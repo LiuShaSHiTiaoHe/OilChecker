@@ -18,10 +18,11 @@ class OCInputView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    var maxLength: Int = 9
+    
+    
     func initUI(){
         self.backgroundColor = kWhiteColor
-//        self.layer.cornerRadius = 10
-        
         self.addSubview(titleLabel)
         self.addSubview(contentBG)
         
@@ -58,7 +59,7 @@ class OCInputView: UIView {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel.init()
-        label.textColor = kGaryFontColor
+        label.textColor = kSecondBlackColor
         label.textAlignment = .left
         label.font = k18Font
         return label
@@ -80,7 +81,7 @@ class OCInputView: UIView {
     
     lazy var unitsLabel: UILabel = {
         let label = UILabel.init()
-        label.textColor = kGaryFontColor
+        label.textColor = kBlackColor
         label.textAlignment = .left
         label.font = k12Font
         label.adjustsFontSizeToFitWidth = true

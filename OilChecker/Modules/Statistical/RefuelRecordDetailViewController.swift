@@ -178,8 +178,9 @@ extension RefuelRecordDetailViewController: UITableViewDelegate, UITableViewData
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecordTableViewCell") as! RecordTableViewCell
         let model = dataArray[indexPath.row]
         cell.contentTitle.text = "Refuel"
-        cell.dateLabel.text = model.time.string(withFormat: "yyyy")
-        cell.recordDateLabel.text = model.time.string(withFormat: "MM-dd")
+//        cell.dateLabel.text = model.time.string(withFormat: "yyyy")
+//        cell.recordDateLabel.text = model.time.string(withFormat: "MM-dd")
+        cell.dateLabel.text = model.recordIDFromDevice.string
         cell.contentMessage.text = model.refuelLevel.string + "  L"
         cell.contentMessage.textColor = kThemeGreenColor
         return cell

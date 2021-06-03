@@ -27,12 +27,29 @@ class SettingViewController: UIViewController {
         return table
     }()
     
+    lazy var rightAddButton: UIButton = {
+        let btn = UIButton.init(type: .custom)
+        btn.frame = CGRect.init(x: 0, y: 0, width: 80, height: 30)
+        btn.backgroundColor = kThemeGreenColor
+        btn.layer.cornerRadius = 15
+        btn.setTitle("Add".localized(), for: .normal)
+        btn.setTitleColor(kWhiteColor, for: .normal)
+        btn.titleLabel?.font = k13Font
+        btn.addTarget(self, action: #selector(addButtonAction), for: .touchUpInside)
+        return btn
+    }()
+    
+    @objc
+    func addButtonAction() {
+        self.navigationController?.pushViewController(AddNewDeviceViewController())
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.title = "Mine".localized()
+        self.navigationItem.title = "Setting".localized()
         self.view.backgroundColor = kBackgroundColor
         self.view.addSubview(tableView)
         tableView.register(SettingTableViewCell.self, forCellReuseIdentifier: SettingTableViewCellIdentifier)
@@ -46,6 +63,10 @@ class SettingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.initData()
+        
+        if dataArray.count > 0 {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightAddButton)
+        }
     }
     
     func initData(){
@@ -111,9 +132,9 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource{
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCellIdentifier, for: indexPath) as! SettingTableViewCell
             if indexPath.row == 0 {
-                cell.updateCellValue(text: "Equipment Malfunction", imageName: "icon_error")
+                cell.updateCellValue(text: "Equipment Malfunction Record".localized(), imageName: "icon_error")
             }else{
-                cell.updateCellValue(text: "Search Device", imageName: "icon_findble")
+                cell.updateCellValue(text: "Search Device".localized(), imageName: "icon_findble")
             }
             return cell
             
@@ -130,7 +151,8 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource{
         switch indexPath.section {
         case 0:
             if dataArray.count == 0 {
-                self.navigationController?.pushViewController(AddNewDeviceViewController(), animated: true)
+//                self.navigationController?.pushViewController(AddNewDeviceViewController(), animated: true)
+                addButtonAction()
             }else{
                 
             }
