@@ -29,9 +29,21 @@ class MyDeviceListViewController: UIViewController {
     
     
     func initUI() {
+        self.view.backgroundColor = kBackgroundColor
+//        self.view.addSubview(rightAddButton)
         self.view.addSubview(tableView)
+        
+//        rightAddButton.snp.makeConstraints { make in
+//            make.width.equalTo(80)
+//            make.height.equalTo(30)
+//            make.top.equalToSuperview().offset(kTitleAndStateHeight)
+//            make.right.equalToSuperview().offset(-kMargin)
+//        }
         tableView.snp.makeConstraints { make  in
+//            make.top.equalTo(rightAddButton.snp.bottom).offset(kMargin)
+//            make.left.right.bottom.equalToSuperview()
             make.edges.equalToSuperview()
+
         }
     }
     
@@ -43,6 +55,8 @@ class MyDeviceListViewController: UIViewController {
         tableView.reloadData()
     }
     
+    
+    
     lazy var tableView: UITableView = {
         let table = UITableView.init(frame: CGRect.zero, style: .plain)
         table.delegate = self
@@ -50,6 +64,22 @@ class MyDeviceListViewController: UIViewController {
         table.tableFooterView = UIView()
         return table
     }()
+    
+    lazy var rightAddButton: UIButton = {
+        let btn = UIButton.init(type: .custom)
+        btn.backgroundColor = kThemeGreenColor
+        btn.layer.cornerRadius = 15
+        btn.setTitle("Close".localized(), for: .normal)
+        btn.setTitleColor(kWhiteColor, for: .normal)
+        btn.titleLabel?.font = k13Font
+        btn.addTarget(self, action: #selector(closeButtonAction), for: .touchUpInside)
+        return btn
+    }()
+    
+    @objc
+    func closeButtonAction() {
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 
@@ -78,5 +108,7 @@ extension MyDeviceListViewController: UITableViewDelegate, UITableViewDataSource
         tableView.deselectRow(at: indexPath, animated: true)
         let userCar = dataSource[indexPath.row]
         delegate?.selectedCarInfo(userCar)
+//        self.dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController()
     }
 }

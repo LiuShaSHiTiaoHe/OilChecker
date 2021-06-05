@@ -219,6 +219,7 @@ class AddNewDeviceViewController: UIViewController {
         let input = OCInputView.init()
         input.titleLabel.text = "Compare Voltage".localized()
         input.textfield.placeholder = "Compare Voltage".localized()
+        input.textfield.text = "1152"
         input.unitsLabel.text = "v"
         return input
     }()

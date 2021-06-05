@@ -82,6 +82,8 @@ let kBackgroundColor : UIColor = UIColor.init(hex: 0xf2f2f2)!
 let kThemeGreenColor : UIColor = UIColor.init(hex: 0x2dae99)!
 let kNavBarColor : UIColor = UIColor.init(hex: 0x5944DD)!
 let kOrangeColor: UIColor = UIColor.init(hex: 0xfe7f4a)!
+let kRedAlphaColor: UIColor = UIColor.init(hex: 0xf53333, transparency: 0.6)!
+let kGreenAlphaColor : UIColor = UIColor.init(hex: 0x2dae99, transparency: 0.6)!
 
 
 /// 黑色字体颜色

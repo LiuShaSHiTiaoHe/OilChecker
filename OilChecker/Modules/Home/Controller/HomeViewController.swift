@@ -32,20 +32,22 @@ class HomeViewController: UIViewController {
     }
     
     @objc
-    func addButtonAction() {
-        self.navigationController?.pushViewController(AddNewDeviceViewController())
-    }
-    
-    @objc
     func carNumberButtonAction() {
-        if userCarArray.count > 1 {
+        if userCarArray.count > 0 {
             let deviceListVC = MyDeviceListViewController()
             deviceListVC.delegate = self
-            self.present(deviceListVC, animated: true) {
-                
-            }
+            self.navigationController?.pushViewController(deviceListVC)
         }else{
-            addButtonAction()
+            //TODO
+            if OCBlueToothManager.shared.remotePeripheral != nil {
+                //add current conneted ble device
+                self.navigationController?.pushViewController(AddNewDeviceViewController())
+
+            }else{
+                SVProgressHUD.showInfo(withStatus: "please add a device first".localized())
+                self.navigationController?.pushViewController(ScanBleDeviceViewController())
+                return
+            }
         }
     }
     
@@ -76,10 +78,10 @@ class HomeViewController: UIViewController {
         }else{
             if Defaults[\.currentCarID]!.isEmpty {
                 currentCarModel = userCarArray[0]
-                Defaults[\.currentCarID] = currentCarModel!.id
+                Defaults[\.currentCarID] = currentCarModel!.deviceID
             }else{
                 currentCarModel = realm.objects(UserAndCarModel.self).filter({ (model) -> Bool in
-                    model.id == Defaults[\.currentCarID]
+                    model.deviceID == Defaults[\.currentCarID]
                 }).first
                 chartView.updateCurrentDevice(model: currentCarModel!)
             }
@@ -93,15 +95,7 @@ class HomeViewController: UIViewController {
             return
         }
         capacityView.statusLabel.text  = "normal".localized()
-        consumptionView.statusLabel.text = DefaultEmptyNumberString
-//        let startDate = getDataRegion().dateAt(.startOfDay).date
-//        let endDate = getDataRegion().dateAt(.endOfDay).date
-//        let capacity = realm.objects(BaseFuelDataModel.self).filter("rTime BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, deviceID!).sorted(byKeyPath: "rTime").last
-//        capacityView.numberLabel.text = capacity?.fuelLevel.string
-//
-//        let consumption = realm.objects(FuelConsumptionModel.self).filter("time BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, deviceID!).sorted(byKeyPath: "time").last
-//        consumptionView.numberLabel.text = consumption?.consumption.string
-        
+        consumptionView.statusLabel.text = GlobalDataMananger.shared.getAverageConsumption(deviceID!) + "L"//DefaultEmptyNumberString
     }
     
  
@@ -157,7 +151,6 @@ class HomeViewController: UIViewController {
             make.left.equalToSuperview().offset(kMargin/2)
             make.right.equalToSuperview().offset(-kMargin/2)
             make.height.equalTo(450)
-            make.bottom.equalToSuperview().offset(-kMargin)
         }
     }
     
@@ -225,7 +218,7 @@ extension HomeViewController: MyDeviceListViewControllerDelegate {
 
     func selectedCarInfo(_ data: UserAndCarModel) {
         carNumberLabel.text = data.carNumber
-        Defaults[\.currentCarID] = data.id
+        Defaults[\.currentCarID] = data.deviceID
         chartView.updateCurrentDevice(model: data)
         updateLatestFuelCapacityAndConsumption(deviceID: data.deviceID)
     }

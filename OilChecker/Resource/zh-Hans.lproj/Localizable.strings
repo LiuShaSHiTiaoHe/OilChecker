@@ -28,12 +28,14 @@
 "Statistical" = "统计";
 "Refuel Record" = "加油记录";
 "Fuel Consumption" = "油耗记录";
-
+"Consumption" = "油耗";
+"Refuel" = "加油";
 
 //Setting
 "Equipment Malfunction Record" = "设备故障列表";
 "Search Device" = "搜索设备";
 "BLE Devices" = "油量检测设备";
+"Device List" = "设备列表";
 
 "Malfuntion" = "故障记录";
 

@@ -24,6 +24,7 @@ class StatisticalViewController: UIViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.title = "Statistical".localized()
         self.view.backgroundColor = kBackgroundColor
+//        GlobalDataMananger.shared.fuelDataProcessor(Defaults[\.currentCarID]!)
         initUI()
     }
     
@@ -47,10 +48,10 @@ class StatisticalViewController: UIViewController {
         }else{
             if Defaults[\.currentCarID]!.isEmpty {
                 currentCarModel = userCarArray[0]
-                Defaults[\.currentCarID] = currentCarModel!.id
+                Defaults[\.currentCarID] = currentCarModel!.deviceID
             }else{
                 currentCarModel = realm.objects(UserAndCarModel.self).filter({ (model) -> Bool in
-                    model.id == Defaults[\.currentCarID]
+                    model.deviceID == Defaults[\.currentCarID]
                 }).first
                 refuelLevelView.updateCurrentDevice(model: currentCarModel!)
                 fuelConsumptionView.updateCurrentDevice(model: currentCarModel!)
@@ -72,7 +73,9 @@ class StatisticalViewController: UIViewController {
     func initUI() {
         self.view.addSubview(scrollView)
         scrollView.addSubview(scrollContentView)
+        scrollContentView.addSubview(fuelConsumptionTitleLabel)
         scrollContentView.addSubview(fuelConsumptionView)
+        scrollContentView.addSubview(refuelLevelTitleLabel)
         scrollContentView.addSubview(refuelLevelView)
         
         scrollView.snp.makeConstraints { (make) in
@@ -82,19 +85,31 @@ class StatisticalViewController: UIViewController {
         scrollContentView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
             make.width.equalTo(kScreenWidth)
-            make.height.equalTo(900)
+            make.height.equalTo(1000)
         }
         
-        fuelConsumptionView.snp.makeConstraints { (make) in
-//            make.top.equalTo(carNumberButton.snp.bottom).offset(kMargin/2)
+        fuelConsumptionTitleLabel.snp.makeConstraints { make  in
             make.top.equalToSuperview().offset(kMargin)
+            make.left.equalToSuperview().offset(kMargin)
+            make.height.equalTo(30)
+            make.right.equalToSuperview()
+        }
+        fuelConsumptionView.snp.makeConstraints { (make) in
+            make.top.equalTo(fuelConsumptionTitleLabel.snp.bottom).offset(kMargin/2)
             make.left.equalToSuperview().offset(kMargin/2)
             make.right.equalToSuperview().offset(-kMargin/2)
             make.height.equalTo(400)
         }
         
-        refuelLevelView.snp.makeConstraints { (make) in
+        refuelLevelTitleLabel.snp.makeConstraints { make  in
             make.top.equalTo(fuelConsumptionView.snp.bottom).offset(kMargin)
+            make.left.equalToSuperview().offset(kMargin)
+            make.height.equalTo(30)
+            make.right.equalToSuperview()
+        }
+        
+        refuelLevelView.snp.makeConstraints { (make) in
+            make.top.equalTo(refuelLevelTitleLabel.snp.bottom).offset(kMargin/2)
             make.left.equalToSuperview().offset(kMargin/2)
             make.right.equalToSuperview().offset(-kMargin/2)
             make.height.equalTo(400)
@@ -114,18 +129,34 @@ class StatisticalViewController: UIViewController {
         return view
     }()
     
+    lazy var fuelConsumptionTitleLabel: UILabel = {
+        let label = UILabel.init()
+        label.textColor = kSecondBlackColor
+        label.font = k20Font
+        label.text = "Fuel Consumption".localized()
+        return label
+    }()
     
     lazy var fuelConsumptionView: FuelConsumptionView = {
         let view = FuelConsumptionView.init()
-        view.isUserInteractionEnabled = true
-        view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(showFuelConsumptionDetail)))
+//        view.isUserInteractionEnabled = true
+//        view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(showFuelConsumptionDetail)))
+        view.detailButton.addTarget(self, action: #selector(showFuelConsumptionDetail), for: .touchUpInside)
         return view
     }()
     
+    lazy var refuelLevelTitleLabel: UILabel = {
+        let label = UILabel.init()
+        label.textColor = kSecondBlackColor
+        label.font = k20Font
+        label.text = "Refuel Record".localized()
+        return label
+    }()
     lazy var refuelLevelView: RefuelRecordView = {
         let view = RefuelRecordView.init()
-        view.isUserInteractionEnabled = true
-        view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(showRefuelRecordDetail)))
+//        view.isUserInteractionEnabled = true
+        view.detailButton.addTarget(self, action: #selector(showRefuelRecordDetail), for: .touchUpInside)
+//        view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(showRefuelRecordDetail)))
         return view
     }()
 }

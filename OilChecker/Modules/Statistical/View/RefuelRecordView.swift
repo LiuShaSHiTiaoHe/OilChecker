@@ -8,6 +8,7 @@
 import UIKit
 import Charts
 import RealmSwift
+import BetterSegmentedControl
 
 class RefuelRecordView: UIView {
     let realm = try! Realm()
@@ -22,54 +23,59 @@ class RefuelRecordView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc func segmentedControlValueChanged(_ sender: BetterSegmentedControl) {
+        
+        guard currentDevice != nil else {
+            return
+        }
+        if sender.index == 0{
+            let dataSource = RealmHelper.queryObject(objectClass: RefuelRecordModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(20)
+            updateChartData(Array(dataSource))
+
+        }else if sender.index == 1{
+            let dataSource = RealmHelper.queryObject(objectClass: RefuelRecordModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(30)
+            updateChartData(Array(dataSource))
+        }else {
+            let dataSource = RealmHelper.queryObject(objectClass: RefuelRecordModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(60)
+            updateChartData(Array(dataSource))
+        }
+      
+        
+    }
+    
     
     func updateCurrentDevice(model: UserAndCarModel) {
         currentDevice = model
-        let dataSource = OCRealmManager.shared().realmQueryWith(object: RefuelRecordModel.self).suffix(60)
-        let fuelLeverDataSource = Array(dataSource)
-        updateChartData(Array(fuelLeverDataSource) as! [RefuelRecordModel] )
-        
-//        let startDate = getDataRegion().dateAt(.startOfWeek).date
-//        let endDate = getDataRegion().dateAt(.endOfWeek).date
-//        let fuelLeverDataSource = realm.objects(RefuelRecordModel.self).filter("time BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, currentDevice!.deviceID).sorted(byKeyPath: "time")
-//        let start = startDate.timeIntervalSince1970
-//        let end = endDate.dateAt(.startOfDay).timeIntervalSince1970
-//        let xAxis = fuelChartView.xAxis
-//        xAxis.axisMinimum = start
-//        xAxis.axisMaximum = end
-//        xAxis.valueFormatter = WeekValueFormatter()
-//        xAxis.setLabelCount(7, force: true)
-//        updateChartData(Array(fuelLeverDataSource))
+        let dataSource = RealmHelper.queryObject(objectClass: RefuelRecordModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(50)
+        updateChartData(Array(dataSource))
     }
     
     func updateChartData(_ dataSource: [RefuelRecordModel]) {
  
-//        let values = dataSource.map { (model) -> ChartDataEntry in
-//            logger.info("\(model.time)")
-//            logger.info("\(model.refuelLevel)")
-//            return ChartDataEntry.init(x: model.time.dateAt(.startOfDay).timeIntervalSince1970, y: model.refuelLevel)
-//        }
-        let values = dataSource.map { (model) -> ChartDataEntry in
-            return ChartDataEntry(x: Double(model.recordIDFromDevice), y: model.refuelLevel)
+        if dataSource.count == 0 {
+            emptyImageView.isHidden = false
+            fuelChartView.isHidden = true
+            return
+        }else
+        {
+            emptyImageView.isHidden = true
+            fuelChartView.isHidden = false
         }
         
-        let set1 = LineChartDataSet(entries: values, label: "DataSet 1")
-        set1.axisDependency = .left
-        set1.setColor(kGreenFontColor)
-        set1.lineWidth = 1.0
-        set1.mode = .cubicBezier
-        set1.drawValuesEnabled = true
-        set1.fillAlpha = 0.1
-        set1.fillColor = kGreenFontColor
-        set1.drawFilledEnabled = true
-        set1.drawCirclesEnabled = true
-        set1.drawCircleHoleEnabled = false
-        set1.setCircleColor(kGreenFontColor)
-        set1.circleRadius = 2
-        let data = LineChartData(dataSet: set1)
-        data.setValueTextColor(kGreenFontColor)
-        data.setValueFont(k12Font)
         
+        let values = dataSource.map { (model) -> BarChartDataEntry in
+            return BarChartDataEntry(x: Double(model.recordIDFromDevice), y: model.refuelLevel)
+        }
+  
+        let set1 = BarChartDataSet(entries: values, label: "Refuel")
+        set1.setColor(kGreenAlphaColor)
+        set1.highlightColor = kGreenFontColor
+        set1.drawValuesEnabled = true
+        set1.valueTextColor = kBlackColor
+        set1.axisDependency = .left
+        let data = BarChartData(dataSet: set1)
+        data.setValueFont(UIFont(name: "HelveticaNeue-Light", size: 10)!)
+        data.barWidth = 0.9
         fuelChartView.data = data
     }
     
@@ -86,8 +92,6 @@ class RefuelRecordView: UIView {
         let leftAxis = fuelChartView.leftAxis
         leftAxis.labelPosition = .outsideChart
         leftAxis.labelFont = k12Font
-//        leftAxis.drawGridLinesEnabled = false
-//        leftAxis.granularityEnabled = false
         leftAxis.axisMinimum = 0
         leftAxis.axisMaximum = 170
         leftAxis.yOffset = -9
@@ -100,87 +104,100 @@ class RefuelRecordView: UIView {
         self.layer.cornerRadius = 10
         self.backgroundColor = kWhiteColor
         
-        self.addSubview(titleLabel)
+//        self.addSubview(segment)
+        self.addSubview(emptyImageView)
         self.addSubview(detailButton)
-        self.addSubview(lineView)
         self.addSubview(fuelChartView)
-        updateChartAxis()
-        lineView.isHidden = true
-        titleLabel.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().offset(kMargin/2)
-            make.top.equalToSuperview().offset(kMargin/2)
-            make.height.equalTo(30)
-            make.right.equalToSuperview().offset(-100)
-        }
+        
+        emptyImageView.isHidden = false
+        fuelChartView.isHidden = true
+        
+//        segment.snp.makeConstraints { (make) in
+//            make.top.equalToSuperview().offset(kMargin)
+//            make.width.equalTo(kScreenWidth - 200)
+//            make.height.equalTo(30)
+//            make.centerX.equalToSuperview()
+//        }
         
         detailButton.snp.makeConstraints { (make) in
-            make.right.equalToSuperview().offset(-kMargin/2)
-            make.centerY.equalTo(titleLabel.snp.centerY)
-            make.width.equalTo(30)
-            make.height.equalTo(30)
+            make.right.equalToSuperview().offset(-kMargin)
+//            make.centerY.equalTo(segment.snp.centerY)
+            make.top.equalToSuperview().offset(kMargin)
+            make.width.equalTo(20)
+            make.height.equalTo(20)
         }
         
-        lineView.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().offset(kMargin/2)
-            make.right.equalToSuperview().offset(-kMargin/2)
-            make.height.equalTo(1)
-            make.top.equalTo(titleLabel.snp.bottom).offset(kMargin/4)
+        emptyImageView.snp.makeConstraints { make  in
+            make.centerX.equalToSuperview()
+            make.width.height.equalTo(200)
+            make.centerY.equalToSuperview().offset(kMargin)
         }
         
         fuelChartView.snp.makeConstraints { (make) in
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.top.equalTo(lineView.snp.bottom)
+            make.top.equalTo(detailButton.snp.bottom)
             make.bottom.equalToSuperview().offset(-kMargin/2)
         }
-        
 
     }
     
-    lazy var titleLabel: UILabel = {
-        let label = UILabel.init()
-        label.textColor = kSecondBlackColor
-        label.font = k15Font
-        label.text = "Refuel Record".localized()
-        return label
+    lazy var segment: BetterSegmentedControl = {
+        let segmentedControl = BetterSegmentedControl(
+            frame: CGRect.zero,
+            segments: LabelSegment.segments(withTitles: ["Week".localized(), "Month".localized(),"Year".localized()],
+                                            normalTextColor: kWhiteColor,
+                                            selectedTextColor: kThemeGreenColor),
+            options:[.backgroundColor(kThemeGreenColor),
+                     .indicatorViewBackgroundColor(kWhiteColor),
+                     .cornerRadius(15.0),
+                     .animationSpringDamping(1.0)])
+        segmentedControl.addTarget(self,action: #selector(segmentedControlValueChanged(_:)),for: .valueChanged)
+        segmentedControl.alwaysAnnouncesValue = true
+        return segmentedControl
     }()
     
-    lazy var detailButton: UIButton = {
-        let btn = UIButton.init(type: .custom)
-        btn.setImage(UIImage.init(named: "icon_arrow"), for: .normal)
-        btn.setTitleColor(kBlackColor, for: .normal)
-        btn.titleLabel?.font = k13BoldFont
+    lazy var detailButton: ExpandButton = {
+        let btn = ExpandButton.init(type: .custom)
+        btn.setImage(UIImage(named: "btn_list_icon"), for: .normal)
         return btn
     }()
-    
-    lazy var lineView: UIView = {
-        let view = UIView.init()
-        view.backgroundColor = UIColor.init(hex: 0x515151, transparency: 0.2)
-        return view
-    }()
-    
-    lazy var fuelChartView: LineChartView = {
-        let chartView = LineChartView.init()
-        chartView.delegate = self
-        chartView.chartDescription?.enabled = false
-        chartView.dragEnabled = false
-        chartView.setScaleEnabled(false)
-        chartView.pinchZoomEnabled = false
-        chartView.highlightPerDragEnabled = true
-        chartView.rightAxis.enabled = false
-        chartView.backgroundColor = .white
+  
+    lazy var fuelChartView: BarChartView = {
+        let chartView = BarChartView.init()
+        chartView.drawBarShadowEnabled = false
+        chartView.drawValueAboveBarEnabled = false
+        chartView.maxVisibleCount = 60
         chartView.legend.enabled = false
         chartView.drawGridBackgroundEnabled = false
-        chartView.animate(xAxisDuration: 1.5)
+        chartView.rightAxis.enabled = false
 
+        let leftAxisFormatter = NumberFormatter()
+        leftAxisFormatter.minimumFractionDigits = 0
+        leftAxisFormatter.maximumFractionDigits = 1
+        
+        let xAxis = chartView.xAxis
+        xAxis.labelPosition = .bottom
+        xAxis.labelFont = .systemFont(ofSize: 10)
+        xAxis.granularity = 1
+        xAxis.labelCount = 7
+        xAxis.valueFormatter = DefaultAxisValueFormatter(formatter: leftAxisFormatter)
+        
+        let leftAxis = chartView.leftAxis
+        leftAxis.labelFont = .systemFont(ofSize: 10)
+        leftAxis.labelCount = 8
+        leftAxis.valueFormatter = DefaultAxisValueFormatter(formatter: leftAxisFormatter)
+        leftAxis.labelPosition = .outsideChart
+        leftAxis.spaceTop = 0.15
+        leftAxis.axisMinimum = 0
         
         return chartView
     }()
     
-    lazy var emptyView: BaseEmptyView = {
-        let view = BaseEmptyView.init()
-        view.emptyImageView.image = UIImage.init(named: "em_charts")
-        return  view
+    lazy var emptyImageView: UIImageView = {
+        let imageView = UIImageView.init()
+        imageView.image = UIImage.init(named: "em_charts")
+        return imageView
     }()
 
 }

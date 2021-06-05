@@ -6,19 +6,18 @@
 //
 
 import UIKit
-import RealmSwift
 import SwiftyUserDefaults
 import SwiftDate
 import DatePickerDialog
+import BetterSegmentedControl
+import RealmSwift
 
 class FuelConsumptionDetailViewController: UIViewController {
 
     let realm = try! Realm()
     var dataArray: [FuelConsumptionModel] = []
-    var currentCarModel: UserAndCarModel!
+    var currentDevice: UserAndCarModel!
     
-    var startDate: Date = getDataRegion().dateAt(.startOfWeek).date
-    var endDate: Date = getDataRegion().dateAt(.endOfWeek).date
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,22 +32,20 @@ class FuelConsumptionDetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        currentCarModel = realm.objects(UserAndCarModel.self).filter({ (model) -> Bool in
-            model.id == Defaults[\.currentCarID]
+        currentDevice = realm.objects(UserAndCarModel.self).filter({ (model) -> Bool in
+            model.deviceID == Defaults[\.currentCarID]
         }).first
         initData()
     }
     
     func initData() {
         
-        guard let _ = currentCarModel else {
+        guard let _ = currentDevice else {
             return
         }
-        startTimeButton.setTitle(startDate.string(withFormat: "yyyy-MM-dd"), for: .normal)
-        endTimeButton.setTitle(endDate.string(withFormat: "yyyy-MM-dd"), for: .normal)
-        let dataSource = realm.objects(FuelConsumptionModel.self).filter("time BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, currentCarModel!.deviceID).sorted(byKeyPath: "time")
-        dataArray = Array(dataSource)
-        tableView.reloadData()
+
+        let dataSource = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(20)
+        updateTableDataSource(Array(dataSource))
     }
     
     func initUI() {
@@ -58,93 +55,59 @@ class FuelConsumptionDetailViewController: UIViewController {
         }
     }
     
-    @objc
-    func selectStartTime() {
-        DatePickerDialog.init().show("pick start time", doneButtonTitle: "Done", cancelButtonTitle: "Cancle", defaultDate: Date(), minimumDate: nil, maximumDate: getDataRegion().dateAt(.endOfWeek).date, datePickerMode: .date) {[self] (selectedDate) in
-            guard let _ = selectedDate else{
-                return
-            }
-            startDate = selectedDate!
-            startTimeButton.setTitle(startDate.string(withFormat: "yyyy-MM-dd"), for: .normal)
-            queryDataWithSelectedDate()
+    // MARK: - Action handlers
+    @objc func segmentedControlValueChanged(_ sender: BetterSegmentedControl) {
+        
+        guard currentDevice != nil else {
+            return
         }
+        if sender.index == 0{
+
+            let dataSource = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(20)
+            updateTableDataSource(Array(dataSource))
+
+        }else if sender.index == 1{
+            let dataSource = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(40)
+            updateTableDataSource(Array(dataSource))
+        }else {
+            let dataSource = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(60)
+            updateTableDataSource(Array(dataSource))
+        }
+      
+        
     }
     
-    @objc
-    func selectEndTime() {
-        DatePickerDialog.init().show("pick start time", doneButtonTitle: "Done", cancelButtonTitle: "Cancle", defaultDate: Date(), minimumDate: nil, maximumDate: getDataRegion().dateAt(.endOfWeek).date, datePickerMode: .date) {[self]  (selectedDate) in
-            
-            guard let _ = selectedDate else{
-                return
-            }
-            
-            endDate = selectedDate!
-            endTimeButton.setTitle(endDate.string(withFormat: "yyyy-MM-dd"), for: .normal)
-            queryDataWithSelectedDate()
-        }
-    }
     
-    func queryDataWithSelectedDate() {
-        let dataSource = realm.objects(FuelConsumptionModel.self).filter("time BETWEEN {%@, %@} and deviceID == %@", startDate, endDate, currentCarModel!.deviceID).sorted(byKeyPath: "time")
-        dataArray = Array(dataSource)
+    func updateTableDataSource(_ data: [FuelConsumptionModel]) {
+        dataArray = data
         tableView.reloadData()
     }
     
     lazy var backContentView: UIView = {
         let view = UIView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: 40))
-        view.addSubview(startTimeButton)
-        view.addSubview(toLabel)
-        view.addSubview(endTimeButton)
-        startTimeButton.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
+        view.addSubview(segment)
+        segment.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(kMargin)
-            make.width.equalTo(120)
-            make.height.equalTo(30)
-        }
-
-        toLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(startTimeButton.snp.right).offset(kMargin/2)
             make.centerY.equalToSuperview()
-            make.width.equalTo(30)
-            make.height.equalTo(30)
-        }
-
-        endTimeButton.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.left.equalTo(toLabel.snp.right).offset(kMargin/2)
-            make.width.equalTo(120)
+            make.width.equalTo(200)
             make.height.equalTo(30)
         }
         return view
     }()
 
-    lazy var startTimeButton: UIButton = {
-        let btn = UIButton.init(type: .custom)
-        btn.titleLabel?.font = k13Font
-        btn.setTitleColor(kSecondBlackColor, for: .normal)
-        btn.backgroundColor = kBackgroundColor
-        btn.layer.cornerRadius = 5
-        btn.addTarget(self, action: #selector(selectStartTime), for: .touchUpInside)
-        return btn
-    }()
-
-    lazy var toLabel: UILabel = {
-        let label = UILabel.init()
-        label.textAlignment = .center
-        label.textColor = kSecondBlackColor
-        label.font = k13Font
-        label.text = "to"
-        return label
-    }()
-
-    lazy var endTimeButton: UIButton = {
-        let btn = UIButton.init(type: .custom)
-        btn.titleLabel?.font = k13Font
-        btn.setTitleColor(kSecondBlackColor, for: .normal)
-        btn.backgroundColor = kBackgroundColor
-        btn.layer.cornerRadius = 5
-        btn.addTarget(self, action: #selector(selectEndTime), for: .touchUpInside)
-        return btn
+    lazy var segment: BetterSegmentedControl = {
+        let segmentedControl = BetterSegmentedControl(
+            frame: CGRect.zero,
+            segments: LabelSegment.segments(withTitles: ["Week".localized(), "Month".localized(),"Year".localized()],
+                                            normalTextColor: kWhiteColor,
+                                            selectedTextColor: kThemeGreenColor),
+            options:[.backgroundColor(kThemeGreenColor),
+                     .indicatorViewBackgroundColor(kWhiteColor),
+                     .cornerRadius(15.0),
+                     .animationSpringDamping(1.0)])
+        segmentedControl.addTarget(self,action: #selector(segmentedControlValueChanged(_:)),for: .valueChanged)
+        segmentedControl.alwaysAnnouncesValue = true
+        return segmentedControl
     }()
     
     lazy var tableView: UITableView = {
@@ -178,7 +141,7 @@ extension FuelConsumptionDetailViewController: UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecordTableViewCell") as! RecordTableViewCell
         let model = dataArray[indexPath.row]
-        cell.contentTitle.text = "Consumption"
+        cell.contentTitle.text = "Consumption".localized()
         cell.dateLabel.text = model.deviceID
         cell.recordDateLabel.text = model.recordIDFromDevice.string
         cell.contentMessage.text = model.consumption.string + "  L"

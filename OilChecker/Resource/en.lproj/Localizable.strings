@@ -20,7 +20,7 @@
 "Sync" = "Sync Data";
 
 "please add a device first" = "please add a device first";
-"connect a device first" = "connect a device first";
+"connect a device first" = "please connect to a device first";
 "Fuel Capacity Status" = "Fuel Capacity Status";
 "Average Fuel Consumption" = "Average Consumption";
 
@@ -28,12 +28,14 @@
 "Statistical" = "Statistical";
 "Refuel Record" = "Refuel Record";
 "Fuel Consumption" = "Consumption Record";
-
-
+"Consumption" = "Consumption";
+"Refuel" = "Refuel";
 //Setting
 "Equipment Malfunction Record" = "Equipment Malfunction Record";
 "Search Device" = "Search Device";
 "BLE Devices" = "OilChecker Devices";
+"Device List" = "Device List";
+
 
 "Parameter Setting" = "Parameter Setting";
 "Statistical Information" = "Statistical Information";

@@ -43,16 +43,16 @@ class HomeChartView: UIView {
         }
         
         emptyImageView.snp.makeConstraints { make  in
-            make.left.equalToSuperview().offset(kMargin)
-            make.right.equalToSuperview().offset(-kMargin)
-            make.bottom.equalToSuperview().offset(-kMargin)
-            make.top.equalTo(segment.snp.bottom).offset(kMargin)
+            make.centerX.equalToSuperview()
+            make.width.height.equalTo(200)
+//            make.bottom.equalToSuperview().offset(-kMargin)
+            make.centerY.equalToSuperview().offset(kMargin)
         }
         
         fuelChartView.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().offset(kMargin/2)
+            make.left.equalToSuperview()
             make.bottom.equalToSuperview().offset(-kMargin/2)
-            make.right.equalToSuperview().offset(-kMargin/2)
+            make.right.equalToSuperview()
             make.top.equalTo(segment.snp.bottom)
         }
         
@@ -84,30 +84,33 @@ class HomeChartView: UIView {
         guard currentDevice != nil else {
             return
         }
-        if sender.index == 0{
-            
-            let dataSource = OCRealmManager.shared().realmQueryWith(object: BaseFuelDataModel.self).suffix(60)
-            let fuelLeverDataSource = Array(dataSource)
-            updateChartData(data: Array(fuelLeverDataSource) as! [BaseFuelDataModel] )
-            
-        }else if sender.index == 1{
-            let dataSource = OCRealmManager.shared().realmQueryWith(object: BaseFuelDataModel.self).suffix(160)
-            let fuelLeverDataSource = Array(dataSource)
-            updateChartData(data: Array(fuelLeverDataSource) as! [BaseFuelDataModel] )
-        }else {
-            let dataSource = OCRealmManager.shared().realmQueryWith(object: BaseFuelDataModel.self).suffix(220)
-            let fuelLeverDataSource = Array(dataSource)
-            updateChartData(data: Array(fuelLeverDataSource) as! [BaseFuelDataModel] )
-        }
-      
+        prepareData(sender.index+1)
+    }
+    
+    func prepareData(_ index: Int) {
+//        let allDataSoure: [BaseFuelDataModel] = OCRealmManager.shared().realmQueryWith(object: BaseFuelDataModel.self) as! [BaseFuelDataModel]
         
+//        let dataSource = allDataSoure.sorted(by: { m1, m2 in
+//            m1.recordIDFromDevice < m2.recordIDFromDevice
+//        }).suffix(index*50)
+        
+        let dataSource = realm.objects(BaseFuelDataModel.self).sorted(byKeyPath: "recordIDFromDevice").suffix(index*50)
+
+        let fuelLeverDataSource = Array(dataSource)
+
+        updateChartData(data: Array(fuelLeverDataSource) )
     }
     
     func setDataCount(_ dataSource: [BaseFuelDataModel]) {
 
-        let values = dataSource.map { (model) -> ChartDataEntry in
-            return ChartDataEntry(x: Double(model.recordIDFromDevice), y: model.fuelLevel)
+//        let values = dataSource.map { (model) -> ChartDataEntry in
+//            return ChartDataEntry(x: Double(model.recordIDFromDevice), y: model.fuelLevel)
+//        }
+        
+        let values = dataSource.enumerated().map { (index, model) in
+            return ChartDataEntry(x: index.double, y: model.fuelLevel)
         }
+        
         
         let set1 = LineChartDataSet(entries: values, label: "Current Fuel".localized())
         set1.axisDependency = .left
@@ -132,7 +135,7 @@ class HomeChartView: UIView {
     lazy var segment: BetterSegmentedControl = {
         let segmentedControl = BetterSegmentedControl(
             frame: CGRect.zero,
-            segments: LabelSegment.segments(withTitles: ["Week".localized(), "Month".localized(),"Year".localized()],
+            segments: LabelSegment.segments(withTitles: ["Week".localized(), "Month".localized()],
                                             normalTextColor: kWhiteColor,
                                             selectedTextColor: kThemeGreenColor),
             options:[.backgroundColor(kThemeGreenColor),
@@ -163,7 +166,6 @@ class HomeChartView: UIView {
         chartView.legend.enabled = true
         chartView.legend.textColor = kThemeGreenColor
         chartView.drawGridBackgroundEnabled = false
-//        chartView.animate(xAxisDuration: 1.5)
         return chartView
     }()
 
@@ -180,7 +182,6 @@ class HomeChartView: UIView {
         let leftAxis = fuelChartView.leftAxis
         leftAxis.labelPosition = .outsideChart
         leftAxis.labelFont = k12Font
-//        leftAxis.drawGridLinesEnabled = true
         leftAxis.gridColor = kLightGaryFontColor
         leftAxis.granularityEnabled = true
         leftAxis.axisMinimum = 0

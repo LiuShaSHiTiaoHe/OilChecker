@@ -12,6 +12,7 @@ import IQKeyboardManagerSwift
 import SwiftDate
 import SwifterSwift
 import CoreBluetooth
+import SwiftyUserDefaults
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,27 +21,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
         initializeApp()
-
-//        let bytess = [UInt8]("FFE0".utf8)
-//        var buf : [UInt8] = Array("FFE0".utf8)
-//        
-//        let bufString = NSUUID.init(uuidBytes: buf)
+                
+//        OCRealmManager.shared().realmDeleteTypeList(object: BaseFuelDataModel.self)
+//        let data: Int = 1151
 //
-//        let stringUUID = CBUUID.init(string: "FFE0")
-//        let data: Data = stringUUID.data
-//        let uuid = stringUUID.uuidString
-//        let uuidString = NSUUID.init(uuidBytes: data.bytes)
-////        let stringUUID = CBUUID.init(string: "FFE0")
-//        var sValue = swapInt(0xFFE0)
-//        let sData = NSData.init(bytes: &sValue, length: 2)
-//        let s = Data.init(bytes: &sValue, count: 2)
 //        
-//        let sssss = Data.init(bytes: bytess, count: 2)
+//        let datas = String.init(0x060F)
+//        let asdasd = datas.data(using: .utf8)
+//        
+//        let bytes:[UInt8] = [0x06, 0x0F]
+//        var binary = Binary(bytes: [0x06, 0x0F])
+//        let version = try? binary.readBits(16)
+//        
 
-        
-//        let ssss = UUID
-        
 //        let serviceUUID = CBUUID.init(data: s)
 //        syncEngine = SyncEngine(objects: [
 //                   SyncObject(type: Dog.self),
@@ -49,17 +44,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //               ])
 //        application.registerForRemoteNotifications()
         
-        addFakeData()
+//        addFakeData()
 //        addFakeReFuelData()
+        
+//        Defaults[\.currentCarID] = "999"
+        
         logger.info("\(NSHomeDirectory())")
         return true
     }
+  
+
     
-    func swapInt(_ data: UInt16) -> UInt16 {
-        var temp = data << 8
-        temp |= data >> 8
-        return temp
-    }
+//    func swapInt(_ data: UInt16) -> UInt16 {
+//        var temp = data << 8
+//        temp |= data >> 8
+//        return temp
+//    }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -86,56 +86,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func initializeApp() {
         self.window = UIWindow.init(frame: UIScreen.main.bounds)
         self.window!.rootViewController = initializeRootViewController()
+        self.window?.overrideUserInterfaceStyle = .light;
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
+        
         self.window?.makeKeyAndVisible()
     }
     
-    func addFakeReFuelData() {
-        
-        let startDate = DateInRegion.init(Date(), region: .UTC).date.nearestHour - 500.hours//getDataRegion().date.nearestHour - 500.hours
-
-        for index in 1...100 {
-            let data = Double(arc4random_uniform(100))+50
-            let fuelMode = RefuelRecordModel.init()
-            fuelMode.deviceID = "999"
-            fuelMode.refuelLevel = data
-            SettingManager.shared.updateRefuelRecordModel(fuelMode)
-        }
-
-        for index in 1...100 {
-            let data = Double(arc4random_uniform(100))+50
-            let fuelMode = FuelConsumptionModel.init()
-            fuelMode.deviceID = "999"
-            fuelMode.consumption = data
-            SettingManager.shared.updateFuelConsumptionModel(fuelMode)
-        }
-        
-    }
 
     func addFakeData() {
         
+        RealmHelper.clearTableClass(objectClass: BaseFuelDataModel())
+        var dataSource: [BaseFuelDataModel] = []
         for index in 1...1000 {
             let data = Double(arc4random_uniform(100))+50
             let baseFuelModel = BaseFuelDataModel.init()
             baseFuelModel.deviceID = "999"
             baseFuelModel.fuelLevel = data
             baseFuelModel.recordIDFromDevice = Int64(index)
-            SettingManager.shared.updateBaseFuelDataModel(baseFuelModel)
-            
+//            SettingManager.shared.updateBaseFuelDataModel(baseFuelModel)
+//            RealmHelper.addObject(object: baseFuelModel)
+            dataSource.append(baseFuelModel)
         }
-
-        
-//        for index in 1...10 {
-//            let data = Double(arc4random_uniform(100))
-//            let date = startDate + (index*2).hours
-//            let malfuntion = MalfunctionModel.init()
-//            malfuntion.deviceID = "999"
-//            malfuntion.mcode = data.toString()
-//            malfuntion.mName = "device error"
-//            malfuntion.mtime = date
-//            SettingManager.shared.updateMalfunctionInfo(malfuntion)
-//        }
+        RealmHelper.addObjects(by: dataSource)
     }
 
      func initializeRootViewController() -> ESTabBarController {

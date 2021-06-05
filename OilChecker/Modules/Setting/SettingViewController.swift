@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import SVProgressHUD
 
 let SettingTableViewCellIdentifier = "SettingTableViewCellIdentifier"
 let AddNewCarTableViewCellIdentifier = "AddNewCarTableViewCellIdentifier"
@@ -41,7 +42,12 @@ class SettingViewController: UIViewController {
     
     @objc
     func addButtonAction() {
-        self.navigationController?.pushViewController(AddNewDeviceViewController())
+        if OCBlueToothManager.shared.remotePeripheral != nil {
+            self.navigationController?.pushViewController(AddNewDeviceViewController())
+        }else{
+            SVProgressHUD.showInfo(withStatus: "connect a device first".localized())
+            self.navigationController?.pushViewController(ScanBleDeviceViewController())
+        }
     }
     
     override func viewDidLoad() {
@@ -64,9 +70,9 @@ class SettingViewController: UIViewController {
         super.viewWillAppear(animated)
         self.initData()
         
-        if dataArray.count > 0 {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightAddButton)
-        }
+//        if dataArray.count > 0 {
+//            self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightAddButton)
+//        }
     }
     
     func initData(){
@@ -74,11 +80,11 @@ class SettingViewController: UIViewController {
         dataArray = models.filter({ (model) -> Bool in
             !model.isDeleted
         })
-        if dataArray.count > 0 {
-            tableView.tableHeaderView = AddSectionHeaderView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: 40))
-        }else{
-            tableView.tableHeaderView = UIView()
-        }
+//        if dataArray.count > 0 {
+//            tableView.tableHeaderView = AddSectionHeaderView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: 40))
+//        }else{
+//            tableView.tableHeaderView = UIView()
+//        }
         tableView.reloadData()
     }
 
@@ -94,11 +100,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            if dataArray.count == 0 {
-                return 1
-            }else{
-                return dataArray.count
-            }
+            return 1
         case 1:
             return 2
         default:
@@ -109,9 +111,13 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            return 100
+            if dataArray.count == 0 {
+                return 100
+            }else{
+                return 70
+            }
         default:
-            return 80
+            return 70
         }
     }
     
@@ -123,11 +129,16 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource{
                 cell.selectionStyle = .none
                 return cell
             }else{
-                let cell = tableView.dequeueReusableCell(withIdentifier: MyCarInfoTableViewCellIdentifier, for: indexPath) as! MyCarInfoTableViewCell
-                let model = dataArray[indexPath.row]
-                cell.updateCellValue(model)
-                cell.selectionStyle = .none
+//                let cell = tableView.dequeueReusableCell(withIdentifier: MyCarInfoTableViewCellIdentifier, for: indexPath) as! MyCarInfoTableViewCell
+//                let model = dataArray[indexPath.row]
+//                cell.updateCellValue(model)
+//                cell.selectionStyle = .none
+//                return cell
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCellIdentifier, for: indexPath) as! SettingTableViewCell
+                cell.updateCellValue(text: "Device List".localized(), imageName: "icon_list")
                 return cell
+                
             }
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCellIdentifier, for: indexPath) as! SettingTableViewCell
@@ -151,10 +162,9 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource{
         switch indexPath.section {
         case 0:
             if dataArray.count == 0 {
-//                self.navigationController?.pushViewController(AddNewDeviceViewController(), animated: true)
                 addButtonAction()
             }else{
-                
+                self.navigationController?.pushViewController(MyDeviceListViewController(), animated: true)
             }
         case 1:
             if indexPath.row == 0 {
