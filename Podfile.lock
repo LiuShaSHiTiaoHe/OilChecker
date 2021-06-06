@@ -58,7 +58,6 @@ PODS:
   - SwifterSwift/SwiftStdlib (5.2.0)
   - SwifterSwift/UIKit (5.2.0)
   - SwiftyUserDefaults (5.3.0)
-  - WoodPeckeriOS (1.2.92)
 
 DEPENDENCIES:
   - BetterSegmentedControl
@@ -80,7 +79,6 @@ DEPENDENCIES:
   - SwiftEntryKit
   - SwifterSwift
   - SwiftyUserDefaults
-  - WoodPeckeriOS
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -105,7 +103,6 @@ SPEC REPOS:
     - SwiftEntryKit
     - SwifterSwift
     - SwiftyUserDefaults
-    - WoodPeckeriOS
 
 SPEC CHECKSUMS:
   BetterSegmentedControl: 09607b27861d49cbce48b7673b74f9150a3d371a
@@ -129,8 +126,7 @@ SPEC CHECKSUMS:
   SwiftEntryKit: 537c92699d6034efb1ef9c32b11e0b37c97aa589
   SwifterSwift: 334181863c416882d97b7a60c05054d9e4d799e2
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
-  WoodPeckeriOS: 29f6fb07de24c8c8716b56a8764876a739c6e8e3
 
-PODFILE CHECKSUM: d9da4f3e242a49c61e75aa1307db1db2692f97e2
+PODFILE CHECKSUM: 628541904f6cbff7bcf8da87d49fb6184be366d0
 
 COCOAPODS: 1.10.0

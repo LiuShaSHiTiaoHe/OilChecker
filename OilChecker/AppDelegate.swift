@@ -101,11 +101,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         for index in 1...1000 {
             let data = Double(arc4random_uniform(100))+50
             let baseFuelModel = BaseFuelDataModel.init()
-            baseFuelModel.deviceID = "999"
+            baseFuelModel.deviceID = "2345"
             baseFuelModel.fuelLevel = data
             baseFuelModel.recordIDFromDevice = Int64(index)
-//            SettingManager.shared.updateBaseFuelDataModel(baseFuelModel)
-//            RealmHelper.addObject(object: baseFuelModel)
             dataSource.append(baseFuelModel)
         }
         RealmHelper.addObjects(by: dataSource)

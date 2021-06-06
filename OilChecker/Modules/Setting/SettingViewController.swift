@@ -42,7 +42,7 @@ class SettingViewController: UIViewController {
     
     @objc
     func addButtonAction() {
-        if OCBlueToothManager.shared.remotePeripheral != nil {
+        if OCBlueToothManager.shared.connectedRemotePeripheral != nil {
             self.navigationController?.pushViewController(AddNewDeviceViewController())
         }else{
             SVProgressHUD.showInfo(withStatus: "connect a device first".localized())
@@ -64,6 +64,8 @@ class SettingViewController: UIViewController {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        
+//        OCBlueToothManager
     }
     
     override func viewWillAppear(_ animated: Bool) {

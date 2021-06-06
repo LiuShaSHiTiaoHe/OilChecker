@@ -13,7 +13,7 @@ import SVProgressHUD
 class ScanBleDeviceViewController: UIViewController {
 
     private var discoveries = [BKDiscovery]()
-    private let central = OCBlueToothManager.shared.central//BKCentral()
+    private let central = OCBlueToothManager.shared.central
     private var currentBKDiscovery: BKDiscovery?
     
     override func viewDidLoad() {
@@ -41,10 +41,10 @@ class ScanBleDeviceViewController: UIViewController {
     }
     
     internal override func viewDidAppear(_ animated: Bool) {
-        if OCBlueToothManager.shared.remotePeripheral != nil {
+        if OCBlueToothManager.shared.connectedRemotePeripheral != nil {
             do {
-                try central.disconnectRemotePeripheral(OCBlueToothManager.shared.remotePeripheral!)
-                OCBlueToothManager.shared.remotePeripheral = nil
+                try central.disconnectRemotePeripheral(OCBlueToothManager.shared.connectedRemotePeripheral!)
+                OCBlueToothManager.shared.connectedRemotePeripheral = nil
             } catch let error {
                 logger.info("Error disconnecting remote peripheral: \(error)")
             }
@@ -56,9 +56,6 @@ class ScanBleDeviceViewController: UIViewController {
         central.interruptScan()
     }
 
-//    deinit {
-//        _ = try? central.stop()
-//    }
     
     private func scan() {
         central.scanContinuouslyWithChangeHandler({ changes, discoveries in
@@ -168,7 +165,7 @@ extension ScanBleDeviceViewController: UITableViewDelegate, UITableViewDataSourc
                 print("Error connecting peripheral: \(String(describing: error))")
                 return
             }
-            OCBlueToothManager.shared.remotePeripheral = remotePeripheral
+            OCBlueToothManager.shared.connectedRemotePeripheral = remotePeripheral
             self.navigationController?.pushViewController(AddNewDeviceViewController())
         }
     }

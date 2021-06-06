@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import SwiftyUserDefaults
 
 class GlobalDataMananger: NSObject {
 
@@ -92,4 +93,12 @@ class GlobalDataMananger: NSObject {
         return model ?? "0"
     }
     
+    
+    func getCurrentDeviceInfo(_ deviceID: String) -> UserAndCarModel? {
+        if Defaults[\.currentCarID] != "" {
+            return RealmHelper.queryObject(objectClass: UserAndCarModel(), filter: "deviceID = '\(deviceID)'").first
+        }else{
+            return nil
+        }
+    }
 }

@@ -16,7 +16,7 @@ let TextFieldHeight = 45
 class AddNewDeviceViewController: UIViewController {
 
     var central: BKCentral? = OCBlueToothManager.shared.central
-    var remotePeripheral: BKRemotePeripheral? = OCBlueToothManager.shared.remotePeripheral
+    var remotePeripheral: BKRemotePeripheral? = OCBlueToothManager.shared.connectedRemotePeripheral
 
 //    init(central: BKCentral, remotePeripheral: BKRemotePeripheral) {
 //        self.central = central

@@ -39,7 +39,7 @@ class HomeViewController: UIViewController {
             self.navigationController?.pushViewController(deviceListVC)
         }else{
             //TODO
-            if OCBlueToothManager.shared.remotePeripheral != nil {
+            if OCBlueToothManager.shared.connectedRemotePeripheral != nil {
                 //add current conneted ble device
                 self.navigationController?.pushViewController(AddNewDeviceViewController())
 
@@ -59,8 +59,10 @@ class HomeViewController: UIViewController {
             return
         }
         //TODO
-        if OCBlueToothManager.shared.remotePeripheral != nil {
+        if OCBlueToothManager.shared.connectedRemotePeripheral != nil {
             //sync data via ble
+//            OCBlueToothManager.shared
+            
         }else{
             //try connect current selected device
         }
@@ -83,6 +85,9 @@ class HomeViewController: UIViewController {
                 currentCarModel = realm.objects(UserAndCarModel.self).filter({ (model) -> Bool in
                     model.deviceID == Defaults[\.currentCarID]
                 }).first
+                guard currentCarModel != nil else {
+                    return
+                }
                 chartView.updateCurrentDevice(model: currentCarModel!)
             }
             carNumberLabel.text = currentCarModel?.carNumber
