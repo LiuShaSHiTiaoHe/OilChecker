@@ -23,6 +23,7 @@
 "connect a device first" = "请先连接一个设备";
 "Fuel Capacity Status" = "油量状态";
 "Average Fuel Consumption" = "平均油耗";
+"BlueTooth Unsupported" = "当前设备不支持或者没有使用蓝牙的权限";
 
 //Statistical
 "Statistical" = "统计";
@@ -55,7 +56,7 @@
 
 "Plate Number" = "车牌号码";
 "Enter Your Plate Number" = "输入车牌号码";
-"Device Identify" = "设备标志符";
+"Device Identify" = "设备标志符 (例如: 1A2B)";
 "Set Device Identify" = "设置设备唯一标志符";
 "Length" = "油箱长度";
 "Witdh" = "油箱宽度";

@@ -94,7 +94,7 @@ class HomeChartView: UIView {
 //            m1.recordIDFromDevice < m2.recordIDFromDevice
 //        }).suffix(index*50)
         
-        let dataSource = realm.objects(BaseFuelDataModel.self).sorted(byKeyPath: "recordIDFromDevice").suffix(index*50)
+        let dataSource = realm.objects(BaseFuelDataModel.self).sorted(byKeyPath: "recordIDFromDevice").suffix(index*20)
 
         let fuelLeverDataSource = Array(dataSource)
 
@@ -103,12 +103,19 @@ class HomeChartView: UIView {
     
     func setDataCount(_ dataSource: [BaseFuelDataModel]) {
 
-//        let values = dataSource.map { (model) -> ChartDataEntry in
-//            return ChartDataEntry(x: Double(model.recordIDFromDevice), y: model.fuelLevel)
-//        }
-        
-        let values = dataSource.enumerated().map { (index, model) in
-            return ChartDataEntry(x: index.double, y: model.fuelLevel)
+        var values: [ChartDataEntry] = []
+        for index in 0 ... dataSource.count - 1 {
+            if index < dataSource.count - 2 {
+                let netxData = dataSource[index + 1]
+                let data = dataSource[index]
+                if data.fuelLevel - netxData.fuelLevel > warningFuelChangedValue {
+                    values.append(ChartDataEntry(x: index.double, y: data.fuelLevel, icon: NSUIImage.init(named: "icon_warning")))
+                }else{
+                    values.append(ChartDataEntry(x: index.double, y: data.fuelLevel))
+                }
+            }else{
+                values.append(ChartDataEntry(x: index.double, y: dataSource[index].fuelLevel))
+            }
         }
         
         
@@ -116,26 +123,23 @@ class HomeChartView: UIView {
         set1.axisDependency = .left
         set1.setColor(kThemeGreenColor)
         set1.lineWidth = 1.0
-        set1.mode = .cubicBezier
-        set1.drawValuesEnabled = true
+        set1.mode = .horizontalBezier
         set1.fillAlpha = 0.1
         set1.fillColor = kThemeGreenColor
         set1.drawFilledEnabled = true
         set1.drawCirclesEnabled = true
-        set1.drawCircleHoleEnabled = false
         set1.setCircleColor(kGreenFontColor)
         set1.circleRadius = 2
         let data = LineChartData(dataSet: set1)
         data.setValueTextColor(kThemeGreenColor)
         data.setValueFont(k12Font)
-
         fuelChartView.data = data
     }
     
     lazy var segment: BetterSegmentedControl = {
         let segmentedControl = BetterSegmentedControl(
             frame: CGRect.zero,
-            segments: LabelSegment.segments(withTitles: ["Week".localized(), "Month".localized()],
+            segments: LabelSegment.segments(withTitles: ["Day".localized(), "Week".localized()],
                                             normalTextColor: kWhiteColor,
                                             selectedTextColor: kThemeGreenColor),
             options:[.backgroundColor(kThemeGreenColor),
@@ -177,7 +181,6 @@ class HomeChartView: UIView {
         xAxis.drawAxisLineEnabled = false
         xAxis.drawGridLinesEnabled = false
         xAxis.centerAxisLabelsEnabled = true
-        xAxis.granularity = 1
         
         let leftAxis = fuelChartView.leftAxis
         leftAxis.labelPosition = .outsideChart
@@ -185,7 +188,6 @@ class HomeChartView: UIView {
         leftAxis.gridColor = kLightGaryFontColor
         leftAxis.granularityEnabled = true
         leftAxis.axisMinimum = 0
-        leftAxis.axisMaximum = 170
         leftAxis.yOffset = -9
         leftAxis.labelTextColor = kSecondBlackColor
         

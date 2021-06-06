@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		693DAFA8266D03B70007EADD /* OCByteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693DAFA7266D03B70007EADD /* OCByteManager.swift */; };
 		6953CCE82642E5A100D48DA2 /* RecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */; };
 		6953CCFB26431F8100D48DA2 /* OCInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CCFA26431F8100D48DA2 /* OCInputView.swift */; };
 		6953CD03264458B100D48DA2 /* ScanBleDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CD02264458B100D48DA2 /* ScanBleDeviceViewController.swift */; };
@@ -79,6 +80,8 @@
 
 /* Begin PBXFileReference section */
 		056F54F2EA47FA6C37668A74 /* Pods-OilChecker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OilChecker.release.xcconfig"; path = "Target Support Files/Pods-OilChecker/Pods-OilChecker.release.xcconfig"; sourceTree = "<group>"; };
+		693DAFA3266CEAB10007EADD /* OilChecker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OilChecker-Bridging-Header.h"; sourceTree = "<group>"; };
+		693DAFA7266D03B70007EADD /* OCByteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCByteManager.swift; sourceTree = "<group>"; };
 		6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTableViewCell.swift; sourceTree = "<group>"; };
 		6953CCFA26431F8100D48DA2 /* OCInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCInputView.swift; sourceTree = "<group>"; };
 		6953CD02264458B100D48DA2 /* ScanBleDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanBleDeviceViewController.swift; sourceTree = "<group>"; };
@@ -259,6 +262,8 @@
 				69CB1ABE266404D2001BE0D3 /* OCRealmManager.swift */,
 				69CB1B062667E632001BE0D3 /* OCBlueToothManager.swift */,
 				69D4FAB8266B6350009D4EF0 /* GlobalDataMananger.swift */,
+				693DAFA7266D03B70007EADD /* OCByteManager.swift */,
+				693DAFA3266CEAB10007EADD /* OilChecker-Bridging-Header.h */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -484,6 +489,7 @@
 				TargetAttributes = {
 					69CAA35326275E8100333AA2 = {
 						CreatedOnToolsVersion = 12.4;
+						LastSwiftMigration = 1250;
 					};
 					69CAA36926275E8400333AA2 = {
 						CreatedOnToolsVersion = 12.4;
@@ -597,6 +603,7 @@
 				69AF2FC626692F790015B987 /* Binary.swift in Sources */,
 				69B10BAD262DF47900617D17 /* Macro.swift in Sources */,
 				69B10DA12635D05600617D17 /* HomeChartView.swift in Sources */,
+				693DAFA8266D03B70007EADD /* OCByteManager.swift in Sources */,
 				69B10E6D263DD95C00617D17 /* BaseFuelDataModel.swift in Sources */,
 				69AF2FB926691C370015B987 /* ExpandButton.swift in Sources */,
 				69B10D432634480F00617D17 /* MalfunctionListViewController.swift in Sources */,
@@ -814,6 +821,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4UW2XRZ2Z5;
 				INFOPLIST_FILE = OilChecker/Resource/Info.plist;
@@ -825,6 +834,8 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xyz.OilChecker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "OilChecker/Common/OilChecker-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -836,6 +847,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4UW2XRZ2Z5;
 				INFOPLIST_FILE = OilChecker/Resource/Info.plist;
@@ -847,6 +860,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xyz.OilChecker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "OilChecker/Common/OilChecker-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

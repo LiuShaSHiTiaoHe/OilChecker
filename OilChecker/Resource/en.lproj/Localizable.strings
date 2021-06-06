@@ -24,6 +24,7 @@
 "Fuel Capacity Status" = "Fuel Capacity Status";
 "Average Fuel Consumption" = "Average Consumption";
 
+"BlueTooth Unsupported" = "BlueTooth Unsupported";
 //Statistical
 "Statistical" = "Statistical";
 "Refuel Record" = "Refuel Record";
@@ -56,7 +57,7 @@
 "Plate Number" = "Plate Number";
 "Enter Your Plate Number" = "Enter Your Plate Number";
 "Device Identify" = "Device Identify";
-"Set Device Identify" = "Set Device Identify";
+"Set Device Identify" = "Set Device Identify (ex: 1A2B)";
 "Length" = "Length";
 "Witdh" = "Witdh";
 "Height" = "Height";

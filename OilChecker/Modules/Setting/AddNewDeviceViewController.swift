@@ -13,25 +13,31 @@ import SVProgressHUD
 
 let TextFieldHeight = 45
 
+extension AddNewDeviceViewController: BKRemotePeripheralDelegate, BKRemotePeerDelegate {
+    func remotePeripheral(_ remotePeripheral: BKRemotePeripheral, didUpdateName name: String) {
+        logger.info("didUpdateName \(name)")
+    }
+    
+    func remotePeripheralIsReady(_ remotePeripheral: BKRemotePeripheral) {
+        logger.info("Peripheral ready: \(remotePeripheral)")
+        SVProgressHUD.showInfo(withStatus: "Device is ready")
+        if sendDataState == .RequestDeviceParamers {
+            requestDeviceInfo()
+        }
+    }
+    
+    func remotePeer(_ remotePeer: BKRemotePeer, didSendArbitraryData data: Data) {
+        logger.info("didSendArbitraryData \(data)")
+    }
+    
+}
+
+
 class AddNewDeviceViewController: UIViewController {
 
     var central: BKCentral? = OCBlueToothManager.shared.central
     var remotePeripheral: BKRemotePeripheral? = OCBlueToothManager.shared.connectedRemotePeripheral
-
-//    init(central: BKCentral, remotePeripheral: BKRemotePeripheral) {
-//        self.central = central
-//        self.remotePeripheral = remotePeripheral
-//        super.init(nibName: nil, bundle: nil)
-//        remotePeripheral.delegate = self
-//        remotePeripheral.peripheralDelegate = self
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-  
-
-    
+    private var sendDataState: BleSendDataState = .RequestDeviceParamers
     @objc
     func saveButtonAction() {
         logger.info("saveButtonAction")
@@ -60,6 +66,100 @@ class AddNewDeviceViewController: UIViewController {
         
     }
     
+    func sendDeviceInfo(_ deviceID: String, _ length: String, _ width: String, _ height: String, _ compareV: String) {
+        var datas: [UInt8] = []
+        
+        let defaultDeviceID: [UInt8] = DefualtDeviceID.hw_to2Bytes()
+        
+        let deviceSettingID: [UInt8] = OCByteManager.shared.bytes(from: deviceID)
+        let deviceLength: [UInt8] = Int(length)!.hw_to2Bytes()
+        let deviceWidth: [UInt8] = Int(width)!.hw_to2Bytes()
+        let deviceHeight: [UInt8] = Int(height)!.hw_to2Bytes()
+        let deviceCompareV: [UInt8] = Int(compareV)!.hw_to2Bytes()
+
+        datas.append(0x02)//STX 1字节
+        datas.append(0x0F)//数据长度  10字节
+        datas.append(0x0F)//数据长补数 1字节
+        datas.append(defaultDeviceID[0])//设备ID
+        datas.append(defaultDeviceID[1])
+        datas.append(0x01)//帧标识 APP -> Hard 0x01
+        datas.append(0x83)//CMD ID  参数设置应答 0x83
+        datas.append(deviceSettingID[0])
+        datas.append(deviceSettingID[1])
+        
+        datas.append(deviceLength[0])
+        datas.append(deviceLength[1])
+        
+        datas.append(deviceWidth[0])
+        datas.append(deviceWidth[1])
+        
+        datas.append(deviceHeight[0])
+        datas.append(deviceHeight[1])
+        
+        datas.append(deviceCompareV[0])
+        datas.append(deviceCompareV[1])
+        
+        var  checkSum: UInt8 = 0x00
+        checkSum += 0x0F
+        checkSum += 0x0F
+        checkSum += defaultDeviceID[0] + defaultDeviceID[1]
+        checkSum += 0x01
+        checkSum += 0x83
+        checkSum += deviceSettingID[0] + deviceSettingID[1]
+        checkSum += deviceLength[0] + deviceLength[1]
+        checkSum += deviceWidth[0] + deviceWidth[1]
+        checkSum += deviceCompareV[0] + deviceCompareV[1]
+
+        datas.append(checkSum^checkSum)//BCC Lengh开始到数据区结尾数据和的异或
+        datas.append(0x30)//ETX 0x30
+        
+        let sendData = Data(bytes: datas)
+        central!.sendData(sendData, toRemotePeer: remotePeripheral!) { data, remotepeer, error in
+            guard error == nil else {
+                SVProgressHUD.showError(withStatus: "Failed sending to \(remotepeer.identifier)")
+                return
+            }
+            logger.info("send Data \(data) to  remote \(remotepeer)")
+            SVProgressHUD.showSuccess(withStatus: "Sent Data to \(remotepeer.identifier)")
+        }
+        
+    }
+    
+    func requestDeviceInfo() {
+
+        let defaultDeviceID: [UInt8] = DefualtDeviceID.hw_to2Bytes()
+        var datas: [UInt8] = []
+        datas.append(0x02)//STX 1字节
+        datas.append(0x01)//数据长度  1字节
+        datas.append(0x01)//数据长补数 1字节
+        datas.append(defaultDeviceID[0])//设备ID
+        datas.append(defaultDeviceID[1])
+        datas.append(0x01)//帧标识 APP -> Hard 0x01
+        datas.append(0x81)//CMD ID
+        datas.append(0x01)
+        
+        var  checkSum: UInt8 = 0x00
+        checkSum += 0x01
+        checkSum += 0x01
+        checkSum += defaultDeviceID[0] + defaultDeviceID[1]
+        checkSum += 0x01
+        checkSum += 0x81
+        checkSum += 0x01
+
+        datas.append(checkSum^checkSum)//BCC Lengh开始到数据区结尾数据和的异或
+        datas.append(0x30)//ETX 0x30
+        
+        let sendData = Data(bytes: datas)
+        central!.sendData(sendData, toRemotePeer: remotePeripheral!) { data, remotepeer, error in
+            guard error == nil else {
+                SVProgressHUD.showError(withStatus: "Failed sending to \(remotepeer.identifier)")
+                return
+            }
+            logger.info("send Data \(data) to  remote \(remotepeer)")
+            SVProgressHUD.showSuccess(withStatus: "Sent Data to \(remotepeer.identifier)")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = kWhiteColor
@@ -69,7 +169,13 @@ class AddNewDeviceViewController: UIViewController {
         initUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        initData()
+    }
+    
     func initData() {
+        SVProgressHUD.show()
         guard remotePeripheral != nil else {
             SVProgressHUD.showError(withStatus: "connect a device first".localized())
             self.navigationController?.popViewController()
@@ -78,6 +184,7 @@ class AddNewDeviceViewController: UIViewController {
         
         remotePeripheral!.delegate = self
         remotePeripheral!.peripheralDelegate = self
+        
     }
     
     func initUI() {
@@ -180,6 +287,7 @@ class AddNewDeviceViewController: UIViewController {
         let input = OCInputView.init()
         input.titleLabel.text = "Plate Number".localized()
         input.textfield.placeholder = "Enter Your Plate Number".localized()
+        input.textfield.keyboardType = .default
         return input
     }()
     
@@ -228,17 +336,4 @@ class AddNewDeviceViewController: UIViewController {
 }
 
 
-extension AddNewDeviceViewController: BKRemotePeripheralDelegate, BKRemotePeerDelegate {
-    func remotePeripheral(_ remotePeripheral: BKRemotePeripheral, didUpdateName name: String) {
-        logger.info("didUpdateName \(name)")
-    }
-    
-    func remotePeripheralIsReady(_ remotePeripheral: BKRemotePeripheral) {
-        logger.info("Peripheral ready: \(remotePeripheral)")
-    }
-    
-    func remotePeer(_ remotePeer: BKRemotePeer, didSendArbitraryData data: Data) {
-        logger.info("didSendArbitraryData \(data)")
-    }
-    
-}
+

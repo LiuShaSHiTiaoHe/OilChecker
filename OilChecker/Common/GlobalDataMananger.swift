@@ -12,7 +12,7 @@ import SwiftyUserDefaults
 class GlobalDataMananger: NSObject {
 
     static let shared = GlobalDataMananger()
-//    private var realm:Realm = try! Realm()
+    private var realm:Realm = try! Realm()
 
     func fuelDataProcessor(_ deviceID: String) {
         
@@ -101,4 +101,83 @@ class GlobalDataMananger: NSObject {
             return nil
         }
     }
+    
+    func checkLastFuelStatus(_ deviceID: String) -> FuelCapacityState {
+        let dataSource = realm.objects(BaseFuelDataModel.self).filter("deviceID = '\(deviceID)'").sorted(byKeyPath: "recordIDFromDevice")
+        if dataSource.count == 0 {
+            return .Unknown
+        }
+        
+        var state: FuelCapacityState = .Normal
+        let fuelLeverDataSource = Array(dataSource.suffix(50))
+        for index in 0 ... fuelLeverDataSource.count - 1 {
+            if index < dataSource.count - 2 {
+                let netxData = dataSource[index + 1]
+                let data = dataSource[index]
+                if data.fuelLevel - netxData.fuelLevel > warningFuelChangedValue {
+                    state = .Irregular
+                    break
+                }
+            }
+        }
+        return state
+    }
 }
+
+
+
+
+extension Int {
+    // MARK:- 转成 2位byte
+    func hw_to2Bytes() -> [UInt8] {
+        let UInt = UInt16.init(Double.init(self))
+        return [UInt8(truncatingIfNeeded: UInt >> 8),UInt8(truncatingIfNeeded: UInt)]
+    }
+    // MARK:- 转成 4字节的bytes
+    func hw_to4Bytes() -> [UInt8] {
+        let UInt = UInt32.init(Double.init(self))
+        return [UInt8(truncatingIfNeeded: UInt >> 24),
+                UInt8(truncatingIfNeeded: UInt >> 16),
+                UInt8(truncatingIfNeeded: UInt >> 8),
+                UInt8(truncatingIfNeeded: UInt)]
+    }
+    // MARK:- 转成 8位 bytes
+    func intToEightBytes() -> [UInt8] {
+        let UInt = UInt64.init(Double.init(self))
+        return [UInt8(truncatingIfNeeded: UInt >> 56),
+            UInt8(truncatingIfNeeded: UInt >> 48),
+            UInt8(truncatingIfNeeded: UInt >> 40),
+            UInt8(truncatingIfNeeded: UInt >> 32),
+            UInt8(truncatingIfNeeded: UInt >> 24),
+            UInt8(truncatingIfNeeded: UInt >> 16),
+            UInt8(truncatingIfNeeded: UInt >> 8),
+            UInt8(truncatingIfNeeded: UInt)]
+    }
+}
+
+
+extension StringProtocol {
+    var hexa: [UInt8] {
+        var startIndex = self.startIndex
+        return (0..<count/2).compactMap { _ in
+            let endIndex = index(after: startIndex)
+            defer { startIndex = index(after: endIndex) }
+            return UInt8(self[startIndex...endIndex], radix: 16)
+        }
+    }
+
+}
+
+extension Sequence where Element == UInt8 {
+    var hexData: Data { .init(self) }
+    var hexa: String { map { .init(format: "%02x", $0).uppercased() }.joined() }
+
+    
+}
+
+//extension Array where Element == UInt8 {
+//    var hexString: String {
+//        return self.compactMap { String(format: "%02x", $0).uppercased() }
+//        .joined(separator: "")
+//    }
+//}

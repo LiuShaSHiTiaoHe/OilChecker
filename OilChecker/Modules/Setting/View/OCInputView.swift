@@ -76,6 +76,7 @@ class OCInputView: UIView {
         let tf = UITextField.init()
         tf.textColor = kSecondBlackColor
         tf.font = k15Font
+        tf.keyboardType = .numberPad
         return tf
     }()
     

@@ -11,6 +11,13 @@ import CoreBluetooth
 import SwiftyUserDefaults
 import SVProgressHUD
 
+
+enum BleSendDataState {
+    case RequestDeviceParamers
+    case RequestSettingDeviceParamers
+    case RequestFueLData
+}
+
 protocol OCBlueToothManagerDelegate: NSObjectProtocol {
    
     func bleScanChangedWith(_ changes: [BKDiscoveriesChange], _ discoveries: [BKDiscovery])
@@ -31,10 +38,12 @@ class OCBlueToothManager: NSObject {
     static let shared = OCBlueToothManager()
     
     private var objservers: [OCBlueToothManagerWrapper] = []
-
-    var discoveries = [BKDiscovery]()
+    private var bleIsAvailable: Bool = false
+    private var sendDataState: BleSendDataState = .RequestDeviceParamers
+    var discoveries: [BKDiscovery] = []
     let central = BKCentral()
     var connectedRemotePeripheral: BKRemotePeripheral?
+    
     
     func addObserver(_ observer: OCBlueToothManagerDelegate) {
         objservers.append(OCBlueToothManagerWrapper(observer))
@@ -52,34 +61,130 @@ class OCBlueToothManager: NSObject {
     }
     
     func startSyncData() {
+
         SVProgressHUD.show()
-        if connectedRemotePeripheral != nil {
-            connectedRemotePeripheral!.delegate = nil
-            connectedRemotePeripheral!.peripheralDelegate = nil
-//            connectedRemotePeripheral
-        }
         central.scanContinuouslyWithChangeHandler({ changes, discoveries in
-            for item in discoveries {
-                if item.localName.contains(Defaults[\.currentCarID]) {
-                    self.connectToRemotePeripheral(item.remotePeripheral)
-                    break
-                }
+            self.discoveries = discoveries
+            if self.sendDataState == .RequestDeviceParamers{
+                self.connectToRemotePeripheral()
             }
         }, stateHandler: { newState in
-
-        }, duration: 10, inBetweenDelay: 3) { error in
+            logger.info("state changed")
+        },errorHandler: { error in
+            if !self.bleIsAvailable {
+                SVProgressHUD.showError(withStatus: "BlueTooth Unsupported".localized())
+            }
             logger.error("Error from scanning: \(error)")
+        })
+    }
+
+    func connectToRemotePeripheral() {
+        let currenDeviceID = Defaults[\.currentCarID]!
+        for item in discoveries {
+            guard item.localName != nil else {
+                continue
+            }
+            if item.localName!.contains(currenDeviceID) {
+                central.interruptScan()
+                SVProgressHUD.show(withStatus: "Connecting")
+                central.connect(remotePeripheral: item.remotePeripheral) { remotePeripheral, error in
+                    self.connectedRemotePeripheral = remotePeripheral
+                    self.connectedRemotePeripheral!.delegate = self
+                    self.connectedRemotePeripheral!.peripheralDelegate = self
+                    SVProgressHUD.show(withStatus: "Connected and Sending Request")
+                    
+                }
+                break
+            }
+        }
+ 
+    }
+    
+    
+    func requsetDeviceInfo() {
+        guard connectedRemotePeripheral != nil else {
+            return
+        }
+        sendDataState = .RequestDeviceParamers
+        if connectedRemotePeripheral?.state == .connected {
+            
+            let defaultDeviceID: [UInt8] = Defaults[\.currentCarID]!.hexa
+            var datas: [UInt8] = []
+            datas.append(0x02)//STX 1字节
+            datas.append(0x01)//数据长度  1字节
+            datas.append(0x01)//数据长补数 1字节
+            datas.append(defaultDeviceID[0])//设备ID
+            datas.append(defaultDeviceID[1])
+            datas.append(0x01)//帧标识 APP -> Hard 0x01
+            datas.append(0x85)//CMD ID  参数设置应答 0x85
+            datas.append(0x11)
+            
+            var  checkSum: UInt8 = 0x00
+            checkSum += 0x01
+            checkSum += 0x01
+            checkSum += defaultDeviceID[0] + defaultDeviceID[1]
+            checkSum += 0x01
+            checkSum += 0x85
+            checkSum += 0x11
+
+            datas.append(checkSum^checkSum)//BCC Lengh开始到数据区结尾数据和的异或
+            datas.append(0x30)//ETX 0x30
+            
+            let sendData = Data(bytes: datas)
+            central.sendData(sendData, toRemotePeer: connectedRemotePeripheral!) { data, remotepeer, error in
+                guard error == nil else {
+                    SVProgressHUD.showError(withStatus: "Failed sending requsetDeviceInfo to \(remotepeer.identifier)")
+                    return
+                }
+                SVProgressHUD.showSuccess(withStatus: "Sent requsetDeviceInfo Data to \(remotepeer.identifier)")
+            }
+        }else{
+            startSyncData()
         }
     }
     
-    func connectToRemotePeripheral(_ remotePeripheral: BKRemotePeripheral) {
-        central.connect(remotePeripheral: remotePeripheral) { remotePeripheral, error in
-            self.connectedRemotePeripheral = remotePeripheral
-            self.connectedRemotePeripheral!.delegate = self
-            self.connectedRemotePeripheral!.peripheralDelegate = self
+    func requestHistoryData() {
+        guard connectedRemotePeripheral != nil else {
+            return
+        }
+        sendDataState = .RequestFueLData
+        if connectedRemotePeripheral?.state == .connected {
+            
+            let defaultDeviceID: [UInt8] = Defaults[\.currentCarID]!.hexa
+            var datas: [UInt8] = []
+            datas.append(0x02)//STX 1字节
+            datas.append(0x01)//数据长度  1字节
+            datas.append(0x01)//数据长补数 1字节
+            datas.append(defaultDeviceID[0])//设备ID
+            datas.append(defaultDeviceID[1])
+            datas.append(0x01)//帧标识 APP -> Hard 0x01
+            datas.append(0x81)//CMD ID
+            datas.append(0x01)
+            
+            var  checkSum: UInt8 = 0x00
+            checkSum += 0x01
+            checkSum += 0x01
+            checkSum += defaultDeviceID[0] + defaultDeviceID[1]
+            checkSum += 0x01
+            checkSum += 0x81
+            checkSum += 0x01
+
+            datas.append(checkSum^checkSum)//BCC Lengh开始到数据区结尾数据和的异或
+            datas.append(0x30)//ETX 0x30
+            
+            let sendData = Data(bytes: datas)
+            central.sendData(sendData, toRemotePeer: connectedRemotePeripheral!) { data, remotepeer, error in
+                guard error == nil else {
+                    SVProgressHUD.showError(withStatus: "Failed sending RequestFueLData to \(remotepeer.identifier)")
+                    return
+                }
+                SVProgressHUD.showSuccess(withStatus: "Sent RequestFueLData Data to \(remotepeer.identifier)")
+            }
+        }else{
+            startSyncData()
         }
     }
-    
+
     
     /////////////////////////////////////
     func startCentral() {
@@ -119,19 +224,7 @@ class OCBlueToothManager: NSObject {
         })
     }
     
-//    func requsetDeviceInfo() {
-//        guard connectedRemotePeripheral != nil else {
-//            return
-//        }
-//        let sendData = [0xff]
-//        central.sendData(sendData, toRemotePeer: connectedRemotePeripheral) { data, remotepeer, error in
-//            guard error == nil else {
-//                logger.error("Failed sending to \(remotePeripheral)")
-//                return
-//            }
-//            logger.info("Sent to \(remotePeripheral)")
-//        }
-//    }
+
 
     
     
@@ -144,10 +237,20 @@ extension OCBlueToothManager:  BKRemotePeripheralDelegate, BKRemotePeerDelegate 
     
     func remotePeripheralIsReady(_ remotePeripheral: BKRemotePeripheral) {
         logger.info("Peripheral ready: \(remotePeripheral)")
+        if sendDataState == .RequestDeviceParamers {
+            self.requsetDeviceInfo()
+        }
     }
     
     func remotePeer(_ remotePeer: BKRemotePeer, didSendArbitraryData data: Data) {
         logger.info("didSendArbitraryData \(data)")
+        if sendDataState == .RequestDeviceParamers {
+            requestHistoryData()
+        }
+        
+        if sendDataState == .RequestFueLData {
+            
+        }
     }
     
 }
@@ -162,8 +265,10 @@ extension OCBlueToothManager: BKCentralDelegate, BKAvailabilityObserver {
         
         switch availability {
         case .available:
-            startScan()
+//            startScan()
+            bleIsAvailable = true
         case let .unavailable(cause):
+            bleIsAvailable = false
             central.interruptScan()
             switch cause {
             case .poweredOff:

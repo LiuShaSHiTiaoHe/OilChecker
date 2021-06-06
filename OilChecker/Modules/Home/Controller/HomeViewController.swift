@@ -23,6 +23,7 @@ class HomeViewController: UIViewController {
         view.backgroundColor = kBackgroundColor
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.title = "Home".localized()
+        OCBlueToothManager.shared.startCentral()
         initUI()
     }
     
@@ -61,10 +62,11 @@ class HomeViewController: UIViewController {
         //TODO
         if OCBlueToothManager.shared.connectedRemotePeripheral != nil {
             //sync data via ble
-//            OCBlueToothManager.shared
+            OCBlueToothManager.shared.requsetDeviceInfo()
             
         }else{
             //try connect current selected device
+            OCBlueToothManager.shared.startSyncData()
         }
     }
     
@@ -99,7 +101,16 @@ class HomeViewController: UIViewController {
         guard let _ = deviceID else {
             return
         }
-        capacityView.statusLabel.text  = "normal".localized()
+        let state = GlobalDataMananger.shared.checkLastFuelStatus(deviceID!)
+        switch state {
+        case .Irregular:
+            capacityView.statusLabel.textColor = kRedFontColor
+        case .Unknown:
+            capacityView.statusLabel.textColor = kSecondBlackColor
+        default :
+            break
+        }
+        capacityView.statusLabel.text  = state.rawValue.localized() //FuelCapacityState.Normal.rawValue.localized()
         consumptionView.statusLabel.text = GlobalDataMananger.shared.getAverageConsumption(deviceID!) + "L"//DefaultEmptyNumberString
     }
     
@@ -208,7 +219,7 @@ class HomeViewController: UIViewController {
     lazy var consumptionView: FuelCapacityView = {
         let view = FuelCapacityView()
         view.nameLabel.text = "Average Fuel Consumption".localized()
-        view.statusLabel.textColor = kRedFontColor
+//        view.statusLabel.textColor = kRedFontColor
         view.statusLabel.text = DefaultEmptyNumberString + "L"
         return view
     }()

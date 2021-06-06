@@ -13,6 +13,7 @@ import SwiftDate
 import SwifterSwift
 import CoreBluetooth
 import SwiftyUserDefaults
+import SVProgressHUD
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,36 +24,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         initializeApp()
-                
-//        OCRealmManager.shared().realmDeleteTypeList(object: BaseFuelDataModel.self)
-//        let data: Int = 1151
-//
-//        
-//        let datas = String.init(0x060F)
-//        let asdasd = datas.data(using: .utf8)
-//        
-//        let bytes:[UInt8] = [0x06, 0x0F]
-//        var binary = Binary(bytes: [0x06, 0x0F])
-//        let version = try? binary.readBits(16)
-//        
+        
+        let originInt: UInt64 = 1551
+        let bytes = Int(originInt).hw_to2Bytes()
+        let asdhex = bytes.hexa
+        let hexData = OCByteManager.shared.hexStringToData(from: asdhex)
 
-//        let serviceUUID = CBUUID.init(data: s)
-//        syncEngine = SyncEngine(objects: [
-//                   SyncObject(type: Dog.self),
-//                   SyncObject(type: Cat.self),
-//                   SyncObject(type: Person.self)
-//               ])
-//        application.registerForRemoteNotifications()
         
 //        addFakeData()
-//        addFakeReFuelData()
-        
-//        Defaults[\.currentCarID] = "999"
-        
+                
         logger.info("\(NSHomeDirectory())")
         return true
     }
   
+    
 
     
 //    func swapInt(_ data: UInt16) -> UInt16 {
@@ -89,7 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.overrideUserInterfaceStyle = .light;
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
-        
+        SVProgressHUD.setMinimumDismissTimeInterval(2)
         self.window?.makeKeyAndVisible()
     }
     
