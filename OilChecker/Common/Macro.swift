@@ -137,9 +137,7 @@ let DefaultEmptyNumberString = "0.0"
 
 let ServiceUUID = 0xFFE0
 let CharacteristicUUID = 0xFFE1
-
 let DefualtDeviceID = 0x1A3B
-
 let warningFuelChangedValue: Double = 40.0
 
 

@@ -26,26 +26,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         initializeApp()
         
         let originInt: UInt64 = 1551
-        let bytes = Int(originInt).hw_to2Bytes()
-        let asdhex = bytes.hexa
-        let hexData = OCByteManager.shared.hexStringToData(from: asdhex)
-
+        let bytes = Int(originInt).intTo2Bytes()// 6 15
+        let asdhex = bytes.hexa //"060F"
+        let intgerValue = OCByteManager.shared.integer(from: asdhex)//1551
         
+        let hexValue = "FF"
+        let singleIntValue = OCByteManager.shared.integer(from: hexValue)
+        
+        let end = 0xFF
+        
+        let unsigned = UInt8(bitPattern: Int8(-1))
+        let unsigned2 = UInt8(bitPattern: Int8(-10))
+        let unsigned2data = String(unsigned2,radix: 16, uppercase: true)
+
+        let numberData = NSString(format: "%d", bytes[0]).integerValue
+        let numberDataString = NSString(format: "%d", bytes[0])
+
 //        addFakeData()
                 
         logger.info("\(NSHomeDirectory())")
         return true
     }
   
-    
-
-    
-//    func swapInt(_ data: UInt16) -> UInt16 {
-//        var temp = data << 8
-//        temp |= data >> 8
-//        return temp
-//    }
-
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
