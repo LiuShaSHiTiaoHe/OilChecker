@@ -58,7 +58,7 @@ class GlobalDataMananger: NSObject {
             for (index, item) in array.enumerated() {
                 let refuleModel = RefuelRecordModel()
                 refuleModel.deviceID = deviceID
-                refuleModel.recordIDFromDevice = Int64(index)//Int64(item["id"]!)!
+                refuleModel.recordIDFromDevice = Int64(index)
                 refuleModel.refuelLevel = item["refuel"]?.double() ?? 0.0
                 refuleModel.fuelCount = 1
                 refuelDataSource.append(refuleModel)

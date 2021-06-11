@@ -11,6 +11,15 @@
 		6953CCE82642E5A100D48DA2 /* RecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */; };
 		6953CCFB26431F8100D48DA2 /* OCInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CCFA26431F8100D48DA2 /* OCInputView.swift */; };
 		6953CD03264458B100D48DA2 /* ScanBleDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CD02264458B100D48DA2 /* ScanBleDeviceViewController.swift */; };
+		699786F6267281F900FF7946 /* BabyBluetooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786E4267281F900FF7946 /* BabyBluetooth.m */; };
+		699786F7267281F900FF7946 /* BabySpeaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786E8267281F900FF7946 /* BabySpeaker.m */; };
+		699786F8267281F900FF7946 /* BabyToy.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786E9267281F900FF7946 /* BabyToy.m */; };
+		699786F9267281F900FF7946 /* BabyOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786EA267281F900FF7946 /* BabyOptions.m */; };
+		699786FA267281F900FF7946 /* BabyPeripheralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786EB267281F900FF7946 /* BabyPeripheralManager.m */; };
+		699786FB267281F900FF7946 /* BabyCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786ED267281F900FF7946 /* BabyCallback.m */; };
+		699786FC267281F900FF7946 /* BabyCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786F0267281F900FF7946 /* BabyCentralManager.m */; };
+		699786FD267281F900FF7946 /* BabyDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786F3267281F900FF7946 /* BabyDefine.m */; };
+		699786FE267281F900FF7946 /* BabyRhythm.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786F4267281F900FF7946 /* BabyRhythm.m */; };
 		69AF2FB926691C370015B987 /* ExpandButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AF2FB826691C370015B987 /* ExpandButton.swift */; };
 		69AF2FC226692F790015B987 /* BinaryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AF2FBD26692F790015B987 /* BinaryError.swift */; };
 		69AF2FC326692F790015B987 /* FixedWidthIntegerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AF2FBE26692F790015B987 /* FixedWidthIntegerExtensions.swift */; };
@@ -85,6 +94,24 @@
 		6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTableViewCell.swift; sourceTree = "<group>"; };
 		6953CCFA26431F8100D48DA2 /* OCInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCInputView.swift; sourceTree = "<group>"; };
 		6953CD02264458B100D48DA2 /* ScanBleDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanBleDeviceViewController.swift; sourceTree = "<group>"; };
+		699786E4267281F900FF7946 /* BabyBluetooth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyBluetooth.m; sourceTree = "<group>"; };
+		699786E5267281F900FF7946 /* BabyBluetooth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyBluetooth.h; sourceTree = "<group>"; };
+		699786E6267281F900FF7946 /* BabyPeripheralManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyPeripheralManager.h; sourceTree = "<group>"; };
+		699786E7267281F900FF7946 /* BabyRhythm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyRhythm.h; sourceTree = "<group>"; };
+		699786E8267281F900FF7946 /* BabySpeaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabySpeaker.m; sourceTree = "<group>"; };
+		699786E9267281F900FF7946 /* BabyToy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyToy.m; sourceTree = "<group>"; };
+		699786EA267281F900FF7946 /* BabyOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyOptions.m; sourceTree = "<group>"; };
+		699786EB267281F900FF7946 /* BabyPeripheralManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyPeripheralManager.m; sourceTree = "<group>"; };
+		699786EC267281F900FF7946 /* BabyCentralManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyCentralManager.h; sourceTree = "<group>"; };
+		699786ED267281F900FF7946 /* BabyCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyCallback.m; sourceTree = "<group>"; };
+		699786EE267281F900FF7946 /* BabyOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyOptions.h; sourceTree = "<group>"; };
+		699786EF267281F900FF7946 /* BabyCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyCallback.h; sourceTree = "<group>"; };
+		699786F0267281F900FF7946 /* BabyCentralManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyCentralManager.m; sourceTree = "<group>"; };
+		699786F1267281F900FF7946 /* BabyToy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyToy.h; sourceTree = "<group>"; };
+		699786F2267281F900FF7946 /* BabyDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyDefine.h; sourceTree = "<group>"; };
+		699786F3267281F900FF7946 /* BabyDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyDefine.m; sourceTree = "<group>"; };
+		699786F4267281F900FF7946 /* BabyRhythm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyRhythm.m; sourceTree = "<group>"; };
+		699786F5267281F900FF7946 /* BabySpeaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabySpeaker.h; sourceTree = "<group>"; };
 		69AF2FB826691C370015B987 /* ExpandButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandButton.swift; sourceTree = "<group>"; };
 		69AF2FBD26692F790015B987 /* BinaryError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BinaryError.swift; sourceTree = "<group>"; };
 		69AF2FBE26692F790015B987 /* FixedWidthIntegerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FixedWidthIntegerExtensions.swift; sourceTree = "<group>"; };
@@ -186,6 +213,31 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		699786E3267281C600FF7946 /* Bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				699786E5267281F900FF7946 /* BabyBluetooth.h */,
+				699786E4267281F900FF7946 /* BabyBluetooth.m */,
+				699786EF267281F900FF7946 /* BabyCallback.h */,
+				699786ED267281F900FF7946 /* BabyCallback.m */,
+				699786EC267281F900FF7946 /* BabyCentralManager.h */,
+				699786F0267281F900FF7946 /* BabyCentralManager.m */,
+				699786F2267281F900FF7946 /* BabyDefine.h */,
+				699786F3267281F900FF7946 /* BabyDefine.m */,
+				699786EE267281F900FF7946 /* BabyOptions.h */,
+				699786EA267281F900FF7946 /* BabyOptions.m */,
+				699786E6267281F900FF7946 /* BabyPeripheralManager.h */,
+				699786EB267281F900FF7946 /* BabyPeripheralManager.m */,
+				699786E7267281F900FF7946 /* BabyRhythm.h */,
+				699786F4267281F900FF7946 /* BabyRhythm.m */,
+				699786F5267281F900FF7946 /* BabySpeaker.h */,
+				699786E8267281F900FF7946 /* BabySpeaker.m */,
+				699786F1267281F900FF7946 /* BabyToy.h */,
+				699786E9267281F900FF7946 /* BabyToy.m */,
+			);
+			path = Bluetooth;
+			sourceTree = "<group>";
+		};
 		69AF2FBC26692F790015B987 /* BinaryKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -254,6 +306,7 @@
 		69B10BAB262DF41E00617D17 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				699786E3267281C600FF7946 /* Bluetooth */,
 				69AF2FBC26692F790015B987 /* BinaryKit */,
 				69B10D63263499B800617D17 /* Extension */,
 				69B10BAC262DF47900617D17 /* Macro.swift */,
@@ -600,6 +653,7 @@
 				69B10D912635A41A00617D17 /* FuelConsumptionDetailViewController.swift in Sources */,
 				69CB1B072667E632001BE0D3 /* OCBlueToothManager.swift in Sources */,
 				69AF2FC226692F790015B987 /* BinaryError.swift in Sources */,
+				699786FA267281F900FF7946 /* BabyPeripheralManager.m in Sources */,
 				69AF2FC626692F790015B987 /* Binary.swift in Sources */,
 				69B10BAD262DF47900617D17 /* Macro.swift in Sources */,
 				69B10DA12635D05600617D17 /* HomeChartView.swift in Sources */,
@@ -617,26 +671,34 @@
 				69CAA3DA2628B19600333AA2 /* BaseViewController.swift in Sources */,
 				69CB1ABF266404D2001BE0D3 /* OCRealmManager.swift in Sources */,
 				69B10C882631E41300617D17 /* AddSectionHeaderView.swift in Sources */,
+				699786F6267281F900FF7946 /* BabyBluetooth.m in Sources */,
 				69B10C59262F5B8700617D17 /* SettingTableViewCell.swift in Sources */,
+				699786F8267281F900FF7946 /* BabyToy.m in Sources */,
 				69B10CCC26332E7700617D17 /* MyCarInfoTableViewCell.swift in Sources */,
 				69B10E46263B2AAC00617D17 /* FuelConsumptionModel.swift in Sources */,
 				69B10D6D2635825F00617D17 /* BaseEmptyView.swift in Sources */,
 				69B10C40262F517300617D17 /* SettingViewController.swift in Sources */,
 				69B10CC7263324E300617D17 /* AddNewCarTableViewCell.swift in Sources */,
 				69AF2FC426692F790015B987 /* StringExtensions.swift in Sources */,
+				699786FE267281F900FF7946 /* BabyRhythm.m in Sources */,
 				69B10D7226359E1000617D17 /* RefuelRecordView.swift in Sources */,
 				69CAA35826275E8100333AA2 /* AppDelegate.swift in Sources */,
 				69B10B7C262DE76A00617D17 /* BaseTabBarItemContentView.swift in Sources */,
 				69B10E68263DBEAE00617D17 /* DateValueFormatter.swift in Sources */,
+				699786F7267281F900FF7946 /* BabySpeaker.m in Sources */,
 				69B10D5326347F6A00617D17 /* StatisticalViewController.swift in Sources */,
 				69AF2FC326692F790015B987 /* FixedWidthIntegerExtensions.swift in Sources */,
 				6953CD03264458B100D48DA2 /* ScanBleDeviceViewController.swift in Sources */,
 				69B10CBE2631F8B200617D17 /* UserAndCarModel.swift in Sources */,
+				699786FB267281F900FF7946 /* BabyCallback.m in Sources */,
 				69B10B8C262DE91700617D17 /* HomeViewController.swift in Sources */,
+				699786FC267281F900FF7946 /* BabyCentralManager.m in Sources */,
+				699786F9267281F900FF7946 /* BabyOptions.m in Sources */,
 				69B10E27263B237C00617D17 /* RefuelRecordModel.swift in Sources */,
 				69B10D4D263465EE00617D17 /* MalfunctionTableViewCell.swift in Sources */,
 				69B10D5B26348BEB00617D17 /* FuelConsumptionView.swift in Sources */,
 				69CAA3D12628B17E00333AA2 /* BaseNavigationController.swift in Sources */,
+				699786FD267281F900FF7946 /* BabyDefine.m in Sources */,
 				69B10D962635A42E00617D17 /* RefuelRecordDetailViewController.swift in Sources */,
 				69D4FAB9266B6350009D4EF0 /* GlobalDataMananger.swift in Sources */,
 				6953CCE82642E5A100D48DA2 /* RecordTableViewCell.swift in Sources */,

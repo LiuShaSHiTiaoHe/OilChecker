@@ -23,6 +23,7 @@ PODS:
   - Realm/Headers (10.7.2)
   - RealmSwift (10.7.2):
     - Realm (= 10.7.2)
+  - Schedule (2.1.0)
   - SkyFloatingLabelTextField (4.0.0)
   - SnapKit (5.0.1)
   - SPPermissions/Bluetooth (5.4.2):
@@ -57,6 +58,7 @@ PODS:
   - SwifterSwift/StoreKit (5.2.0)
   - SwifterSwift/SwiftStdlib (5.2.0)
   - SwifterSwift/UIKit (5.2.0)
+  - SwiftyBeaver (1.9.3)
   - SwiftyUserDefaults (5.3.0)
 
 DEPENDENCIES:
@@ -71,6 +73,7 @@ DEPENDENCIES:
   - Localize-Swift
   - Logging
   - RealmSwift
+  - Schedule (~> 2.0)
   - SkyFloatingLabelTextField
   - SnapKit
   - SPPermissions/Bluetooth
@@ -78,6 +81,7 @@ DEPENDENCIES:
   - SwiftDate
   - SwiftEntryKit
   - SwifterSwift
+  - SwiftyBeaver
   - SwiftyUserDefaults
 
 SPEC REPOS:
@@ -95,6 +99,7 @@ SPEC REPOS:
     - QuickLayout
     - Realm
     - RealmSwift
+    - Schedule
     - SkyFloatingLabelTextField
     - SnapKit
     - SPPermissions
@@ -102,6 +107,7 @@ SPEC REPOS:
     - SwiftDate
     - SwiftEntryKit
     - SwifterSwift
+    - SwiftyBeaver
     - SwiftyUserDefaults
 
 SPEC CHECKSUMS:
@@ -118,6 +124,7 @@ SPEC CHECKSUMS:
   QuickLayout: 07b45a72b10083fee3f095990cfed1c1e7b27f0a
   Realm: e523da9ade306c5ae87e85dc09fdef148d3e1cc1
   RealmSwift: 4f6758c3adbdcc87f7b7777107226532a077f61c
+  Schedule: 00e6d7bbdbdb000fd1f51a7d10e9f88a8c451fda
   SkyFloatingLabelTextField: 79ddc40e4ad59707fedbb48d605417aee48bb78a
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SPPermissions: f516d117ced15316a5d4dd667274d12e1c3e8a4b
@@ -125,8 +132,9 @@ SPEC CHECKSUMS:
   SwiftDate: 72d28954e8e1c6c1c0f917ccc8005e4f83c7d4b2
   SwiftEntryKit: 537c92699d6034efb1ef9c32b11e0b37c97aa589
   SwifterSwift: 334181863c416882d97b7a60c05054d9e4d799e2
+  SwiftyBeaver: 2e8acd6fc90c6d0a27055867a290794926d57c02
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
 
-PODFILE CHECKSUM: 628541904f6cbff7bcf8da87d49fb6184be366d0
+PODFILE CHECKSUM: 934312fea45be4ff970e9048d88f6350c0b5555a
 
 COCOAPODS: 1.10.0

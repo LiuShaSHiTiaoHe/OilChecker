@@ -19,11 +19,12 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NotificationCenter.default.addObserver(self, selector: #selector(updateAfterSyncWithDevice), name:NSNotification.Name.SyncDateCompleteNotify, object: nil)
         // Do any additional setup after loading the view.
         view.backgroundColor = kBackgroundColor
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.title = "Home".localized()
-        OCBlueToothManager.shared.startCentral()
+//        OCBlueToothManager.shared.startCentral()
         initUI()
     }
     
@@ -40,15 +41,8 @@ class HomeViewController: UIViewController {
             self.navigationController?.pushViewController(deviceListVC)
         }else{
             //TODO
-            if OCBlueToothManager.shared.connectedRemotePeripheral != nil {
-                //add current conneted ble device
-                self.navigationController?.pushViewController(AddNewDeviceViewController())
+            self.navigationController?.pushViewController(ScanBleDeviceViewController())
 
-            }else{
-                SVProgressHUD.showInfo(withStatus: "please add a device first".localized())
-                self.navigationController?.pushViewController(ScanBleDeviceViewController())
-                return
-            }
         }
     }
     
@@ -60,14 +54,7 @@ class HomeViewController: UIViewController {
             return
         }
         //TODO
-        if OCBlueToothManager.shared.connectedRemotePeripheral != nil {
-            //sync data via ble
-            OCBlueToothManager.shared.requsetDeviceInfo()
-            
-        }else{
-            //try connect current selected device
-            OCBlueToothManager.shared.startSyncData()
-        }
+        OCBlueToothManager.shared.startScan(Defaults[\.currentCarID]!)
     }
     
     func initData()  {
@@ -95,6 +82,14 @@ class HomeViewController: UIViewController {
             carNumberLabel.text = currentCarModel?.carNumber
             updateLatestFuelCapacityAndConsumption(deviceID: currentCarModel?.deviceID)
         }
+    }
+    
+    @objc func updateAfterSyncWithDevice() {
+        guard currentCarModel != nil else {
+            return
+        }
+        chartView.updateCurrentDevice(model: currentCarModel!)
+        updateLatestFuelCapacityAndConsumption(deviceID: currentCarModel!.deviceID)
     }
     
     func updateLatestFuelCapacityAndConsumption(deviceID: String?) {
@@ -219,7 +214,6 @@ class HomeViewController: UIViewController {
     lazy var consumptionView: FuelCapacityView = {
         let view = FuelCapacityView()
         view.nameLabel.text = "Average Fuel Consumption".localized()
-//        view.statusLabel.textColor = kRedFontColor
         view.statusLabel.text = DefaultEmptyNumberString + "L"
         return view
     }()

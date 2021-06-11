@@ -11,80 +11,111 @@ import CoreBluetooth
 import SVProgressHUD
 
 class ScanBleDeviceViewController: UIViewController {
-
-    private var discoveries = [BKDiscovery]()
-    private let central = OCBlueToothManager.shared.central
-    private var currentBKDiscovery: BKDiscovery?
     
+    let baby = BabyBluetooth.share();
+
+    private var discoveries = [CBPeripheral]()
+    private var currentPeripheral: CBPeripheral!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         initUI()
-        startCentral()
+        addBabyDelegate()
     }
     
 
-    
-    private func startCentral() {
-        do {
-            central.delegate = self
-            central.addAvailabilityObserver(self)
-            let dataServiceUUID = UUID.init(uuidString: "0000FFE0-0000-1000-8000-00805F9B34FB")!
-            let dataServiceCharacteristicUUID = UUID.init(uuidString: "0000FFE1-0000-1000-8000-00805F9B34FB")!
-    
-            let configuration = BKConfiguration(dataServiceUUID: dataServiceUUID, dataServiceCharacteristicUUID: dataServiceCharacteristicUUID)
-            try central.startWithConfiguration(configuration)
-        } catch let error {
-            print("Error while starting: \(error)")
-        }
+    func addBabyDelegate() {
+        baby?.setBlockOnCentralManagerDidUpdateStateAtChannel(BabyChannelScanViewIdentifier, block: { central in
+            if central?.state == .poweredOn  {
+                
+            }else{
+                SVProgressHUD.showInfo(withStatus: "蓝牙没有打开")
+            }
+        })
+
+        //扫描到设备
+        baby?.setBlockOnDiscoverToPeripheralsAtChannel(BabyChannelScanViewIdentifier, block: { central, peripheral, advertisementData, RSSI in
+            logger.info("扫描到设备 + \(String(describing: advertisementData))")
+            if peripheral != nil {
+                if !self.discoveries.contains(peripheral!) {
+                    self.discoveries.append(peripheral!)
+                    self.tableView.reloadData()
+                }
+            }
+        })
+        
+        //设备连接成功
+        baby?.setBlockOnConnectedAtChannel(BabyChannelScanViewIdentifier, block: { central, peripheral in
+            //            logger.info("设备连接成功" + (peripheral?.name)!)
+            logger.info("设备连接成功")
+            SVProgressHUD.showSuccess(withStatus: "连接设备成功")
+            let vc = AddNewDeviceViewController()
+            vc.currentPeripheral = peripheral!
+            self.navigationController?.pushViewController(vc)
+            
+        })
+        
+        baby?.setBlockOnFailToConnectAtChannel(BabyChannelScanViewIdentifier, block: { central, peripheral, error in
+            SVProgressHUD.showError(withStatus: "连接设备失败")
+            self.scan()
+        })
+        
+        //发现设备的服务
+        baby?.setBlockOnDiscoverServicesAtChannel(BabyChannelScanViewIdentifier, block: { peripheral, error in
+            for service in peripheral!.services! {
+                logger.info("设备的服务 + \(service.uuid.uuidString)")
+            }
+        })
+
+        
+        //发现设service的Characteristics
+        baby?.setBlockOnDiscoverCharacteristicsAtChannel(BabyChannelScanViewIdentifier, block: { peripheral, service, error in
+            guard service != nil else {
+                return
+            }
+            let characteristics = service?.characteristics as! Array<CBCharacteristic>
+            for c in characteristics {
+                logger.info("发现设service的Characteristics + \(c.uuid.uuidString)")
+            }
+        })
+
+        
+        baby?.setFilterOnDiscoverPeripheralsAtChannel(BabyChannelScanViewIdentifier, filter: { (name, adv, RSSi) -> Bool in
+            if adv == nil {
+                return false
+            }
+            if let serviceUUIDs = adv!["kCBAdvDataServiceUUIDs"] as? Array<CBUUID> {
+                for cbuuid in serviceUUIDs {
+                    if cbuuid.uuidString == ServiceUUIDString {
+                        return true
+                    }
+                }
+            }
+            return false
+        })
+        
+        
     }
     
+    
     internal override func viewDidAppear(_ animated: Bool) {
-        if OCBlueToothManager.shared.connectedRemotePeripheral != nil {
-            do {
-                try central.disconnectRemotePeripheral(OCBlueToothManager.shared.connectedRemotePeripheral!)
-                OCBlueToothManager.shared.connectedRemotePeripheral = nil
-            } catch let error {
-                logger.info("Error disconnecting remote peripheral: \(error)")
-            }
-        }
         scan()
     }
 
     internal override func viewWillDisappear(_ animated: Bool) {
-        central.interruptScan()
+        //取消连接
+        baby?.cancelAllPeripheralsConnection()
+        //停止搜索
+        baby?.cancelScan()
     }
 
     
     private func scan() {
-        central.scanContinuouslyWithChangeHandler({ changes, discoveries in
-            let indexPathsToRemove = changes.filter({ $0 == .remove(discovery: nil) }).map({ IndexPath(row: self.discoveries.firstIndex(of: $0.discovery)!, section: 0) })
-            self.discoveries = discoveries
-            let indexPathsToInsert = changes.filter({ $0 == .insert(discovery: nil) }).map({ IndexPath(row: self.discoveries.firstIndex(of: $0.discovery)!, section: 0) })
-            if !indexPathsToRemove.isEmpty {
-                self.tableView.deleteRows(at: indexPathsToRemove, with: UITableView.RowAnimation.automatic)
-            }
-            if !indexPathsToInsert.isEmpty {
-                self.tableView.insertRows(at: indexPathsToInsert, with: UITableView.RowAnimation.automatic)
-            }
-            for insertedDiscovery in changes.filter({ $0 == .insert(discovery: nil) }) {
-                logger.info("Discovery: \(insertedDiscovery)")
-            }
-        }, stateHandler: { newState in
-            if newState == .scanning {
-                SVProgressHUD.show()
-                return
-            } else if newState == .stopped {
-                self.discoveries.removeAll()
-                self.tableView.reloadData()
-            }
-            SVProgressHUD.dismiss()
-            
-        }, errorHandler: { error in
-            logger.error("Error from scanning: \(error)")
-        })
+        baby?.channel(BabyChannelScanViewIdentifier).scanForPeripherals().begin()
     }
+    
     func initUI(){
         self.navigationItem.title = "BLE Devices".localized()
         self.view.backgroundColor = kWhiteColor
@@ -105,26 +136,6 @@ class ScanBleDeviceViewController: UIViewController {
     }()
 }
 
-extension ScanBleDeviceViewController: BKCentralDelegate, BKAvailabilityObserver{
-    
-    func availabilityObserver(_ availabilityObservable: BKAvailabilityObservable, unavailabilityCauseDidChange unavailabilityCause: BKUnavailabilityCause) {
-       
-    }
-    func availabilityObserver(_ availabilityObservable: BKAvailabilityObservable, availabilityDidChange availability: BKAvailability) {
-        logger.info("availability: \(availability)")
-        if availability == .available {
-            scan()
-        } else {
-            central.interruptScan()
-        }
-    }
-
-    
-    func central(_ central: BKCentral, remotePeripheralDidDisconnect remotePeripheral: BKRemotePeripheral) {
-        logger.info("Remote peripheral did disconnect: \(remotePeripheral)")
-    }
-    
-}
 
 
 extension ScanBleDeviceViewController: UITableViewDelegate, UITableViewDataSource{
@@ -148,26 +159,21 @@ extension ScanBleDeviceViewController: UITableViewDelegate, UITableViewDataSourc
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellIdentifier)
         }
         let discovery = discoveries[indexPath.row]
-        cell?.textLabel?.text = discovery.localName != nil ? discovery.localName : discovery.remotePeripheral.name
+        cell?.textLabel?.text = discovery.name
         return cell!
         
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        tableView.isUserInteractionEnabled = false
-        SVProgressHUD.show()
-        let discovery = discoveries[indexPath.row]
-        central.connect(30.0, remotePeripheral: discovery.remotePeripheral) { remotePeripheral, error in
-            SVProgressHUD.dismiss()
-            tableView.isUserInteractionEnabled = true
-            guard error == nil else {
-                print("Error connecting peripheral: \(String(describing: error))")
-                return
-            }
-            OCBlueToothManager.shared.connectedRemotePeripheral = remotePeripheral
-            self.navigationController?.pushViewController(AddNewDeviceViewController())
-        }
+//        tableView.isUserInteractionEnabled = false
+//        SVProgressHUD.show()
+        baby?.cancelScan()
+        let peripheral = discoveries[indexPath.row]
+//        baby?.having(discovery).and().channel(BabyChannelScanViewIdentifier).then().connectToPeripherals().begin()
+        let vc = AddNewDeviceViewController()
+        vc.currentPeripheral = peripheral
+        self.navigationController?.pushViewController(vc)
     }
     
     

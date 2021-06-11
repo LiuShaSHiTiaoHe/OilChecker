@@ -11,7 +11,6 @@ import SwiftDate
 //import ClockKit
 //import IceCream
 
-let logger = Logger(label: "com.OilChecker.main")
 let BaseDateFormatString = "yyyy-MM-dd HH:mm:ss"
 
 func getDataRegion() -> DateInRegion {

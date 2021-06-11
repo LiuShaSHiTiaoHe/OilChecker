@@ -88,11 +88,6 @@ class HomeChartView: UIView {
     }
     
     func prepareData(_ index: Int) {
-//        let allDataSoure: [BaseFuelDataModel] = OCRealmManager.shared().realmQueryWith(object: BaseFuelDataModel.self) as! [BaseFuelDataModel]
-        
-//        let dataSource = allDataSoure.sorted(by: { m1, m2 in
-//            m1.recordIDFromDevice < m2.recordIDFromDevice
-//        }).suffix(index*50)
         
         let dataSource = realm.objects(BaseFuelDataModel.self).sorted(byKeyPath: "recordIDFromDevice").suffix(index*20)
 

@@ -26,7 +26,9 @@ target 'OilChecker' do
   pod 'DatePickerDialog'
   pod 'SwiftyUserDefaults'
   pod 'SwiftDate'
-  
+  pod 'SwiftyBeaver'
+  pod 'Schedule', '~> 2.0'
+
 #  pod 'WoodPeckeriOS', :configurations => ['Debug']
 
 #  pod "GMStepper"

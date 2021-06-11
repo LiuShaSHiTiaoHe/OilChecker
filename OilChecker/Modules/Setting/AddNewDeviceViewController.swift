@@ -13,108 +13,187 @@ import SVProgressHUD
 
 let TextFieldHeight = 45
 
-extension AddNewDeviceViewController: BKRemotePeripheralDelegate, BKRemotePeerDelegate {
-    func remotePeripheral(_ remotePeripheral: BKRemotePeripheral, didUpdateName name: String) {
-        logger.info("didUpdateName \(name)")
-    }
-    
-    func remotePeripheralIsReady(_ remotePeripheral: BKRemotePeripheral) {
-        logger.info("Peripheral ready: \(remotePeripheral)")
-        SVProgressHUD.showInfo(withStatus: "Device is ready")
-        if sendDataState == .RequestDeviceParamers {
-            //请求设备参数
-            requestDeviceInfo()
-        }
-    }
-    
-    func remotePeer(_ remotePeer: BKRemotePeer, didSendArbitraryData data: Data) {
-        logger.info("didSendArbitraryData \(data)")
-        if sendDataState == .RequestDeviceParamers {
-            SVProgressHUD.show(withStatus: "请求设备信息应答...")
-            var binary = Binary.init(bytes: data.bytes)
-            let _ = try? binary.readBytes(1) //stx
-            let _ = try? binary.readBytes(1)//dataLength
-            let _ = try? binary.readBytes(1)//length comp
-            let dataDeviceID = try? binary.readBytes(2)//deviceID
-            let stringDID = dataDeviceID?.hexa
-            let deviceIDIntValue = OCByteManager.shared.integer(from: stringDID!)
-            let property = try? binary.readBytes(1)
-            if property![0] != 0x00 {
-                logger.info("Hard -> APP")
-                return
-            }
-            let cmd = try? binary.readBytes(1)
-            if cmd![0] == 0x86 {//请求设备信息应答
-                SVProgressHUD.show(withStatus: "请求设备信息应答成功")
-                let deviceID = try? binary.readBytes(2)
-                let length = try? binary.readBytes(2)
-                let width = try? binary.readBytes(2)
-                let height = try? binary.readBytes(2)
-                let compareV = try? binary.readBytes(2)
-                if deviceID?.hexa !=  DefualtDeviceID.intTo2Bytes().hexa{//已经被设置过的设备
-                    if length?.hexa != "FFFF" && width?.hexa != "FFFF" && height?.hexa != "FFFF" && compareV?.hexa != "FFFF" {//设备参数符合标准
-                        let deviceIDString = deviceID?.hexa
-                        let deviceIDIntValue = OCByteManager.shared.integer(from: deviceIDString!)
-                        let carModel = RealmHelper.queryObject(objectClass: UserAndCarModel(), filter: "deviceID = '\(deviceIDIntValue.string)'").first
-                        if carModel == nil {//本地没有存储当前设备，添加到本地
-                            let userModel = UserAndCarModel()
-                            userModel.deviceID = deviceIDIntValue.string
-                            userModel.carNumber = ""
-                            userModel.fuelTankLength = OCByteManager.shared.integer(from: length!.hexa).float
-                            userModel.fuelTankWidth = OCByteManager.shared.integer(from: width!.hexa).float
-                            userModel.fuelTankHeight = OCByteManager.shared.integer(from: height!.hexa).float
-                            userModel.createTime = NSDate.now
-                            userModel.voltage = OCByteManager.shared.integer(from: compareV!.hexa)
-                            updateViewValues(carModel!)
-                        }else{//本地有存储当前设备，更新设备参数
-                            carModel!.fuelTankLength = (length?.hexa.float())!
-                            carModel!.fuelTankHeight = (height?.hexa.float())!
-                            carModel!.fuelTankWidth = (width?.hexa.float())!
-                            SettingManager.shared.updateUserCarInfo(carModel!)
-                            updateViewValues(carModel!)
-                        }
-                    }else{
-                        SVProgressHUD.show(withStatus: "设置参数参数有误,请重新设置")
-                    }
-                }else{
-                    SVProgressHUD.show(withStatus: "新设备，请设置参数")
-                }
-            }
-        }
-        
-        if sendDataState == .RequestSettingDeviceParamers {
-            var binary = Binary.init(bytes: data.bytes)
-            let _ = try? binary.readBytes(1) //stx
-            let _ = try? binary.readBytes(1)//dataLength
-            let _ = try? binary.readBytes(1)//length comp
-            let _ = try? binary.readBytes(2)//deviceID
-            let property = try? binary.readBytes(1)
-            if property![0] != 0x00 {
-                logger.info("Hard -> APP")
-                return
-            }
-            let cmd = try? binary.readBytes(1)
-            if cmd![0] == 0x84 {//参数设置应答
-                let response = try? binary.readBytes(1)
-                if response?[0] == 0x00 {
-                    saveToRealmDataBase()
-                    SVProgressHUD.show(withStatus: "设备参数设置成功")
-                }else{
-                    SVProgressHUD.show(withStatus: "设备参数设置失败")
-                }
-            }
-        }
-        
-    }
-    
-}
-
-
 class AddNewDeviceViewController: UIViewController {
 
-    var central: BKCentral? = OCBlueToothManager.shared.central
-    var remotePeripheral: BKRemotePeripheral? = OCBlueToothManager.shared.connectedRemotePeripheral
+//    var central: BKCentral? = OCBlueToothManager.shared.central
+//    var remotePeripheral: BKRemotePeripheral? = OCBlueToothManager.shared.connectedRemotePeripheral
+    let baby = BabyBluetooth.share();
+    var currentPeripheral: CBPeripheral!
+    
+    private var readCBCharacteristic: CBCharacteristic?
+    private var writeCBCharacteristic: CBCharacteristic?
+    private var services: [CBService] = []
+    
     private var sendDataState: BleSendDataState = .RequestDeviceParamers
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = kWhiteColor
+        self.navigationItem.title = "Add A Device".localized()
+        // Do any additional setup after loading the view.
+        initUI()
+        addBabyDelegate()
+        initData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        baby?.cancelAllPeripheralsConnection()
+    }
+    
+    func initData() {
+        SVProgressHUD.show()
+        if currentPeripheral == nil {
+            return
+        }
+        baby?.having(currentPeripheral).channel(BabyChannelAddDeviceIdentifier).connectToPeripherals().discoverServices().discoverCharacteristics().readValueForCharacteristic().discoverDescriptorsForCharacteristic().readValueForDescriptors().begin()
+    }
+    
+    
+    func addBabyDelegate() {
+
+        //设备连接成功
+        baby?.setBlockOnConnectedAtChannel(BabyChannelAddDeviceIdentifier, block: { central, peripheral in
+            logger.info("设备连接成功")
+            SVProgressHUD.showSuccess(withStatus: "连接设备成功")
+//            SVProgressHUD.show()
+        })
+        
+        baby?.setBlockOnFailToConnectAtChannel(BabyChannelAddDeviceIdentifier, block: { central, peripheral, error in
+            SVProgressHUD.showError(withStatus: "连接设备失败")
+            self.navigationController?.popViewController()
+        })
+        
+        
+        //发现设备的服务
+        baby?.setBlockOnDiscoverServicesAtChannel(BabyChannelAddDeviceIdentifier, block: { peripheral, error in
+            self.services.removeAll()
+            for service in peripheral!.services! {
+                logger.info("设备的服务 + \(service.uuid.uuidString)")
+                self.services.append(service)
+            }
+        })
+        
+        //发现设service的Characteristics
+        baby?.setBlockOnDiscoverCharacteristicsAtChannel(BabyChannelAddDeviceIdentifier, block: { peripheral, service, error in
+            guard service != nil else {
+                return
+            } 
+            let characteristics = service?.characteristics as! Array<CBCharacteristic>
+            for c in characteristics {
+                logger.info("发现设service的Characteristics + \(c.uuid.uuidString)")
+                if c.uuid.uuidString == CharacteristicNotifyUUIDString {
+                    self.readCBCharacteristic = c
+                    self.setNotify()
+                }
+                if c.uuid.uuidString == CharacteristicWriteUUIDString {
+                    self.writeCBCharacteristic = c
+                    self.requestDeviceInfo()
+                }
+            }
+        })
+        
+        baby?.setBlockOnDiscoverDescriptorsForCharacteristicAtChannel(BabyChannelAddDeviceIdentifier, block: { peripheral, characteristic, error in
+            
+            if characteristic == nil {
+                return
+            }
+            logger.info("Descriptors + \(characteristic!.uuid.uuidString)")
+
+        })
+        
+        //读取characteristics
+        baby?.setBlockOnReadValueForCharacteristicAtChannel(BabyChannelAddDeviceIdentifier, block: { peripheral, characteristic, error in
+            logger.info("读取characteristics UUID + \(characteristic!.uuid.uuidString)")
+            logger.info("读取characteristics Value + \(characteristic!.value)")
+            if characteristic != nil {
+                if let value = characteristic!.value {
+                    var binary = Binary.init(bytes: value.bytes)
+                    if binary.count < 10 {
+                        return
+                    }
+                    let _ = try? binary.readBytes(1)//stx
+                    let _ = try? binary.readBytes(1)//dataLength
+                    let _ = try? binary.readBytes(1)//length comp
+                    let dataDeviceID = try? binary.readBytes(2)//deviceID
+                    let stringDID = dataDeviceID?.hexa
+                    logger.info("\(String(describing: stringDID))")
+                    let property = try? binary.readBytes(1)
+                    if property![0] != 0x00 {
+                        logger.info("Hard -> APP")
+                        return
+                    }
+                    let cmd = try? binary.readBytes(1)
+                    guard cmd != nil else {
+                        return
+                    }
+                    if cmd![0] == 0x86 {//请求设备信息应答
+                        SVProgressHUD.show(withStatus: "请求设备信息应答成功")
+                        let deviceID = try? binary.readBytes(2)
+                        let length = try? binary.readBytes(2)
+                        let width = try? binary.readBytes(2)
+                        let height = try? binary.readBytes(2)
+                        let compareV = try? binary.readBytes(2)
+                        if deviceID?.hexa !=  DefualtDeviceID.intTo2Bytes().hexa{//已经被设置过的设备
+                            if length?.hexa != "FFFF" && width?.hexa != "FFFF" && height?.hexa != "FFFF" && compareV?.hexa != "FFFF" {//设备参数符合标准
+                                let deviceIDString = deviceID?.hexa
+                                let deviceIDIntValue = OCByteManager.shared.integer(from: deviceIDString!)
+                                let carModel = RealmHelper.queryObject(objectClass: UserAndCarModel(), filter: "deviceID = '\(deviceIDIntValue.string)'").first
+                                if carModel == nil {//本地没有存储当前设备，添加到本地
+                                    let userModel = UserAndCarModel()
+                                    userModel.deviceID = deviceIDIntValue.string
+                                    userModel.carNumber = ""
+                                    userModel.fuelTankLength = OCByteManager.shared.integer(from: length!.hexa).float
+                                    userModel.fuelTankWidth = OCByteManager.shared.integer(from: width!.hexa).float
+                                    userModel.fuelTankHeight = OCByteManager.shared.integer(from: height!.hexa).float
+                                    userModel.createTime = NSDate.now
+                                    userModel.voltage = OCByteManager.shared.integer(from: compareV!.hexa)
+                                    self.updateViewValues(carModel!)
+                                }else{//本地有存储当前设备，更新设备参数
+                                    carModel!.fuelTankLength = (length?.hexa.float())!
+                                    carModel!.fuelTankHeight = (height?.hexa.float())!
+                                    carModel!.fuelTankWidth = (width?.hexa.float())!
+                                    SettingManager.shared.updateUserCarInfo(carModel!)
+                                    self.updateViewValues(carModel!)
+                                }
+                            }else{
+                                SVProgressHUD.show(withStatus: "设置参数参数有误,请重新设置")
+                            }
+                        }else{
+                            SVProgressHUD.show(withStatus: "新设备，请设置参数")
+                        }
+                    }
+                    
+                    if cmd![0] == 0x84 {//参数设置应答
+                        let response = try? binary.readBytes(1)
+                        if response?[0] == 0x00 {
+                            self.saveToRealmDataBase()
+                            SVProgressHUD.show(withStatus: "设备参数设置成功")
+                        }else{
+                            SVProgressHUD.show(withStatus: "设备参数设置失败")
+                        }
+                    }
+                }
+            }
+        })
+
+        baby?.setBlockOnReadValueForDescriptorsAtChannel(BabyChannelAddDeviceIdentifier, block: { peripheral, characteristic, error in
+            logger.info("读取Descriptors + \(characteristic!.uuid.uuidString)")
+        })
+        
+    }
+    
+    func setNotify() {
+        guard readCBCharacteristic != nil else {
+            return
+        }
+        if readCBCharacteristic?.isNotifying == false {
+            logger.info("readCBCharacteristic?.isNotifying == false   setNotify")
+            currentPeripheral.setNotifyValue(true, for: readCBCharacteristic!)
+        }
+   
+    }
+    
     @objc
     func saveButtonAction() {
         logger.info("saveButtonAction")
@@ -193,43 +272,35 @@ class AddNewDeviceViewController: UIViewController {
         datas.append(deviceCompareV[0])
         datas.append(deviceCompareV[1])
         
-        var  checkSum: UInt64 = 0x00
-        checkSum += 0x0F
-        checkSum += 0x0F
-        checkSum += UInt64(defaultDeviceID[0])
-        checkSum += UInt64(defaultDeviceID[1])
-        checkSum += 0x01
-        checkSum += 0x83
-        checkSum += UInt64(deviceSettingID[0])
-        checkSum += UInt64(deviceSettingID[1])
+        var  checkSum: UInt8 = 0x00
+        checkSum ^= 0x0F
+        checkSum ^= 0xF6
+        checkSum ^= defaultDeviceID[0]
+        checkSum ^= defaultDeviceID[1]
+        checkSum ^= 0x01
+        checkSum ^= 0x83
+        checkSum ^= deviceSettingID[0]
+        checkSum ^= deviceSettingID[1]
+        checkSum ^= deviceLength[0]
+        checkSum ^= deviceLength[1]
+        checkSum ^= deviceWidth[0]
+        checkSum ^= deviceWidth[1]
+        checkSum ^= deviceCompareV[0]
+        checkSum ^= deviceCompareV[1]
 
-        checkSum += UInt64(deviceLength[0])
-        checkSum += UInt64(deviceLength[1])
-
-        checkSum += UInt64(deviceWidth[0])
-        checkSum += UInt64(deviceWidth[1])
-
-        checkSum += UInt64(deviceCompareV[0])
-        checkSum += UInt64(deviceCompareV[1])
-
-        datas.append(UInt8(checkSum^checkSum))//BCC Lengh开始到数据区结尾数据和的异或
-        datas.append(0x30)//ETX 0x30
+        datas.append(checkSum)//BCC Lengh开始到数据区结尾数据和的异或
+        datas.append(0x03)//ETX 0x03
         
         let sendData = Data.init(datas)//Data(bytes: datas)
-        central!.sendData(sendData, toRemotePeer: remotePeripheral!) { data, remotepeer, error in
-            guard error == nil else {
-                SVProgressHUD.showError(withStatus: "Failed sending to \(remotepeer.identifier)")
-                return
-            }
-            logger.info("send Data \(data) to  remote \(remotepeer)")
-            SVProgressHUD.showSuccess(withStatus: "Sent Data to \(remotepeer.identifier)")
-        }
-        
+        currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
+        SVProgressHUD.dismiss()
+        SVProgressHUD.showSuccess(withStatus: "发送配置数据\(sendData.hexa)")
+        logger.info("发送配置数据 + \(sendData)")
+        logger.info("发送配置数据 + \(sendData.bytes.hexa)")
     }
     
     func requestDeviceInfo() {
 
-        sendDataState = .RequestDeviceParamers
         let defaultDeviceID: [UInt8] = DefualtDeviceID.intTo2Bytes()
         var datas: [UInt8] = []
         datas.append(0x02)//STX 1字节
@@ -238,62 +309,29 @@ class AddNewDeviceViewController: UIViewController {
         datas.append(defaultDeviceID[0])//设备ID
         datas.append(defaultDeviceID[1])
         datas.append(0x01)//帧标识 APP -> Hard 0x01
-        datas.append(0x81)//CMD ID
-        datas.append(0x01)
+        datas.append(0x85)//CMD ID
+        datas.append(0x11)
         
-        var  checkSum: UInt64 = 0x00
-        checkSum += 0x01
-        checkSum += 0x01
-        checkSum += UInt64(defaultDeviceID[0])
-        checkSum += UInt64(defaultDeviceID[1])
-        checkSum += 0x01
-        checkSum += 0x81
-        checkSum += 0x01
+        var  checkSum: UInt8 = 0x00
+        checkSum ^= 0x02
+        checkSum ^= 0xFE
+        checkSum ^= defaultDeviceID[0]
+        checkSum ^= defaultDeviceID[1]
+        checkSum ^= 0x01
+        checkSum ^= 0x85
+        checkSum ^= 0x11
 
-        datas.append(UInt8(checkSum^checkSum))//BCC Lengh开始到数据区结尾数据和的异或
-        datas.append(0x30)//ETX 0x30
+        datas.append(checkSum)//BCC Lengh开始到数据区结尾数据和的异或
+        datas.append(0x03)//ETX 0x03
         
         let sendData = Data.init(datas)//Data(bytes: datas)
-        central!.sendData(sendData, toRemotePeer: remotePeripheral!) { data, remotepeer, error in
-            guard error == nil else {
-                SVProgressHUD.showError(withStatus: "Failed sending to \(remotepeer.identifier)")
-                return
-            }
-            logger.info("send Data \(data) to  remote \(remotepeer)")
-            SVProgressHUD.showSuccess(withStatus: "请求设备信息")
-            SVProgressHUD.dismiss(withDelay: 1) {
-                SVProgressHUD.show()
-            }
-            
-        }
+        currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
+        SVProgressHUD.showSuccess(withStatus: "请求设备信息\(sendData.hexa)")
+        logger.info("请求设备信息 + \(sendData)")
+        logger.info("请求设备信息 + \(sendData.bytes.hexa)")
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = kWhiteColor
-        self.navigationItem.title = "Add".localized()
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightSaveButton)
-        // Do any additional setup after loading the view.
-        initUI()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        initData()
-    }
-    
-    func initData() {
-        SVProgressHUD.show()
-        guard remotePeripheral != nil else {
-            SVProgressHUD.showError(withStatus: "connect a device first".localized())
-            self.navigationController?.popViewController()
-            return
-        }
-        
-        remotePeripheral!.delegate = self
-        remotePeripheral!.peripheralDelegate = self
-        
-    }
+
     
     func initUI() {
         self.view.addSubview(scrollView)

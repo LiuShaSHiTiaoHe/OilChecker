@@ -136,14 +136,30 @@ let k20BoldFont = UIFont.boldSystemFont(ofSize: 20.0)
 let DefaultEmptyNumberString = "0.0"
 
 let ServiceUUID = 0xFFE0
+let ServiceUUIDString = "0000FFE0-0000-1000-8000-00805F9B34FB"
 let CharacteristicUUID = 0xFFE1
-let DefualtDeviceID = 0x1A3B
+
+let CharacteristicNotifyUUID = 0xFFE1
+let CharacteristicNotifyUUIDString = "0000FFE1-0000-1000-8000-00805F9B34FB"
+
+let CharacteristicWriteUUID = 0xFFE2
+let CharacteristicWriteUUIDString = "0000FFE2-0000-1000-8000-00805F9B34FB"
+
+let DefualtDeviceID = 0x0000
 let warningFuelChangedValue: Double = 40.0
 
+let BabyChannelHomeIdentifier = "BabyChannelHomeIdentifier"
+let BabyChannelScanViewIdentifier = "BabyChannelScanViewIdentifier"
+let BabyChannelAddDeviceIdentifier = "BabyChannelAddDeviceIdentifier"
 
 
 enum FuelCapacityState: String {
     case Unknown = "Unknown"
     case Normal =  "Normal"
     case Irregular = "Irregular"
+}
+
+extension Notification.Name {
+    //更新视图
+   static let SyncDateCompleteNotify = Notification.Name(rawValue:"updateHomeChartAndStatus")
 }
