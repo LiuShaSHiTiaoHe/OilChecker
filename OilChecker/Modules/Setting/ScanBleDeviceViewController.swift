@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import BluetoothKit
 import CoreBluetooth
 import SVProgressHUD
 

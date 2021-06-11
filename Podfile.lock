@@ -1,6 +1,5 @@
 PODS:
   - BetterSegmentedControl (2.0.1)
-  - BluetoothKit (0.4.0)
   - Charts (3.6.0):
     - Charts/Core (= 3.6.0)
   - Charts/Core (3.6.0)
@@ -63,7 +62,6 @@ PODS:
 
 DEPENDENCIES:
   - BetterSegmentedControl
-  - BluetoothKit
   - Charts
   - DatePickerDialog
   - DropDown
@@ -87,7 +85,6 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - BetterSegmentedControl
-    - BluetoothKit
     - Charts
     - DatePickerDialog
     - DropDown
@@ -112,7 +109,6 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   BetterSegmentedControl: 09607b27861d49cbce48b7673b74f9150a3d371a
-  BluetoothKit: 00e189e01ba765e2689c46fbd8d0ede62984441b
   Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
   DatePickerDialog: ccff2f91ff7a018057a4d72fa5ad6de49c8cb0cd
   DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
@@ -135,6 +131,6 @@ SPEC CHECKSUMS:
   SwiftyBeaver: 2e8acd6fc90c6d0a27055867a290794926d57c02
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
 
-PODFILE CHECKSUM: 934312fea45be4ff970e9048d88f6350c0b5555a
+PODFILE CHECKSUM: ff2aae0cba8bad924bb6b5fdf3f1008adb1839d1
 
 COCOAPODS: 1.10.0

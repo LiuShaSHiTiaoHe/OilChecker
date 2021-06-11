@@ -7,7 +7,6 @@
 
 import UIKit
 import SkyFloatingLabelTextField
-import BluetoothKit
 import CoreBluetooth
 import SVProgressHUD
 
@@ -15,8 +14,6 @@ let TextFieldHeight = 45
 
 class AddNewDeviceViewController: UIViewController {
 
-//    var central: BKCentral? = OCBlueToothManager.shared.central
-//    var remotePeripheral: BKRemotePeripheral? = OCBlueToothManager.shared.connectedRemotePeripheral
     let baby = BabyBluetooth.share();
     var currentPeripheral: CBPeripheral!
     

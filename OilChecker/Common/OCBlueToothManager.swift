@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import BluetoothKit
 import CoreBluetooth
 import SwiftyUserDefaults
 import SVProgressHUD
@@ -19,9 +18,7 @@ enum BleSendDataState {
 }
 
 protocol OCBlueToothManagerDelegate: NSObjectProtocol {
-   
-    func bleScanChangedWith(_ changes: [BKDiscoveriesChange], _ discoveries: [BKDiscovery])
-    
+       
 }
 
 private struct OCBlueToothManagerWrapper {

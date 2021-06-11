@@ -8,7 +8,6 @@ target 'OilChecker' do
 	pod 'SnapKit'
   pod 'Logging'
   pod 'Localize-Swift'
-  pod 'BluetoothKit'
   pod 'SwifterSwift'
   pod "ESTabBarController-swift"
   pod 'IceCream'
