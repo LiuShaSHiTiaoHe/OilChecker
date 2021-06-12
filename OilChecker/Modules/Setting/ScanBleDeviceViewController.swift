@@ -45,70 +45,81 @@ class ScanBleDeviceViewController: UIViewController {
             }
         })
         
-        //设备连接成功
-        baby?.setBlockOnConnectedAtChannel(BabyChannelScanViewIdentifier, block: { central, peripheral in
-            //            logger.info("设备连接成功" + (peripheral?.name)!)
-            logger.info("设备连接成功")
-            SVProgressHUD.showSuccess(withStatus: "连接设备成功")
-            let vc = AddNewDeviceViewController()
-            vc.currentPeripheral = peripheral!
-            self.navigationController?.pushViewController(vc)
-            
-        })
+//        //设备连接成功
+//        baby?.setBlockOnConnectedAtChannel(BabyChannelScanViewIdentifier, block: { central, peripheral in
+//            //            logger.info("设备连接成功" + (peripheral?.name)!)
+//            logger.info("设备连接成功")
+//            SVProgressHUD.showSuccess(withStatus: "连接设备成功")
+//            let vc = AddNewDeviceViewController()
+//            vc.currentPeripheral = peripheral!
+//            self.navigationController?.pushViewController(vc)
+//
+//        })
+//
+//        baby?.setBlockOnFailToConnectAtChannel(BabyChannelScanViewIdentifier, block: { central, peripheral, error in
+//            SVProgressHUD.showError(withStatus: "连接设备失败")
+//            self.scan()
+//        })
         
-        baby?.setBlockOnFailToConnectAtChannel(BabyChannelScanViewIdentifier, block: { central, peripheral, error in
-            SVProgressHUD.showError(withStatus: "连接设备失败")
-            self.scan()
-        })
-        
-        //发现设备的服务
-        baby?.setBlockOnDiscoverServicesAtChannel(BabyChannelScanViewIdentifier, block: { peripheral, error in
-            for service in peripheral!.services! {
-                logger.info("设备的服务 + \(service.uuid.uuidString)")
-            }
-        })
-
-        
-        //发现设service的Characteristics
-        baby?.setBlockOnDiscoverCharacteristicsAtChannel(BabyChannelScanViewIdentifier, block: { peripheral, service, error in
-            guard service != nil else {
-                return
-            }
-            let characteristics = service?.characteristics as! Array<CBCharacteristic>
-            for c in characteristics {
-                logger.info("发现设service的Characteristics + \(c.uuid.uuidString)")
-            }
-        })
+//        //发现设备的服务
+//        baby?.setBlockOnDiscoverServicesAtChannel(BabyChannelScanViewIdentifier, block: { peripheral, error in
+//            for service in peripheral!.services! {
+//                logger.info("设备的服务 + \(service.uuid.uuidString)")
+//            }
+//        })
+//
+//        
+//        //发现设service的Characteristics
+//        baby?.setBlockOnDiscoverCharacteristicsAtChannel(BabyChannelScanViewIdentifier, block: { peripheral, service, error in
+//            guard service != nil else {
+//                return
+//            }
+//            let characteristics = service?.characteristics as! Array<CBCharacteristic>
+//            for c in characteristics {
+//                logger.info("发现设service的Characteristics + \(c.uuid.uuidString)")
+//            }
+//        })
 
         
         baby?.setFilterOnDiscoverPeripheralsAtChannel(BabyChannelScanViewIdentifier, filter: { (name, adv, RSSi) -> Bool in
             if adv == nil {
                 return false
             }
-            if let serviceUUIDs = adv!["kCBAdvDataServiceUUIDs"] as? Array<CBUUID> {
-                for cbuuid in serviceUUIDs {
-                    if cbuuid.uuidString == ServiceUUIDString {
-                        return true
-                    }
-                }
+//            if let serviceUUIDs = adv!["kCBAdvDataServiceUUIDs"] as? Array<CBUUID> {
+//                for cbuuid in serviceUUIDs {
+//                    if cbuuid.uuidString == ServiceUUIDString {
+//                        return true
+//                    }
+//                }
+//            }
+            if name == nil || name!.isEmpty {
+                return false
             }
-            return false
+            
+//            if name!.contains("BT-") {
+//                return true
+//            }
+            
+            return true
         })
         
         
     }
     
-    
-    internal override func viewDidAppear(_ animated: Bool) {
+
+    override func viewWillAppear(_ animated: Bool) {
         scan()
     }
 
-    internal override func viewWillDisappear(_ animated: Bool) {
-        //取消连接
-        baby?.cancelAllPeripheralsConnection()
-        //停止搜索
-        baby?.cancelScan()
+    override func viewWillDisappear(_ animated: Bool) {
+        discoveries.removeAll()
     }
+//    internal override func viewWillDisappear(_ animated: Bool) {
+//        //取消连接
+//        baby?.cancelAllPeripheralsConnection()
+//        //停止搜索
+//        baby?.cancelScan()
+//    }
 
     
     private func scan() {
@@ -165,14 +176,18 @@ extension ScanBleDeviceViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-//        tableView.isUserInteractionEnabled = false
-//        SVProgressHUD.show()
         baby?.cancelScan()
         let peripheral = discoveries[indexPath.row]
-//        baby?.having(discovery).and().channel(BabyChannelScanViewIdentifier).then().connectToPeripherals().begin()
-        let vc = AddNewDeviceViewController()
-        vc.currentPeripheral = peripheral
-        self.navigationController?.pushViewController(vc)
+        if let name = peripheral.name {
+            if name.contains("BT-") {
+                let vc = AddNewDeviceViewController()
+                vc.currentPeripheral = peripheral
+                self.navigationController?.pushViewController(vc)
+            }else{
+                SVProgressHUD.showError(withStatus: "选择设备不符合条件")
+            }
+        }
+
     }
     
     
