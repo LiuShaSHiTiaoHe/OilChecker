@@ -22,7 +22,7 @@ class AddNewDeviceViewController: UIViewController {
     private var services: [CBService] = []
     
     private var sendDataState: BleSendDataState = .RequestDeviceParamers
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +53,7 @@ class AddNewDeviceViewController: UIViewController {
         baby?.setBlockOnConnectedAtChannel(BabyChannelAddDeviceIdentifier, block: { central, peripheral in
             logger.info("设备连接成功")
             SVProgressHUD.showSuccess(withStatus: "连接设备成功")
-//            SVProgressHUD.show()
+            self.currentPeripheral = peripheral!
         })
         
         baby?.setBlockOnFailToConnectAtChannel(BabyChannelAddDeviceIdentifier, block: { central, peripheral, error in
@@ -75,35 +75,48 @@ class AddNewDeviceViewController: UIViewController {
         baby?.setBlockOnDiscoverCharacteristicsAtChannel(BabyChannelAddDeviceIdentifier, block: { peripheral, service, error in
             guard service != nil else {
                 return
-            } 
-            let characteristics = service?.characteristics as! Array<CBCharacteristic>
-            for c in characteristics {
-                logger.info("发现设service的Characteristics + \(c.uuid.uuidString)")
-                if c.uuid.uuidString == CharacteristicNotifyUUIDString {
-                    self.readCBCharacteristic = c
-                    self.setNotify()
-                }
-                if c.uuid.uuidString == CharacteristicWriteUUIDString {
-                    self.writeCBCharacteristic = c
-                    self.requestDeviceInfo()
+            }
+            if service!.uuid.uuidString == ServiceUUIDString {
+                let characteristics = service!.characteristics!
+                for c in characteristics {
+                    logger.info("发现设service的Characteristics + \(c.uuid.uuidString)")
+                    if c.uuid.uuidString == CharacteristicNotifyUUIDString {
+                        self.readCBCharacteristic = c
+    //                    self.setNotify()
+                        self.currentPeripheral.setNotifyValue(true, for: self.readCBCharacteristic!)
+                    }
+                    if c.uuid.uuidString == CharacteristicWriteUUIDString {
+                        self.writeCBCharacteristic = c
+                        self.currentPeripheral.setNotifyValue(true, for: self.writeCBCharacteristic!)
+                        self.requestDeviceInfo()
+                    }
                 }
             }
-        })
-        
-        baby?.setBlockOnDiscoverDescriptorsForCharacteristicAtChannel(BabyChannelAddDeviceIdentifier, block: { peripheral, characteristic, error in
-            
-            if characteristic == nil {
-                return
-            }
-            logger.info("Descriptors + \(characteristic!.uuid.uuidString)")
 
         })
         
+//        baby?.setBlockOnDiscoverDescriptorsForCharacteristicAtChannel(BabyChannelAddDeviceIdentifier, block: { peripheral, characteristic, error in
+//
+//            if characteristic == nil {
+//                return
+//            }
+//            logger.info("Descriptors + \(characteristic!.uuid.uuidString)")
+//
+//        })
+        
         //读取characteristics
         baby?.setBlockOnReadValueForCharacteristicAtChannel(BabyChannelAddDeviceIdentifier, block: { peripheral, characteristic, error in
+            
+            guard characteristic != nil else{
+                return
+            }
             logger.info("读取characteristics UUID + \(characteristic!.uuid.uuidString)")
-            logger.info("读取characteristics Value + \(characteristic!.value)")
-            if characteristic != nil {
+            logger.info("读取characteristics Value + \(String(describing: characteristic!.value))")
+            if characteristic!.uuid.uuidString != CharacteristicNotifyUUIDString || characteristic!.uuid.uuidString != CharacteristicWriteUUIDString {
+                return
+            }
+            if characteristic!.value != nil {
+                SVProgressHUD.showSuccess(withStatus: "接收到\(characteristic!.uuid.uuidString) 的数据\(characteristic!.value!.hexa)")
                 if let value = characteristic!.value {
                     var binary = Binary.init(bytes: value.bytes)
                     if binary.count < 10 {
@@ -174,22 +187,37 @@ class AddNewDeviceViewController: UIViewController {
             }
         })
 
-        baby?.setBlockOnReadValueForDescriptorsAtChannel(BabyChannelAddDeviceIdentifier, block: { peripheral, characteristic, error in
-            logger.info("读取Descriptors + \(characteristic!.uuid.uuidString)")
+
+        baby?.setBlockOnDidWriteValueForCharacteristicAtChannel(BabyChannelAddDeviceIdentifier, block: { characteristic, error in
+            guard characteristic != nil else {
+                return
+            }
+            SVProgressHUD.showSuccess(withStatus: "写入数据成功\(characteristic!.uuid.uuidString)")
         })
         
+        baby?.setBlockOnDidUpdateNotificationStateForCharacteristic({ characteristic, error in
+            guard characteristic != nil else {
+                return
+            }
+            guard self.currentPeripheral != nil else {
+                return
+            }
+            self.currentPeripheral!.readValue(for: characteristic!)
+            if characteristic!.isNotifying {
+                self.currentPeripheral!.readValue(for: characteristic!)
+            }
+        })
     }
     
-    func setNotify() {
-        guard readCBCharacteristic != nil else {
-            return
-        }
-        if readCBCharacteristic?.isNotifying == false {
-            logger.info("readCBCharacteristic?.isNotifying == false   setNotify")
-            currentPeripheral.setNotifyValue(true, for: readCBCharacteristic!)
-        }
-   
-    }
+//    func setNotify() {
+//        guard readCBCharacteristic != nil else {
+//            return
+//        }
+//        if readCBCharacteristic?.isNotifying == false {
+//            logger.info("readCBCharacteristic?.isNotifying == false   setNotify")
+//            currentPeripheral.setNotifyValue(true, for: readCBCharacteristic!)
+//        }
+//    }
     
     @objc
     func saveButtonAction() {
@@ -289,11 +317,21 @@ class AddNewDeviceViewController: UIViewController {
         datas.append(0x03)//ETX 0x03
         
         let sendData = Data.init(datas)//Data(bytes: datas)
-        currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
-        SVProgressHUD.dismiss()
-        SVProgressHUD.showSuccess(withStatus: "发送配置数据\(sendData.hexa)")
-        logger.info("发送配置数据 + \(sendData)")
-        logger.info("发送配置数据 + \(sendData.bytes.hexa)")
+        if writeCBCharacteristic == nil {
+            SVProgressHUD.showSuccess(withStatus: "重新连接设备")
+        }else{
+            logger.info("发送配置数据 + \(writeCBCharacteristic!.uuid.uuidString)")
+            currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
+            SVProgressHUD.dismiss()
+            SVProgressHUD.showSuccess(withStatus: "发送配置数据\(sendData.hexa)")
+            logger.info("发送配置数据 + \(sendData)")
+            logger.info("发送配置数据 + \(sendData.bytes.hexa)")
+        }
+        if readCBCharacteristic != nil {
+            logger.info("发送配置数据 + \(readCBCharacteristic!.uuid.uuidString)")
+            logger.info("发送配置数据 + \(sendData)")
+            currentPeripheral.writeValue(sendData, for: readCBCharacteristic!, type: .withResponse)
+        }
     }
     
     func requestDeviceInfo() {
@@ -322,10 +360,23 @@ class AddNewDeviceViewController: UIViewController {
         datas.append(0x03)//ETX 0x03
         
         let sendData = Data.init(datas)//Data(bytes: datas)
-        currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
-        SVProgressHUD.showSuccess(withStatus: "请求设备信息\(sendData.hexa)")
-        logger.info("请求设备信息 + \(sendData)")
-        logger.info("请求设备信息 + \(sendData.bytes.hexa)")
+        if writeCBCharacteristic == nil {
+            SVProgressHUD.showSuccess(withStatus: "重新连接设备")
+        }else{
+            logger.info("请求设备信息 + \(writeCBCharacteristic!.uuid.uuidString)")
+            logger.info("请求设备信息 + \(sendData)")
+            logger.info("请求设备信息 + \(sendData.bytes.hexa)")
+            SVProgressHUD.showSuccess(withStatus: "请求设备信息\(sendData.hexa)")
+            currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
+
+        }
+        
+        if readCBCharacteristic != nil {
+            logger.info("请求设备信息 + \(readCBCharacteristic!.uuid.uuidString)")
+            logger.info("请求设备信息 + \(sendData)")
+            currentPeripheral.writeValue(sendData, for: readCBCharacteristic!, type: .withResponse)
+        }
+
     }
     
 
@@ -393,7 +444,6 @@ class AddNewDeviceViewController: UIViewController {
             make.left.equalToSuperview().offset(kMargin)
             make.height.equalTo(80)
             make.width.equalTo(kScreenWidth - kMargin*2)
-//            make.right.equalToSuperview().offset(-kMargin)
         }
         
         rightSaveButton.snp.makeConstraints { make  in

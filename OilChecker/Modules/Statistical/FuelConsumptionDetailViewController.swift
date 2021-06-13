@@ -8,7 +8,6 @@
 import UIKit
 import SwiftyUserDefaults
 import SwiftDate
-import DatePickerDialog
 import BetterSegmentedControl
 import RealmSwift
 

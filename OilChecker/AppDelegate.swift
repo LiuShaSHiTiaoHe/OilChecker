@@ -14,12 +14,10 @@ import SwifterSwift
 import CoreBluetooth
 import SwiftyUserDefaults
 import SVProgressHUD
-import SwiftyBeaver
 import Logging
 
-let logger = SwiftyBeaver.self
 //let logger = Logger(label: "com.OilChecker.main")
-
+let logger = TLogFactory.createTLog(forModuleName: "com.OilChecker.main")!
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -30,37 +28,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         initializeApp()
         
-        let console = ConsoleDestination()  // log to Xcode Console
-        let cloud = SBPlatformDestination(appID: "Ybn2zR", appSecret: "cuY7tinlehtnE8bncSgtvcrxsVcxSSdz", encryptionKey: "qnklqokboFufwbphdmrcFt4qY9tawvf3") // to cloud
-        
-        // use custom format and set console output to short time, log level & message
-        console.format = "$DHH:mm:ss$d $L $M"
-        // or use this for JSON output: console.format = "$J"
+        AlicloudTlogProvider.init().autoInit(withAppVersion: "1.0.0", channel: "debug", nick: "oilchecker")
+        AlicloudHAProvider.start()
+//        TRDManagerService.shareInstance().startInit()
+        TRDManagerService.update(.info)
 
-        // add the destinations to SwiftyBeaver
-        logger.addDestination(console)
-        logger.addDestination(cloud)
+        let loggerr = TLogFactory.createTLog(forModuleName: "com.OilChecker.UIApplicationDelegate")!
+        loggerr.info("UIApplicationDelegate")
         
-        
-//        let originInt: UInt64 = 1551
-//        let bytes = Int(originInt).intTo2Bytes()// 6 15
-//        let asdhex = bytes.hexa //"060F"
-//        let intgerValue = OCByteManager.shared.integer(from: asdhex)//1551
-//
-//        let hexValue = "FF"
-//        let singleIntValue = OCByteManager.shared.integer(from: hexValue)
-//
-//        let end = 0xFF
-//
-//        let unsigned = UInt8(bitPattern: Int8(-1))
-//        let unsigned2 = UInt8(bitPattern: Int8(-10))
-//        let unsigned2data = String(unsigned2,radix: 16, uppercase: true)
-//
-//        let numberData = NSString(format: "%d", bytes[0]).integerValue
-//        let numberDataString = NSString(format: "%d", bytes[0])
-
-//        addFakeData()
-                
         logger.info("\(NSHomeDirectory())")
         return true
     }

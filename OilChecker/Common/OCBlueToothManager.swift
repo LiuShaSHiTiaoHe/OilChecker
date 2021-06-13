@@ -33,7 +33,6 @@ class OCBlueToothManager: NSObject {
 
     
     static let shared = OCBlueToothManager()
-    
 
     //MARK: observers
     private var objservers: [OCBlueToothManagerWrapper] = []
@@ -78,6 +77,7 @@ class OCBlueToothManager: NSObject {
                 SVProgressHUD.showError(withStatus: "无法连接当前设备")
             }
         }
+        baby?.cancelAllPeripheralsConnection()
         baby?.channel(BabyChannelHomeIdentifier).scanForPeripherals().begin()
     }
     
@@ -145,7 +145,7 @@ class OCBlueToothManager: NSObject {
             guard service != nil else {
                 return
             }
-            let characteristics = service?.characteristics as! Array<CBCharacteristic>
+            let characteristics = service!.characteristics!
             for c in characteristics {
                 logger.info("发现设service的Characteristics + \(c.uuid.uuidString)")
                 if c.uuid.uuidString == CharacteristicNotifyUUIDString {
@@ -218,7 +218,7 @@ class OCBlueToothManager: NSObject {
                     }
                     
                     if cmd![0] == 0x82 {//获取油量历史数据
-                        logger.info("获取油量历史数据 + \(characteristic!.value)")
+                        logger.info("获取油量历史数据 + \(String(describing: characteristic!.value))")
                         logger.info("获取油量历史数据 + \(characteristic!.value!.bytes.hexa)")
                         let number = try? binary.readBytes(1)
                         let numberIntStrng = OCByteManager.shared.integer(from: number!.hexa)
@@ -310,10 +310,15 @@ class OCBlueToothManager: NSObject {
         datas.append(0x03)//ETX 0x03
         
         let sendData = Data.init(datas)//Data(bytes: datas)
-        logger.info("请求设备信息 + \(sendData)")
-        logger.info("请求设备信息 + \(sendData.bytes.hexa)")
-        currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
-        SVProgressHUD.showSuccess(withStatus: "请求设备信息\(sendData.hexa)")
+        if writeCBCharacteristic == nil {
+            SVProgressHUD.showSuccess(withStatus: "writeCBCharacteristic 为空,重新连接设备")
+        }else{
+            logger.info("请求设备信息 + \(sendData)")
+            logger.info("请求设备信息 + \(sendData.bytes.hexa)")
+            currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
+            SVProgressHUD.showSuccess(withStatus: "请求设备信息\(sendData.hexa)")
+        }
+
     }
     
     func requestHistoryData() {
@@ -345,9 +350,14 @@ class OCBlueToothManager: NSObject {
         datas.append(0x03)//ETX 0x03
         
         let sendData = Data.init(datas)//Data(bytes: datas)
-        logger.info("发送油量数据请求 + \(sendData)")
-        logger.info("发送油量数据请求 + \(sendData.bytes.hexa)")
-        SVProgressHUD.show(withStatus: "发送油量数据请求")
+        if writeCBCharacteristic == nil {
+            SVProgressHUD.showSuccess(withStatus: "writeCBCharacteristic 为空,重新连接设备")
+        }else{
+            logger.info("发送油量数据请求 + \(sendData)")
+            logger.info("发送油量数据请求 + \(sendData.bytes.hexa)")
+            currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
+            SVProgressHUD.show(withStatus: "发送油量数据请求")
+        }
 
     }
 

@@ -1,10 +1,36 @@
 PODS:
+  - AlicloudHAUtil (1.0.1):
+    - AliHACore
+    - TBRest
+    - ZipArchive
+  - AlicloudTLog (1.0.0.2):
+    - AlicloudHAUtil
+    - AlicloudUtils
+    - AliHACore (~> 10.0.3)
+    - AliHAProtocol (~> 10.0.3)
+    - AliHASecurity (~> 10.0.4)
+    - RemoteDebugChannel (~> 10.0.4)
+    - TBRest (~> 10.1.1)
+    - TRemoteDebugger (~> 10.0.4)
+  - AlicloudUTDID (1.5.0.94)
+  - AlicloudUtils (1.3.9):
+    - AlicloudUTDID
+  - AliHACore (10.0.3.6):
+    - AliHALogEngine (>= 10.0.2)
+    - AliHAProtocol (>= 10.0.2.1)
+    - TBJSONModel
+    - TBRest (>= 1.0.0.18)
+  - AliHALogEngine (10.0.5)
+  - AliHAMethodTrace (10.0.4)
+  - AliHAProtocol (10.0.3):
+    - TBJSONModel
+  - AliHASecurity (10.0.4)
+  - AliRemoteDebugInterface (0.0.1.4)
+  - AliyunOSSiOS (2.10.9)
   - BetterSegmentedControl (2.0.1)
   - Charts (3.6.0):
     - Charts/Core (= 3.6.0)
   - Charts/Core (3.6.0)
-  - DatePickerDialog (4.0)
-  - DropDown (2.3.13)
   - ESTabBarController-swift (2.8.0)
   - IceCream (2.0.0):
     - RealmSwift
@@ -16,22 +42,23 @@ PODS:
   - Localize-Swift/UIKit (3.2.0):
     - Localize-Swift/LocalizeSwiftCore
   - Logging (1.4.0)
-  - QuickLayout (3.0.0)
   - Realm (10.7.2):
     - Realm/Headers (= 10.7.2)
   - Realm/Headers (10.7.2)
   - RealmSwift (10.7.2):
     - Realm (= 10.7.2)
+  - RemoteDebugChannel (10.0.4.5):
+    - AliHAProtocol (>= 10.0.0.3)
+    - AliHASecurity
+    - AliyunOSSiOS
+    - TBJSONModel
+    - TBRest (>= 1.0.0.18)
+    - ZipArchive
   - Schedule (2.1.0)
   - SkyFloatingLabelTextField (4.0.0)
   - SnapKit (5.0.1)
-  - SPPermissions/Bluetooth (5.4.2):
-    - SPPermissions/Core
-  - SPPermissions/Core (5.4.2)
   - SVProgressHUD (2.2.5)
   - SwiftDate (6.3.1)
-  - SwiftEntryKit (1.2.7):
-    - QuickLayout (= 3.0.0)
   - SwifterSwift (5.2.0):
     - SwifterSwift/AppKit (= 5.2.0)
     - SwifterSwift/CoreAnimation (= 5.2.0)
@@ -57,14 +84,23 @@ PODS:
   - SwifterSwift/StoreKit (5.2.0)
   - SwifterSwift/SwiftStdlib (5.2.0)
   - SwifterSwift/UIKit (5.2.0)
-  - SwiftyBeaver (1.9.3)
   - SwiftyUserDefaults (5.3.0)
+  - TBJSONModel (0.1.15.1)
+  - TBRest (10.1.1.0)
+  - TRemoteDebugger (10.0.6.3):
+    - AliHALogEngine (>= 10.0.5)
+    - AliHAMethodTrace (>= 1.0.1.2)
+    - AliHAProtocol (>= 10.0.0.5)
+    - AliHASecurity (>= 10.0.4)
+    - AliRemoteDebugInterface (>= 0.0.1.2)
+    - TBJSONModel
+    - TBRest (>= 1.0.0.18)
+  - ZipArchive (1.4.0)
 
 DEPENDENCIES:
+  - AlicloudTLog (~> 1.0.0.2)
   - BetterSegmentedControl
   - Charts
-  - DatePickerDialog
-  - DropDown
   - ESTabBarController-swift
   - IceCream
   - IQKeyboardManagerSwift
@@ -74,63 +110,81 @@ DEPENDENCIES:
   - Schedule (~> 2.0)
   - SkyFloatingLabelTextField
   - SnapKit
-  - SPPermissions/Bluetooth
   - SVProgressHUD
   - SwiftDate
-  - SwiftEntryKit
   - SwifterSwift
-  - SwiftyBeaver
   - SwiftyUserDefaults
 
 SPEC REPOS:
+  https://github.com/aliyun/aliyun-specs.git:
+    - AlicloudHAUtil
+    - AlicloudTLog
+    - AlicloudUTDID
+    - AlicloudUtils
+    - AliHACore
+    - AliHALogEngine
+    - AliHAMethodTrace
+    - AliHAProtocol
+    - AliHASecurity
+    - AliRemoteDebugInterface
+    - RemoteDebugChannel
+    - TBJSONModel
+    - TBRest
+    - TRemoteDebugger
   https://github.com/CocoaPods/Specs.git:
+    - AliyunOSSiOS
     - BetterSegmentedControl
     - Charts
-    - DatePickerDialog
-    - DropDown
     - ESTabBarController-swift
     - IceCream
     - IQKeyboardManagerSwift
     - Localize-Swift
     - Logging
-    - QuickLayout
     - Realm
     - RealmSwift
     - Schedule
     - SkyFloatingLabelTextField
     - SnapKit
-    - SPPermissions
     - SVProgressHUD
     - SwiftDate
-    - SwiftEntryKit
     - SwifterSwift
-    - SwiftyBeaver
     - SwiftyUserDefaults
+    - ZipArchive
 
 SPEC CHECKSUMS:
+  AlicloudHAUtil: 99e5929118fdd73f8ac27807c13e2cded5d4b048
+  AlicloudTLog: 462a53a958f7e57a189d7d234f41bca1dbef9fcd
+  AlicloudUTDID: 7323c443dcdf9a73e2224dc6ce51703671d7a765
+  AlicloudUtils: 66e0ba6ece62d7dd05e9dd95674b2c7811624c2f
+  AliHACore: 631974dc2ab61ffed5ba743e339defb5c9e028c0
+  AliHALogEngine: 22b83d8cfb4fbc2c22a2238574bc295b2dbba48d
+  AliHAMethodTrace: 31ebea278dfc3dfead7c47a75fc995c79d14ac36
+  AliHAProtocol: fd6ba550c1888b51cc1cd55a21f220fccadd7a26
+  AliHASecurity: feacfe93b806c1c1a03e2d03c4968d7021df6851
+  AliRemoteDebugInterface: acc89a6becba06e3c009465cbc377b297d745fcb
+  AliyunOSSiOS: 13173e9eaf05d3816315319876025de3028ea31d
   BetterSegmentedControl: 09607b27861d49cbce48b7673b74f9150a3d371a
   Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
-  DatePickerDialog: ccff2f91ff7a018057a4d72fa5ad6de49c8cb0cd
-  DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
   ESTabBarController-swift: 05593a6ad64700b03c0eb60ff625916370aa4136
   IceCream: a7d6ffdef8e36ce1d089738e51d5e918c4862fd8
   IQKeyboardManagerSwift: c7df9d2deb356c04522f5c4b7b6e4ce4d8ed94fe
   Localize-Swift: 6f4475136bdb0d7b2882ea3d4ea919d70142b232
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
-  QuickLayout: 07b45a72b10083fee3f095990cfed1c1e7b27f0a
   Realm: e523da9ade306c5ae87e85dc09fdef148d3e1cc1
   RealmSwift: 4f6758c3adbdcc87f7b7777107226532a077f61c
+  RemoteDebugChannel: 6cf6628a167a1c6c530d32f21d16cf38a5a24bd4
   Schedule: 00e6d7bbdbdb000fd1f51a7d10e9f88a8c451fda
   SkyFloatingLabelTextField: 79ddc40e4ad59707fedbb48d605417aee48bb78a
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  SPPermissions: f516d117ced15316a5d4dd667274d12e1c3e8a4b
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftDate: 72d28954e8e1c6c1c0f917ccc8005e4f83c7d4b2
-  SwiftEntryKit: 537c92699d6034efb1ef9c32b11e0b37c97aa589
   SwifterSwift: 334181863c416882d97b7a60c05054d9e4d799e2
-  SwiftyBeaver: 2e8acd6fc90c6d0a27055867a290794926d57c02
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
+  TBJSONModel: 2c95a8789bc3d98a2a773dd09c41ddeb902a200b
+  TBRest: 36fcaf59c76692eae5acf4c8fd469748d453a327
+  TRemoteDebugger: af82010a22063d31b8509497a8bfabfb3f7028c3
+  ZipArchive: e25a4373192673e3229ac8d6e9f64a3e5713c966
 
-PODFILE CHECKSUM: ff2aae0cba8bad924bb6b5fdf3f1008adb1839d1
+PODFILE CHECKSUM: 4f25093057f4ba2ad760c51eebc6950ec3f931cf
 
 COCOAPODS: 1.10.0

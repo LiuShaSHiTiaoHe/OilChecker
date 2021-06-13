@@ -9,7 +9,6 @@ import UIKit
 import RealmSwift
 import SwiftyUserDefaults
 import SwiftDate
-import DatePickerDialog
 import BetterSegmentedControl
 
 class RefuelRecordDetailViewController: UIViewController {
@@ -62,10 +61,8 @@ class RefuelRecordDetailViewController: UIViewController {
             return
         }
         if sender.index == 0{
-
             let dataSource = RealmHelper.queryObject(objectClass: RefuelRecordModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(20)
             updateTableDataSource(Array(dataSource))
-
         }else if sender.index == 1{
             let dataSource = RealmHelper.queryObject(objectClass: RefuelRecordModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(40)
             updateTableDataSource(Array(dataSource))
@@ -73,8 +70,6 @@ class RefuelRecordDetailViewController: UIViewController {
             let dataSource = RealmHelper.queryObject(objectClass: RefuelRecordModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(60)
             updateTableDataSource(Array(dataSource))
         }
-      
-        
     }
     
     func updateTableDataSource(_ data: [RefuelRecordModel]) {
@@ -147,7 +142,6 @@ extension RefuelRecordDetailViewController: UITableViewDelegate, UITableViewData
         cell.contentMessage.text = model.refuelLevel.string + "  L"
         cell.contentMessage.textColor = kThemeGreenColor
         return cell
-        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

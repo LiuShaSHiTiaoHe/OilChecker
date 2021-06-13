@@ -24,7 +24,6 @@ class HomeViewController: UIViewController {
         view.backgroundColor = kBackgroundColor
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.title = "Home".localized()
-//        OCBlueToothManager.shared.startCentral()
         initUI()
     }
     
@@ -42,7 +41,6 @@ class HomeViewController: UIViewController {
         }else{
             //TODO
             self.navigationController?.pushViewController(ScanBleDeviceViewController())
-
         }
     }
     

@@ -1,5 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
-
+source "https://github.com/CocoaPods/Specs.git"
+source "https://github.com/aliyun/aliyun-specs.git"
 platform :ios, '13.0'
 
 use_frameworks!
@@ -13,22 +14,22 @@ target 'OilChecker' do
   pod 'IceCream'
   pod 'RealmSwift'
   pod 'Charts'
-  pod 'DropDown'
-
-  
-  pod 'SwiftEntryKit'
   pod 'SkyFloatingLabelTextField'
   pod 'BetterSegmentedControl'
-  pod 'SPPermissions/Bluetooth'
   pod 'IQKeyboardManagerSwift'
   pod 'SVProgressHUD'
-  pod 'DatePickerDialog'
   pod 'SwiftyUserDefaults'
   pod 'SwiftDate'
-  pod 'SwiftyBeaver'
   pod 'Schedule', '~> 2.0'
+  pod 'AlicloudTLog', '~> 1.0.0.2'
 
-#  pod 'WoodPeckeriOS', :configurations => ['Debug']
+  #  pod 'WoodPeckeriOS', :configurations => ['Debug']
+  #  pod 'Pgyer'
+  #  pod 'SwiftyBeaver'
+  #  pod 'DatePickerDialog'
+  #  pod 'SPPermissions/Bluetooth'
+  #  pod 'SwiftEntryKit'
+  #  pod 'DropDown'
 
 #  pod "GMStepper"
 #  pod 'SegementSlide'

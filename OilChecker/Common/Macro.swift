@@ -136,14 +136,16 @@ let k20BoldFont = UIFont.boldSystemFont(ofSize: 20.0)
 let DefaultEmptyNumberString = "0.0"
 
 let ServiceUUID = 0xFFE0
-let ServiceUUIDString = "0000FFE0-0000-1000-8000-00805F9B34FB"
-let CharacteristicUUID = 0xFFE1
+//let ServiceUUIDString = "0000FFE0-0000-1000-8000-00805F9B34FB"
+let ServiceUUIDString = "FFE0"
 
 let CharacteristicNotifyUUID = 0xFFE1
-let CharacteristicNotifyUUIDString = "0000FFE1-0000-1000-8000-00805F9B34FB"
+//let CharacteristicNotifyUUIDString = "0000FFE1-0000-1000-8000-00805F9B34FB"
+let CharacteristicNotifyUUIDString = "FFE1"
 
 let CharacteristicWriteUUID = 0xFFE2
-let CharacteristicWriteUUIDString = "0000FFE2-0000-1000-8000-00805F9B34FB"
+//let CharacteristicWriteUUIDString = "0000FFE2-0000-1000-8000-00805F9B34FB"
+let CharacteristicWriteUUIDString = "FFE2"
 
 let DefualtDeviceID = 0x0000
 let warningFuelChangedValue: Double = 40.0

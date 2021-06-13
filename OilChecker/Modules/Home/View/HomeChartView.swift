@@ -45,7 +45,6 @@ class HomeChartView: UIView {
         emptyImageView.snp.makeConstraints { make  in
             make.centerX.equalToSuperview()
             make.width.height.equalTo(200)
-//            make.bottom.equalToSuperview().offset(-kMargin)
             make.centerY.equalToSuperview().offset(kMargin)
         }
         

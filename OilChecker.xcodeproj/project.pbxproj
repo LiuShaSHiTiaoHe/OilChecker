@@ -20,6 +20,7 @@
 		699786FC267281F900FF7946 /* BabyCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786F0267281F900FF7946 /* BabyCentralManager.m */; };
 		699786FD267281F900FF7946 /* BabyDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786F3267281F900FF7946 /* BabyDefine.m */; };
 		699786FE267281F900FF7946 /* BabyRhythm.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786F4267281F900FF7946 /* BabyRhythm.m */; };
+		699787002674853A00FF7946 /* AliyunEmasServices-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 699786FF2674853A00FF7946 /* AliyunEmasServices-Info.plist */; };
 		69AF2FB926691C370015B987 /* ExpandButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AF2FB826691C370015B987 /* ExpandButton.swift */; };
 		69AF2FC226692F790015B987 /* BinaryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AF2FBD26692F790015B987 /* BinaryError.swift */; };
 		69AF2FC326692F790015B987 /* FixedWidthIntegerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AF2FBE26692F790015B987 /* FixedWidthIntegerExtensions.swift */; };
@@ -112,6 +113,7 @@
 		699786F3267281F900FF7946 /* BabyDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyDefine.m; sourceTree = "<group>"; };
 		699786F4267281F900FF7946 /* BabyRhythm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyRhythm.m; sourceTree = "<group>"; };
 		699786F5267281F900FF7946 /* BabySpeaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabySpeaker.h; sourceTree = "<group>"; };
+		699786FF2674853A00FF7946 /* AliyunEmasServices-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AliyunEmasServices-Info.plist"; sourceTree = "<group>"; };
 		69AF2FB826691C370015B987 /* ExpandButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandButton.swift; sourceTree = "<group>"; };
 		69AF2FBD26692F790015B987 /* BinaryError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BinaryError.swift; sourceTree = "<group>"; };
 		69AF2FBE26692F790015B987 /* FixedWidthIntegerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FixedWidthIntegerExtensions.swift; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 		69CAA34B26275E8100333AA2 = {
 			isa = PBXGroup;
 			children = (
+				699786FF2674853A00FF7946 /* AliyunEmasServices-Info.plist */,
 				69CAA35626275E8100333AA2 /* OilChecker */,
 				69CAA36D26275E8400333AA2 /* OilCheckerTests */,
 				69CAA37826275E8400333AA2 /* OilCheckerUITests */,
@@ -580,6 +583,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				699787002674853A00FF7946 /* AliyunEmasServices-Info.plist in Resources */,
 				69CAA36426275E8400333AA2 /* LaunchScreen.storyboard in Resources */,
 				69B10C18262DFAAC00617D17 /* Localizable.strings in Resources */,
 				69CAA36126275E8400333AA2 /* Assets.xcassets in Resources */,
@@ -883,10 +887,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4UW2XRZ2Z5;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = OilChecker/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -909,10 +915,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4UW2XRZ2Z5;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = OilChecker/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (

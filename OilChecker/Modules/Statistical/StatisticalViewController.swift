@@ -7,7 +7,6 @@
 
 import UIKit
 import RealmSwift
-import DropDown
 import SwiftyUserDefaults
 import SwiftDate
 
@@ -139,8 +138,6 @@ class StatisticalViewController: UIViewController {
     
     lazy var fuelConsumptionView: FuelConsumptionView = {
         let view = FuelConsumptionView.init()
-//        view.isUserInteractionEnabled = true
-//        view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(showFuelConsumptionDetail)))
         view.detailButton.addTarget(self, action: #selector(showFuelConsumptionDetail), for: .touchUpInside)
         return view
     }()
@@ -154,9 +151,7 @@ class StatisticalViewController: UIViewController {
     }()
     lazy var refuelLevelView: RefuelRecordView = {
         let view = RefuelRecordView.init()
-//        view.isUserInteractionEnabled = true
         view.detailButton.addTarget(self, action: #selector(showRefuelRecordDetail), for: .touchUpInside)
-//        view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(showRefuelRecordDetail)))
         return view
     }()
 }

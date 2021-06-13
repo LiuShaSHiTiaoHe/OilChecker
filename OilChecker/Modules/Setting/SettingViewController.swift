@@ -59,17 +59,11 @@ class SettingViewController: UIViewController {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        
-//        OCBlueToothManager
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.initData()
-        
-//        if dataArray.count > 0 {
-//            self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightAddButton)
-//        }
     }
     
     func initData(){
@@ -77,11 +71,6 @@ class SettingViewController: UIViewController {
         dataArray = models.filter({ (model) -> Bool in
             !model.isDeleted
         })
-//        if dataArray.count > 0 {
-//            tableView.tableHeaderView = AddSectionHeaderView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: 40))
-//        }else{
-//            tableView.tableHeaderView = UIView()
-//        }
         tableView.reloadData()
     }
 

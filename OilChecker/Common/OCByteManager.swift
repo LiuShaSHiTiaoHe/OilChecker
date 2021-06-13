@@ -7,6 +7,12 @@
 
 import UIKit
 
+
+//        let originInt: UInt64 = 1551
+//        let bytes = Int(originInt).intTo2Bytes()// 6 15
+//        let asdhex = bytes.hexa //"060F"
+//        let intgerValue = OCByteManager.shared.integer(from: asdhex)//1551
+
 class OCByteManager: NSObject {
     static let shared = OCByteManager()
 
