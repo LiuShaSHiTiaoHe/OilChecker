@@ -16,8 +16,8 @@ import SwiftyUserDefaults
 import SVProgressHUD
 import Logging
 
-//let logger = Logger(label: "com.OilChecker.main")
-let logger = TLogFactory.createTLog(forModuleName: "com.OilChecker.main")!
+let logger = Logger(label: "com.OilChecker.main")
+//let logger = TLogFactory.createTLog(forModuleName: "com.OilChecker.main")!
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -35,7 +35,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let loggerr = TLogFactory.createTLog(forModuleName: "com.OilChecker.UIApplicationDelegate")!
         loggerr.info("UIApplicationDelegate")
-        
+        let uuidString = "FFE1"
+        if uuidString != "FFE1" && uuidString != "FFE2" {
+            logger.info("\(NSHomeDirectory())")
+        }
+//        var binary = Binary.init(hexString: "020AF600000008400")!
+//        let count = binary.count
+//        let qw = try? binary.readBytes(1)//stx
+//        let ass = try? binary.readBytes(1)//dataLength
+//        let df = try? binary.readBytes(1)//length comp
+//        let dataDeviceID = try? binary.readBytes(2)//deviceID
+//        let property = try? binary.readBytes(1)
+//        let cmd = try? binary.readBytes(1)
+//        let response = try? binary.readBytes(1)
+
         logger.info("\(NSHomeDirectory())")
         return true
     }
@@ -68,7 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.overrideUserInterfaceStyle = .light;
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
-        SVProgressHUD.setMinimumDismissTimeInterval(2)
+        SVProgressHUD.setMaximumDismissTimeInterval(2)
         self.window?.makeKeyAndVisible()
     }
     

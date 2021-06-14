@@ -37,7 +37,7 @@ class ScanBleDeviceViewController: UIViewController {
 
         //扫描到设备
         baby?.setBlockOnDiscoverToPeripheralsAtChannel(BabyChannelScanViewIdentifier, block: { central, peripheral, advertisementData, RSSI in
-            logger.info("扫描到设备 + \(String(describing: advertisementData))")
+//            logger.info("扫描到设备 + \(String(describing: advertisementData))")
             if peripheral != nil {
                 if !self.discoveries.contains(peripheral!) {
                     self.discoveries.append(peripheral!)
@@ -83,10 +83,22 @@ class ScanBleDeviceViewController: UIViewController {
 
         
         baby?.setFilterOnDiscoverPeripheralsAtChannel(BabyChannelScanViewIdentifier, filter: { (name, advertisementData, RSSi) -> Bool in
-//            if advertisementData == nil {
-//                return false
-//            }
-//
+
+            logger.info("扫描到设备 + name:\(name ?? "")\n advertisementData: \(String(describing: advertisementData)) \r\n")
+            if advertisementData == nil {
+                return false
+            }
+            if advertisementData!.has(key: "kCBAdvDataServiceUUIDs") {
+                let serviceUUIDs = advertisementData!["kCBAdvDataServiceUUIDs"] as? [CBUUID]
+                if serviceUUIDs != nil && serviceUUIDs!.count > 0{
+                    let serviceuuid = serviceUUIDs!.first
+                    if serviceuuid!.uuidString == ServiceUUIDString {
+                        return true
+                    }
+                }
+            }
+            
+            return false
 //            if let serviceUUIDs = advertisementData!["kCBAdvDataServiceUUIDs"] as? [CBUUID]{
 //                let serviceuuid = serviceUUIDs.first
 //                if serviceuuid != nil && serviceuuid!.uuidString == ServiceUUIDString {
@@ -96,14 +108,9 @@ class ScanBleDeviceViewController: UIViewController {
 //            return false
             
             
-            logger.info("扫描到设备 + name:\(name ?? "") \r\n advertisementData: \(String(describing: advertisementData))")
-            if name != nil && name!.isEmpty {
-                if name!.contains("BT-") {
-                    return true
-                }
-            }
-            return false
-            
+//            if name == nil || name!.isEmpty {
+//                return false
+//            }
 //            return true
         })
             
