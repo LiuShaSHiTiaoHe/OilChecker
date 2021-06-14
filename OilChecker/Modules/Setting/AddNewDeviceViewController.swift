@@ -115,7 +115,7 @@ class AddNewDeviceViewController: UIViewController {
                 let _ = try? binary.readBytes(1)//stx
                 let _ = try? binary.readBytes(1)//dataLength
                 let _ = try? binary.readBytes(1)//length comp
-                let dataDeviceID = try? binary.readBytes(2)//deviceID
+                let _ = try? binary.readBytes(2)//deviceID
                 let property = try? binary.readBytes(1)
                 if property![0] != 0x00 {
                     logger.info("Hard -> APP")
@@ -126,7 +126,6 @@ class AddNewDeviceViewController: UIViewController {
                     return
                 }
                 if cmd![0] == 0x86 {//请求设备信息应答
-//                    SVProgressHUD.show(withStatus: "请求设备信息应答成功")
                     SVProgressHUD.showSuccess(withStatus: "请求设备信息应答成功")
                     let deviceID = try? binary.readBytes(2)
                     let length = try? binary.readBytes(2)
@@ -149,10 +148,16 @@ class AddNewDeviceViewController: UIViewController {
                                 userModel.voltage = OCByteManager.shared.integer(from: compareV!.hexa)
                                 self.updateViewValues(userModel)
                             }else{//本地有存储当前设备，更新设备参数
-                                carModel!.fuelTankLength = OCByteManager.shared.integer(from: length!.hexa).float
-                                carModel!.fuelTankHeight = OCByteManager.shared.integer(from: height!.hexa).float
-                                carModel!.fuelTankWidth = OCByteManager.shared.integer(from: width!.hexa).float
-                                SettingManager.shared.updateUserCarInfo(carModel!)
+                                let userModel = UserAndCarModel()
+                                userModel.id = carModel!.id
+                                userModel.deviceID = deviceIDIntValue.string
+                                userModel.carNumber = carModel!.carNumber
+                                userModel.fuelTankLength = OCByteManager.shared.integer(from: length!.hexa).float
+                                userModel.fuelTankWidth = OCByteManager.shared.integer(from: width!.hexa).float
+                                userModel.fuelTankHeight = OCByteManager.shared.integer(from: height!.hexa).float
+                                userModel.createTime = carModel!.createTime
+                                userModel.voltage = OCByteManager.shared.integer(from: compareV!.hexa)
+                                SettingManager.shared.updateUserCarInfo(userModel)
                                 self.updateViewValues(carModel!)
                             }
                         }else{
@@ -182,7 +187,6 @@ class AddNewDeviceViewController: UIViewController {
             guard characteristic != nil else {
                 return
             }
-//            SVProgressHUD.showSuccess(withStatus: "写入数据成功\(characteristic!.uuid.uuidString)")
             logger.info("写入数据成功\(characteristic!.uuid.uuidString)")
         })
         
@@ -255,7 +259,7 @@ class AddNewDeviceViewController: UIViewController {
         sendDataState = .RequestSettingDeviceParamers
         var datas: [UInt8] = []
         let defaultDeviceID: [UInt8] = DefualtDeviceID.intTo2Bytes()
-        let deviceSettingID: [UInt8] = deviceID.hexa//OCByteManager.shared.bytes(from: deviceID)
+        let deviceSettingID: [UInt8] = deviceID.double()!.int.intTo2Bytes()
         let deviceLength: [UInt8] = length.double()!.int.intTo2Bytes()
         let deviceWidth: [UInt8] = width.double()!.int.intTo2Bytes()
         let deviceHeight: [UInt8] = height.double()!.int.intTo2Bytes()
@@ -300,7 +304,7 @@ class AddNewDeviceViewController: UIViewController {
         datas.append(bcc)//BCC Lengh开始到数据区结尾数据和的异或
         datas.append(0x03)//ETX 0x03
         
-        let sendData = Data.init(datas)//Data(bytes: datas)
+        let sendData = Data.init(datas)
         if writeCBCharacteristic == nil {
             SVProgressHUD.showSuccess(withStatus: "重新连接设备")
             self.navigationController?.popToRootViewController(animated: true)
@@ -309,13 +313,6 @@ class AddNewDeviceViewController: UIViewController {
             currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
             SVProgressHUD.dismiss()
         }
-//        if readCBCharacteristic != nil {
-//            logger.info("发送配置数据 +  \(readCBCharacteristic!.uuid.uuidString) +  \(sendData.bytes.hexa)")
-//            currentPeripheral.writeValue(sendData, for: readCBCharacteristic!, type: .withResponse)
-//        }else{
-//            SVProgressHUD.showSuccess(withStatus: "重新连接设备")
-//            self.navigationController?.popToRootViewController(animated: true)
-//        }
     }
     
     func requestDeviceInfo() {
@@ -343,22 +340,13 @@ class AddNewDeviceViewController: UIViewController {
         datas.append(bcc)//BCC Lengh开始到数据区结尾数据和的异或
         datas.append(0x03)//ETX 0x03
         
-        let sendData = Data.init(datas)//Data(bytes: datas)
+        let sendData = Data.init(datas)
         if writeCBCharacteristic == nil {
             SVProgressHUD.showSuccess(withStatus: "重新连接设备")
         }else{
             logger.info("请求设备信息 + \(writeCBCharacteristic!.uuid.uuidString) + \(sendData.bytes.hexa)")
             currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
         }
-        
-//        if readCBCharacteristic != nil {
-//            logger.info("请求设备信息 + \(readCBCharacteristic!.uuid.uuidString) + \(sendData.bytes.hexa)")
-//            currentPeripheral.writeValue(sendData, for: readCBCharacteristic!, type: .withResponse)
-//        }else{
-//            SVProgressHUD.showSuccess(withStatus: "重新连接设备")
-//            self.navigationController?.popToRootViewController(animated: true)
-//        }
-
     }
     
 

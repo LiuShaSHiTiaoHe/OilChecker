@@ -33,12 +33,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        TRDManagerService.shareInstance().startInit()
         TRDManagerService.update(.info)
 
-        let loggerr = TLogFactory.createTLog(forModuleName: "com.OilChecker.UIApplicationDelegate")!
-        loggerr.info("UIApplicationDelegate")
-        let uuidString = "FFE1"
-        if uuidString != "FFE1" && uuidString != "FFE2" {
-            logger.info("\(NSHomeDirectory())")
-        }
+//        let loggerr = TLogFactory.createTLog(forModuleName: "com.OilChecker.UIApplicationDelegate")!
+//        loggerr.info("UIApplicationDelegate")
+//        let uuidString = "FFE1"
+//        if uuidString != "FFE1" && uuidString != "FFE2" {
+//            logger.info("\(NSHomeDirectory())")
+//        }
 //        var binary = Binary.init(hexString: "020AF600000008400")!
 //        let count = binary.count
 //        let qw = try? binary.readBytes(1)//stx

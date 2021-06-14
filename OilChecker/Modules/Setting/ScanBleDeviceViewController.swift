@@ -187,8 +187,12 @@ extension ScanBleDeviceViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        baby?.cancelScan()
         let peripheral = discoveries[indexPath.row]
+        if peripheral == nil {
+            SVProgressHUD.showError(withStatus: "设备不可连接,请刷新列表")
+            return
+        }
+        baby?.cancelScan()
 //        if let services = peripheral.services {
 //            if services.count == 0 {
 //                SVProgressHUD.showError(withStatus: "选择设备 Services 为空")
