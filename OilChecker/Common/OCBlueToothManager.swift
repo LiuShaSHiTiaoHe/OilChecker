@@ -57,7 +57,8 @@ class OCBlueToothManager: NSObject {
     /////////////////////////////////////////////
     let baby = BabyBluetooth.share();
     var currentPeripheral: CBPeripheral!
-    
+//    private var sendDataState: BleSendDataState = .RequestDeviceParamers
+
     private var readCBCharacteristic: CBCharacteristic?
     private var writeCBCharacteristic: CBCharacteristic?
     private var currentDeviceID: String!
@@ -94,7 +95,7 @@ class OCBlueToothManager: NSObject {
             if central?.state == .poweredOn  {
                 
             }else{
-                SVProgressHUD.showInfo(withStatus: "蓝牙没有打开")
+                SVProgressHUD.showInfo(withStatus: "open mobile bluetooth".localized())
             }
         })
         
@@ -104,26 +105,33 @@ class OCBlueToothManager: NSObject {
                 return
             }
             if let name = advertisementData!["kCBAdvDataLocalName"] as? String {
-                if name == "BT-" + self.currentDeviceID.int!.intTo2Bytes().hexa {
+                if name.contains(self.currentDeviceID) {
                     if peripheral != nil {
                         self.currentPeripheral = peripheral
                         self.stopScan()
                         self.connetDevice()
                     }
                 }
+//                if name == "BT-" + self.currentDeviceID {
+//                    if peripheral != nil {
+//                        self.currentPeripheral = peripheral
+//                        self.stopScan()
+//                        self.connetDevice()
+//                    }
+//                }
             }
         })
         
         //设备连接成功
         baby?.setBlockOnConnectedAtChannel(BabyChannelHomeIdentifier, block: { central, peripheral in
             logger.info("设备连接成功")
-            SVProgressHUD.showSuccess(withStatus: "连接设备成功")
+            SVProgressHUD.showSuccess(withStatus: "Successfully connected the device".localized())
             self.currentPeripheral = peripheral!
 
         })
         
         baby?.setBlockOnFailToConnectAtChannel(BabyChannelHomeIdentifier, block: { central, peripheral, error in
-            SVProgressHUD.showError(withStatus: "连接设备失败")
+            SVProgressHUD.showError(withStatus: "Failed to connect device".localized())
         })
         
 
@@ -180,18 +188,25 @@ class OCBlueToothManager: NSObject {
             guard characteristic != nil else{
                 return
             }
-//            logger.info("读取characteristics UUID + \(characteristic!.uuid.uuidString)")
-//            logger.info("读取characteristics Value + \(String(describing: characteristic!.value?.hexa))")
+            logger.info("读取characteristics UUID + \(characteristic!.uuid.uuidString)")
+            logger.info("读取characteristics Value + \(String(describing: characteristic!.value?.hexa))")
             if characteristic!.uuid.uuidString != CharacteristicNotifyUUIDString && characteristic!.uuid.uuidString != CharacteristicWriteUUIDString {
                 return
             }
             
             if let value = characteristic!.value {
                 if characteristic!.uuid.uuidString == CharacteristicNotifyUUIDString && self.isReceiveFuelData {
+                    if self.receivedFuelDatas.count == 0 {
+                        var binary = Binary.init(bytes: value.bytes)
+                        let stx = try? binary.readBytes(1)//stx
+                        if stx![0] != 0x02 {
+                            return
+                        }
+                    }
                     self.receivedFuelDatas.append(value)
                     if self.checkFuelDataReceiveEnd(self.receivedFuelDatas) {
                         logger.info("油量数据已经传输完成")
-                        SVProgressHUD.show(withStatus: "油量数据已经传输完成,处理数据中...")
+                        SVProgressHUD.show(withStatus: "Data transfer completed, Parsing data...".localized())
                         self.isReceiveFuelData = false
                         self.sendReceiveHistoryDataFeedBack()
                         self.analyzeData()
@@ -218,24 +233,24 @@ class OCBlueToothManager: NSObject {
                         return
                     }
                     if cmd![0] == 0x86 {//请求设备信息应答
-                        SVProgressHUD.show(withStatus: "请求设备信息应答成功")
+                        SVProgressHUD.showSuccess(withStatus: "Requested device info successfully".localized())
                         let deviceID = try? binary.readBytes(2)
                         let length = try? binary.readBytes(2)
                         let width = try? binary.readBytes(2)
                         let height = try? binary.readBytes(2)
                         let compareV = try? binary.readBytes(2)
                         
-                        if deviceID?.hexa ==  self.currentDeviceID.int!.intTo2Bytes().hexa{
+                        if deviceID?.hexa ==  self.currentDeviceID{
                             if length?.hexa != "FFFF" && width?.hexa != "FFFF" && height?.hexa != "FFFF" && compareV?.hexa != "FFFF" {//设备参数符合标准
                                 let deviceIDString = deviceID?.hexa
-                                let deviceIDIntValue = OCByteManager.shared.integer(from: deviceIDString!)
-                                let carModel = RealmHelper.queryObject(objectClass: UserAndCarModel(), filter: "deviceID = '\(deviceIDIntValue.string)'").first
+//                                let deviceIDIntValue = OCByteManager.shared.integer(from: deviceIDString!)
+                                let carModel = RealmHelper.queryObject(objectClass: UserAndCarModel(), filter: "deviceID = '\(deviceIDString!)'").first
                                 guard carModel != nil else {
                                     return
                                 }
                                 let userModel = UserAndCarModel()
                                 userModel.id = carModel!.id
-                                userModel.deviceID = deviceIDIntValue.string
+                                userModel.deviceID = deviceIDString!//deviceIDIntValue.string
                                 userModel.carNumber = carModel!.carNumber
                                 userModel.fuelTankLength = OCByteManager.shared.integer(from: length!.hexa).float
                                 userModel.fuelTankWidth = OCByteManager.shared.integer(from: width!.hexa).float
@@ -246,11 +261,11 @@ class OCBlueToothManager: NSObject {
                                 //设备参数无误，开始请求油量数据
                                 self.requestHistoryData()
                             }else{
-                                SVProgressHUD.show(withStatus: "设置参数参数有误,请重新设置")
+                                SVProgressHUD.show(withStatus: "Please reset device parameters".localized())
                                 self.baby?.cancelAllPeripheralsConnection()
                             }
                         }else{
-                            SVProgressHUD.show(withStatus: "该设备已被重新设置,请去设置页面同步最新参数")
+                            SVProgressHUD.show(withStatus: "Device parameters has changed, please synchronous the latest".localized())
                             self.baby?.cancelAllPeripheralsConnection()
                         }
                     }
@@ -299,7 +314,7 @@ class OCBlueToothManager: NSObject {
     }
     
     func checkFuelDataReceiveEnd(_ datas: Data) -> Bool {
-        logger.info("接收到数据 \(datas.hexa)")
+        logger.info("接收到油量数据数据 \(datas.hexa)")
         var count = datas.count
         var isEndofFuelData = false
         //一帧数据字节 帧头6字节 + 1个字节cmd + data区length字节 + 帧尾2字节
@@ -308,9 +323,9 @@ class OCBlueToothManager: NSObject {
             var isContinue = true
             while isContinue {
                 let stx = try? binary.readBytes(1)//stx
-                logger.info("stx \(stx!.hexa)")
+//                logger.info("stx \(stx!.hexa)")
                 let length = try? binary.readBytes(1)//dataLength
-                logger.info("length \(length!.hexa)")
+//                logger.info("length \(length!.hexa)")
                 let dataLength = OCByteManager.shared.integer(from: length!.hexa)//第一条数据帧的数据区长度
                 let _ = try? binary.readBytes(5)//length comp + deviceID + 帧标识 hard->APP 0x00 + cmd油量历史数据 0x82
                 
@@ -357,7 +372,7 @@ class OCBlueToothManager: NSObject {
         guard currentPeripheral != nil else {
             return
         }
-        let defaultDeviceID: [UInt8] = currentDeviceID.int!.intTo2Bytes()
+        let defaultDeviceID: [UInt8] = currentDeviceID.hexa
         var datas: [UInt8] = []
         datas.append(0x02)//STX 1字节
         datas.append(0x01)//数据长度  1字节
@@ -382,12 +397,12 @@ class OCBlueToothManager: NSObject {
         
         let sendData = Data.init(datas)//Data(bytes: datas)
         if writeCBCharacteristic == nil {
-            SVProgressHUD.showSuccess(withStatus: "writeCBCharacteristic 为空,重新连接设备")
+            SVProgressHUD.showError(withStatus: "Please reconnect the device".localized())
         }else{
             logger.info("请求设备信息 + \(sendData)")
             logger.info("请求设备信息 + \(sendData.bytes.hexa)")
             currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
-            SVProgressHUD.showSuccess(withStatus: "请求设备信息\(sendData.hexa)")
+//            SVProgressHUD.showSuccess(withStatus: "请求设备信息\(sendData.hexa)")
         }
 
     }
@@ -397,7 +412,7 @@ class OCBlueToothManager: NSObject {
         guard currentPeripheral != nil else {
             return
         }
-        let defaultDeviceID: [UInt8] = currentDeviceID.int!.intTo2Bytes()
+        let defaultDeviceID: [UInt8] = currentDeviceID.hexa
         var datas: [UInt8] = []
         datas.append(0x02)//STX 1字节
         datas.append(0x01)//数据长度  1字节
@@ -422,13 +437,13 @@ class OCBlueToothManager: NSObject {
         
         let sendData = Data.init(datas)//Data(bytes: datas)
         if writeCBCharacteristic == nil {
-            SVProgressHUD.showSuccess(withStatus: "writeCBCharacteristic 为空,重新连接设备")
+            SVProgressHUD.showError(withStatus: "Please reconnect the device".localized())
         }else{
             logger.info("发送油量数据请求 + \(sendData.bytes.hexa)")
             self.isReceiveFuelData = true
             self.receivedFuelDatas = Data.init()
             currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
-            SVProgressHUD.showInfo(withStatus: "正在同步油量数据,请耐心等待...")
+            SVProgressHUD.showInfo(withStatus: "Updating fuel data, please wait...".localized())
         }
     }
     
@@ -436,7 +451,7 @@ class OCBlueToothManager: NSObject {
         guard currentPeripheral != nil else {
             return
         }
-        let defaultDeviceID: [UInt8] = currentDeviceID.int!.intTo2Bytes()
+        let defaultDeviceID: [UInt8] = currentDeviceID.hexa
         var datas: [UInt8] = []
         datas.append(0x02)//STX 1字节
         datas.append(0x01)//数据长度  1字节
@@ -461,11 +476,11 @@ class OCBlueToothManager: NSObject {
         
         let sendData = Data.init(datas)//Data(bytes: datas)
         if writeCBCharacteristic == nil {
-            SVProgressHUD.showSuccess(withStatus: "writeCBCharacteristic 为空,重新连接设备")
+            SVProgressHUD.showError(withStatus: "Please reconnect the device".localized())
         }else{
             logger.info("发送油量数据接收状态请求 + \(sendData.bytes.hexa)")
             currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
-            SVProgressHUD.show(withStatus: "发送油量数据请求")
+//            SVProgressHUD.show(withStatus: "发送油量数据请求")
         }
     }
 
@@ -505,21 +520,35 @@ class OCBlueToothManager: NSObject {
         }
         let width = carModel!.fuelTankWidth.double
         let length = carModel!.fuelTankLength.double
-        
+//        logger.info("width: \(width) + length: \(length)")
+
         RealmHelper.deleteObjectFilter(objectClass: BaseFuelDataModel(), filter: "deviceID = '\(currentDeviceID!)'")
         var dataSource: [BaseFuelDataModel] = []
+        var isFirstActive: Bool = false//是否是上电
         for (index, data) in fuelData.enumerated()  {
             logger.info("index: \(index) + data: \(data)")
+            if data == 0xFFFD {//0xFFFD
+                isFirstActive = true
+                return
+            }
+            if data == 0 {
+                return
+            }
             let baseFuelModel = BaseFuelDataModel.init()
+            if isFirstActive {
+                baseFuelModel.isFirstActive = true
+            }
             baseFuelModel.deviceID = currentDeviceID
             baseFuelModel.fuelLevel = data.double*width*length/1000000
             baseFuelModel.recordIDFromDevice = Int64(index)
             dataSource.append(baseFuelModel)
+            isFirstActive = false
         }
+        logger.info("dataSource count \(dataSource.count)")
         RealmHelper.addObjects(by: dataSource)
-        GlobalDataMananger.shared.fuelDataProcessor(Defaults[\.currentCarID]!)
+        GlobalDataMananger.shared.fuelDataProcessor(currentDeviceID!)
         NotificationCenter.default.post(name: NSNotification.Name.SyncDateCompleteNotify, object: nil)
-        SVProgressHUD.showSuccess(withStatus: "油量数据处理完成")
+        SVProgressHUD.showSuccess(withStatus: "Fuel data processing completed".localized())
         baby?.cancelAllPeripheralsConnection()
     }
     

@@ -28,10 +28,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         initializeApp()
         
-        AlicloudTlogProvider.init().autoInit(withAppVersion: "1.0.0", channel: "debug", nick: "oilchecker")
-        AlicloudHAProvider.start()
-//        TRDManagerService.shareInstance().startInit()
-        TRDManagerService.update(.info)
+//        AlicloudTlogProvider.init().autoInit(withAppVersion: "1.0.0", channel: "debug", nick: "oilchecker")
+//        AlicloudHAProvider.start()
+//        TRDManagerService.update(.info)
 
 //        let loggerr = TLogFactory.createTLog(forModuleName: "com.OilChecker.UIApplicationDelegate")!
 //        loggerr.info("UIApplicationDelegate")
@@ -48,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let property = try? binary.readBytes(1)
 //        let cmd = try? binary.readBytes(1)
 //        let response = try? binary.readBytes(1)
-
+        
         logger.info("\(NSHomeDirectory())")
         return true
     }

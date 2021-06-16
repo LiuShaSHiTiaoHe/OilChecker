@@ -8,6 +8,7 @@
 import UIKit
 import CoreBluetooth
 import SVProgressHUD
+import Schedule
 
 class ScanBleDeviceViewController: UIViewController {
     
@@ -15,7 +16,7 @@ class ScanBleDeviceViewController: UIViewController {
 
     private var discoveries = [CBPeripheral]()
     private var currentPeripheral: CBPeripheral!
-
+    var  reloadTask: Task!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,6 +24,7 @@ class ScanBleDeviceViewController: UIViewController {
         
         initUI()
         addBabyDelegate()
+
     }
     
 
@@ -31,7 +33,7 @@ class ScanBleDeviceViewController: UIViewController {
             if central?.state == .poweredOn  {
                 
             }else{
-                SVProgressHUD.showInfo(withStatus: "蓝牙没有打开")
+                SVProgressHUD.showInfo(withStatus: "open mobile bluetooth".localized())
             }
         })
 
@@ -46,41 +48,6 @@ class ScanBleDeviceViewController: UIViewController {
             }
         })
         
-//        //设备连接成功
-//        baby?.setBlockOnConnectedAtChannel(BabyChannelScanViewIdentifier, block: { central, peripheral in
-//            //            logger.info("设备连接成功" + (peripheral?.name)!)
-//            logger.info("设备连接成功")
-//            SVProgressHUD.showSuccess(withStatus: "连接设备成功")
-//            let vc = AddNewDeviceViewController()
-//            vc.currentPeripheral = peripheral!
-//            self.navigationController?.pushViewController(vc)
-//
-//        })
-//
-//        baby?.setBlockOnFailToConnectAtChannel(BabyChannelScanViewIdentifier, block: { central, peripheral, error in
-//            SVProgressHUD.showError(withStatus: "连接设备失败")
-//            self.scan()
-//        })
-        
-//        //发现设备的服务
-//        baby?.setBlockOnDiscoverServicesAtChannel(BabyChannelScanViewIdentifier, block: { peripheral, error in
-//            for service in peripheral!.services! {
-//                logger.info("设备的服务 + \(service.uuid.uuidString)")
-//            }
-//        })
-//
-//        
-//        //发现设service的Characteristics
-//        baby?.setBlockOnDiscoverCharacteristicsAtChannel(BabyChannelScanViewIdentifier, block: { peripheral, service, error in
-//            guard service != nil else {
-//                return
-//            }
-//            let characteristics = service?.characteristics as! Array<CBCharacteristic>
-//            for c in characteristics {
-//                logger.info("发现设service的Characteristics + \(c.uuid.uuidString)")
-//            }
-//        })
-
         
         baby?.setFilterOnDiscoverPeripheralsAtChannel(BabyChannelScanViewIdentifier, filter: { (name, advertisementData, RSSi) -> Bool in
 
@@ -99,39 +66,28 @@ class ScanBleDeviceViewController: UIViewController {
             }
             
             return false
-//            if let serviceUUIDs = advertisementData!["kCBAdvDataServiceUUIDs"] as? [CBUUID]{
-//                let serviceuuid = serviceUUIDs.first
-//                if serviceuuid != nil && serviceuuid!.uuidString == ServiceUUIDString {
-//                    return true
-//                }
-//             }
-//            return false
-            
-            
-//            if name == nil || name!.isEmpty {
-//                return false
-//            }
-//            return true
         })
             
     }
     
 
     override func viewWillAppear(_ animated: Bool) {
-        discoveries.removeAll()
+//        discoveries.removeAll()
+//        self.tableView.reloadData()
+        reloadTask = Plan.every(20.second).do {
+            logger.info("reload task")
+            self.baby?.cancelScan()
+            self.discoveries.removeAll()
+            self.tableView.reloadData()
+            self.scan()
+        }
         scan()
     }
-
-//    override func viewWillDisappear(_ animated: Bool) {
-//        discoveries.removeAll()
-//    }
-//    internal override func viewWillDisappear(_ animated: Bool) {
-//        //取消连接
-//        baby?.cancelAllPeripheralsConnection()
-//        //停止搜索
-//        baby?.cancelScan()
-//    }
-
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        baby?.cancelScan()
+        reloadTask.cancel()
+    }
     
     private func scan() {
         baby?.channel(BabyChannelScanViewIdentifier).scanForPeripherals().begin()
@@ -187,44 +143,11 @@ extension ScanBleDeviceViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        let peripheral = discoveries[indexPath.row]
-        if peripheral == nil {
-            SVProgressHUD.showError(withStatus: "设备不可连接,请刷新列表")
+        if discoveries.count == 0 {
+            SVProgressHUD.showError(withStatus: "Device unconnected".localized())
             return
         }
-        baby?.cancelScan()
-//        if let services = peripheral.services {
-//            if services.count == 0 {
-//                SVProgressHUD.showError(withStatus: "选择设备 Services 为空")
-//            }else{
-//                var containsService = false
-//                for service in services {
-//                    if service.uuid.uuidString == ServiceUUIDString {
-//                        containsService = true
-//                        break
-//                    }
-//                }
-//                if containsService {
-//                    let vc = AddNewDeviceViewController()
-//                    vc.currentPeripheral = peripheral
-//                    self.navigationController?.pushViewController(vc)
-//                }else{
-//                    SVProgressHUD.showError(withStatus: "选择设备没有 FFE0 的Service")
-//                }
-//            }
-//        }else{
-//            SVProgressHUD.showError(withStatus: "选择设备 Services 为空")
-//        }
-        
-//        if let name = peripheral.name {
-//            if name.contains("BT-") {
-//                let vc = AddNewDeviceViewController()
-//                vc.currentPeripheral = peripheral
-//                self.navigationController?.pushViewController(vc)
-//            }else{
-//                SVProgressHUD.showError(withStatus: "选择设备不符合条件")
-//            }
-//        }
+        let peripheral = discoveries[indexPath.row]
         let vc = AddNewDeviceViewController()
         vc.currentPeripheral = peripheral
         self.navigationController?.pushViewController(vc)

@@ -64,8 +64,20 @@
 "Height" = "Height";
 "Compare Voltage" = "Compare Voltage";
 
-"error1" = "error1";
-"error2" = "error2";
-"error3" = "error3";
-"error4" = "error4";
-"error5" = "error5";
+//ScanDevice
+"Please reconnect the device" = "Please reconnect the device";
+"open mobile bluetooth" = "Please open mobile bluetooth";
+"Device unconnectable" = "Device unconnectable";
+"Successfully connected the device" = "Successfully connected the device";
+"Failed to connect device" = "Failed to connect device";
+"Requeste device info successfully" = "Requeste device info successfully";
+"Set device parameters" = "Please set device parameters";
+"Please reset device parameters" = "Please reset device parameters";
+"Device parameters has changed, please synchronous the latest" = "Device parameters has changed, please synchronous the latest";
+"Failed to set device info" = "Failed to set device info";
+"set device info successfully, Please restart the device!" = "set device info successfully, Please restart the device!";
+
+
+"Data transfer completed, Parsing data..." = "Data transfer completed, Parsing data...";
+"Updating fuel data, please wait..." = "Updating fuel data, please wait...";
+"Fuel data processing completed" = "Fuel data processing completed";

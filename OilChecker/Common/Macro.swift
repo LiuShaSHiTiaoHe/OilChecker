@@ -165,3 +165,7 @@ extension Notification.Name {
     //更新视图
    static let SyncDateCompleteNotify = Notification.Name(rawValue:"updateHomeChartAndStatus")
 }
+
+
+let DigtesKeyboardHeight: CGFloat = 203
+let DigtesKeyboardDeleteButtonWidth: CGFloat = 80

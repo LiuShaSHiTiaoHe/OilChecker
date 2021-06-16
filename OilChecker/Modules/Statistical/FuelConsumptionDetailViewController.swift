@@ -32,7 +32,7 @@ class FuelConsumptionDetailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         currentDevice = realm.objects(UserAndCarModel.self).filter({ (model) -> Bool in
-            model.deviceID == Defaults[\.currentCarID]
+            model.deviceID == Defaults[\.currentCarDeviceID]
         }).first
         initData()
     }

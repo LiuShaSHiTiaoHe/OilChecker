@@ -63,3 +63,22 @@
 "Witdh" = "油箱宽度";
 "Height" = "油箱高度";
 "Compare Voltage" = "比较电压";
+
+
+//ScanDevice
+"Please reconnect the device" = "重新连接设备";
+"open mobile bluetooth" = "蓝牙没有打开";
+"Device unconnected" = "设备不可连接";
+"Successfully connected the device" = "连接设备成功";
+"Failed to connect device" = "连接设备失败";
+"Requested device info successfully" = "请求设备信息应答成功";
+"Set device parameters" = "请设置参数";
+"Please reset device parameters" = "设置参数参数有误,请重新设置";
+"Device parameters has changed, please synchronous the latest" = "该设备已被重新设置,请去设置页面同步最新参数";
+"Failed to set device info" = "设备参数设置失败";
+"set device info successfully, Please restart the device!" = "设备参数设置成功,装置重启后生效!";
+
+
+"Data transfer completed, Parsing data..." = "油量数据已经传输完成,处理数据中...";
+"Updating fuel data, please wait..." = "正在同步油量数据,请耐心等待...";
+"Fuel data processing completed" = "油量数据处理完成";

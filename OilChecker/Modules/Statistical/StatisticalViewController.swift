@@ -23,7 +23,7 @@ class StatisticalViewController: UIViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.title = "Statistical".localized()
         self.view.backgroundColor = kBackgroundColor
-//        GlobalDataMananger.shared.fuelDataProcessor(Defaults[\.currentCarID]!)
+//        GlobalDataMananger.shared.fuelDataProcessor(Defaults[\.currentCarDeviceID]!)
         initUI()
     }
     
@@ -45,12 +45,12 @@ class StatisticalViewController: UIViewController {
 //            carNumberButton.imageEdgeInsets = UIEdgeInsets.init(top: 0, left: kMargin/2, bottom: 0, right: kMargin)
 
         }else{
-            if Defaults[\.currentCarID]!.isEmpty {
+            if Defaults[\.currentCarDeviceID]!.isEmpty {
                 currentCarModel = userCarArray[0]
-                Defaults[\.currentCarID] = currentCarModel!.deviceID
+                Defaults[\.currentCarDeviceID] = currentCarModel!.deviceID
             }else{
                 currentCarModel = realm.objects(UserAndCarModel.self).filter({ (model) -> Bool in
-                    model.deviceID == Defaults[\.currentCarID]
+                    model.deviceID == Defaults[\.currentCarDeviceID]
                 }).first
                 refuelLevelView.updateCurrentDevice(model: currentCarModel!)
                 fuelConsumptionView.updateCurrentDevice(model: currentCarModel!)

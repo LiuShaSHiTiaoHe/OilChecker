@@ -12,6 +12,6 @@ extension DefaultsKeys {
     var username: DefaultsKey<String?> { .init("username") }
     var launchCount: DefaultsKey<Int> { .init("launchCount", defaultValue: 0) }
     
-    var currentCarID: DefaultsKey<String?> { .init("currentCarID", defaultValue: "") }
+    var currentCarDeviceID: DefaultsKey<String?> { .init("currentCarDeviceID", defaultValue: "") }
     
 }

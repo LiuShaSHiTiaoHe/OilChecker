@@ -1,32 +1,4 @@
 PODS:
-  - AlicloudHAUtil (1.0.1):
-    - AliHACore
-    - TBRest
-    - ZipArchive
-  - AlicloudTLog (1.0.0.2):
-    - AlicloudHAUtil
-    - AlicloudUtils
-    - AliHACore (~> 10.0.3)
-    - AliHAProtocol (~> 10.0.3)
-    - AliHASecurity (~> 10.0.4)
-    - RemoteDebugChannel (~> 10.0.4)
-    - TBRest (~> 10.1.1)
-    - TRemoteDebugger (~> 10.0.4)
-  - AlicloudUTDID (1.5.0.94)
-  - AlicloudUtils (1.3.9):
-    - AlicloudUTDID
-  - AliHACore (10.0.3.6):
-    - AliHALogEngine (>= 10.0.2)
-    - AliHAProtocol (>= 10.0.2.1)
-    - TBJSONModel
-    - TBRest (>= 1.0.0.18)
-  - AliHALogEngine (10.0.5)
-  - AliHAMethodTrace (10.0.4)
-  - AliHAProtocol (10.0.3):
-    - TBJSONModel
-  - AliHASecurity (10.0.4)
-  - AliRemoteDebugInterface (0.0.1.4)
-  - AliyunOSSiOS (2.10.9)
   - BetterSegmentedControl (2.0.1)
   - Charts (3.6.0):
     - Charts/Core (= 3.6.0)
@@ -47,13 +19,6 @@ PODS:
   - Realm/Headers (10.7.2)
   - RealmSwift (10.7.2):
     - Realm (= 10.7.2)
-  - RemoteDebugChannel (10.0.4.5):
-    - AliHAProtocol (>= 10.0.0.3)
-    - AliHASecurity
-    - AliyunOSSiOS
-    - TBJSONModel
-    - TBRest (>= 1.0.0.18)
-    - ZipArchive
   - Schedule (2.1.0)
   - SkyFloatingLabelTextField (4.0.0)
   - SnapKit (5.0.1)
@@ -85,20 +50,8 @@ PODS:
   - SwifterSwift/SwiftStdlib (5.2.0)
   - SwifterSwift/UIKit (5.2.0)
   - SwiftyUserDefaults (5.3.0)
-  - TBJSONModel (0.1.15.1)
-  - TBRest (10.1.1.0)
-  - TRemoteDebugger (10.0.6.3):
-    - AliHALogEngine (>= 10.0.5)
-    - AliHAMethodTrace (>= 1.0.1.2)
-    - AliHAProtocol (>= 10.0.0.5)
-    - AliHASecurity (>= 10.0.4)
-    - AliRemoteDebugInterface (>= 0.0.1.2)
-    - TBJSONModel
-    - TBRest (>= 1.0.0.18)
-  - ZipArchive (1.4.0)
 
 DEPENDENCIES:
-  - AlicloudTLog (~> 1.0.0.2)
   - BetterSegmentedControl
   - Charts
   - ESTabBarController-swift
@@ -116,23 +69,7 @@ DEPENDENCIES:
   - SwiftyUserDefaults
 
 SPEC REPOS:
-  https://github.com/aliyun/aliyun-specs.git:
-    - AlicloudHAUtil
-    - AlicloudTLog
-    - AlicloudUTDID
-    - AlicloudUtils
-    - AliHACore
-    - AliHALogEngine
-    - AliHAMethodTrace
-    - AliHAProtocol
-    - AliHASecurity
-    - AliRemoteDebugInterface
-    - RemoteDebugChannel
-    - TBJSONModel
-    - TBRest
-    - TRemoteDebugger
   https://github.com/CocoaPods/Specs.git:
-    - AliyunOSSiOS
     - BetterSegmentedControl
     - Charts
     - ESTabBarController-swift
@@ -149,20 +86,8 @@ SPEC REPOS:
     - SwiftDate
     - SwifterSwift
     - SwiftyUserDefaults
-    - ZipArchive
 
 SPEC CHECKSUMS:
-  AlicloudHAUtil: 99e5929118fdd73f8ac27807c13e2cded5d4b048
-  AlicloudTLog: 462a53a958f7e57a189d7d234f41bca1dbef9fcd
-  AlicloudUTDID: 7323c443dcdf9a73e2224dc6ce51703671d7a765
-  AlicloudUtils: 66e0ba6ece62d7dd05e9dd95674b2c7811624c2f
-  AliHACore: 631974dc2ab61ffed5ba743e339defb5c9e028c0
-  AliHALogEngine: 22b83d8cfb4fbc2c22a2238574bc295b2dbba48d
-  AliHAMethodTrace: 31ebea278dfc3dfead7c47a75fc995c79d14ac36
-  AliHAProtocol: fd6ba550c1888b51cc1cd55a21f220fccadd7a26
-  AliHASecurity: feacfe93b806c1c1a03e2d03c4968d7021df6851
-  AliRemoteDebugInterface: acc89a6becba06e3c009465cbc377b297d745fcb
-  AliyunOSSiOS: 13173e9eaf05d3816315319876025de3028ea31d
   BetterSegmentedControl: 09607b27861d49cbce48b7673b74f9150a3d371a
   Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
   ESTabBarController-swift: 05593a6ad64700b03c0eb60ff625916370aa4136
@@ -172,7 +97,6 @@ SPEC CHECKSUMS:
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
   Realm: e523da9ade306c5ae87e85dc09fdef148d3e1cc1
   RealmSwift: 4f6758c3adbdcc87f7b7777107226532a077f61c
-  RemoteDebugChannel: 6cf6628a167a1c6c530d32f21d16cf38a5a24bd4
   Schedule: 00e6d7bbdbdb000fd1f51a7d10e9f88a8c451fda
   SkyFloatingLabelTextField: 79ddc40e4ad59707fedbb48d605417aee48bb78a
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
@@ -180,11 +104,7 @@ SPEC CHECKSUMS:
   SwiftDate: 72d28954e8e1c6c1c0f917ccc8005e4f83c7d4b2
   SwifterSwift: 334181863c416882d97b7a60c05054d9e4d799e2
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
-  TBJSONModel: 2c95a8789bc3d98a2a773dd09c41ddeb902a200b
-  TBRest: 36fcaf59c76692eae5acf4c8fd469748d453a327
-  TRemoteDebugger: af82010a22063d31b8509497a8bfabfb3f7028c3
-  ZipArchive: e25a4373192673e3229ac8d6e9f64a3e5713c966
 
-PODFILE CHECKSUM: 4f25093057f4ba2ad760c51eebc6950ec3f931cf
+PODFILE CHECKSUM: 93e596a614f2059e2f7cf6798a0e71fd06438da0
 
 COCOAPODS: 1.10.0

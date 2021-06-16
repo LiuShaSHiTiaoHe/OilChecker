@@ -22,7 +22,7 @@ class AddNewDeviceViewController: UIViewController {
     private var services: [CBService] = []
     
     private var sendDataState: BleSendDataState = .RequestDeviceParamers
-
+    private var originalDeviceIDFromDevice: String = "0000"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,12 +52,13 @@ class AddNewDeviceViewController: UIViewController {
         //设备连接成功
         baby?.setBlockOnConnectedAtChannel(BabyChannelAddDeviceIdentifier, block: { central, peripheral in
             logger.info("设备连接成功")
-            SVProgressHUD.showSuccess(withStatus: "连接设备成功")
+            SVProgressHUD.showSuccess(withStatus: "Successfully connected the device".localized())
             self.currentPeripheral = peripheral!
         })
         
         baby?.setBlockOnFailToConnectAtChannel(BabyChannelAddDeviceIdentifier, block: { central, peripheral, error in
-            SVProgressHUD.showError(withStatus: "连接设备失败")
+            SVProgressHUD.showError(withStatus: "Failed to connect device".localized())
+            logger.info("连接设备失败")
             self.navigationController?.popViewController()
         })
         
@@ -82,7 +83,6 @@ class AddNewDeviceViewController: UIViewController {
                     logger.info("发现设service的Characteristics + \(c.uuid.uuidString)")
                     if c.uuid.uuidString == CharacteristicNotifyUUIDString {
                         self.readCBCharacteristic = c
-    //                    self.setNotify()
                         self.currentPeripheral.setNotifyValue(true, for: self.readCBCharacteristic!)
                     }
                     if c.uuid.uuidString == CharacteristicWriteUUIDString {
@@ -126,57 +126,58 @@ class AddNewDeviceViewController: UIViewController {
                     return
                 }
                 if cmd![0] == 0x86 {//请求设备信息应答
-                    SVProgressHUD.showSuccess(withStatus: "请求设备信息应答成功")
+                    guard self.sendDataState == .RequestDeviceParamers else {
+                        return
+                    }
                     let deviceID = try? binary.readBytes(2)
-                    let length = try? binary.readBytes(2)
-                    let width = try? binary.readBytes(2)
-                    let height = try? binary.readBytes(2)
-                    let compareV = try? binary.readBytes(2)
-                    if deviceID?.hexa !=  DefualtDeviceID.intTo2Bytes().hexa{//已经被设置过的设备
-                        if length?.hexa != "FFFF" && width?.hexa != "FFFF" && height?.hexa != "FFFF" && compareV?.hexa != "FFFF" {//设备参数符合标准
-                            let deviceIDString = deviceID?.hexa
-                            let deviceIDIntValue = OCByteManager.shared.integer(from: deviceIDString!)
-                            let carModel = RealmHelper.queryObject(objectClass: UserAndCarModel(), filter: "deviceID = '\(deviceIDIntValue.string)'").first
-                            if carModel == nil {//本地没有存储当前设备，添加到本地
+                    if let deviceIDString = deviceID?.hexa  {
+                        SVProgressHUD.showSuccess(withStatus: "Requested device info successfully".localized())
+                        let length = try? binary.readBytes(2)
+                        let width = try? binary.readBytes(2)
+                        let height = try? binary.readBytes(2)
+                        let compareV = try? binary.readBytes(2)
+                        
+                        self.originalDeviceIDFromDevice = deviceIDString
+                        if deviceIDString !=  DefualtDeviceID.intTo2Bytes().hexa{//已经被设置过的设备
+                            if length?.hexa != "FFFF" && width?.hexa != "FFFF" && height?.hexa != "FFFF" && compareV?.hexa != "FFFF" {//设备参数符合标准
+                                let carModel = RealmHelper.queryObject(objectClass: UserAndCarModel(), filter: "deviceID = '\(deviceIDString)'").first
                                 let userModel = UserAndCarModel()
-                                userModel.deviceID = deviceIDIntValue.string
-                                userModel.carNumber = ""
+                                if carModel == nil {//本地没有存储当前设备，添加到本地
+                                    userModel.carNumber = ""
+                                }else{//本地有存储当前设备，更新设备参数
+                                    userModel.carNumber = carModel!.carNumber
+                                }
+                                userModel.deviceID = deviceIDString
                                 userModel.fuelTankLength = OCByteManager.shared.integer(from: length!.hexa).float
                                 userModel.fuelTankWidth = OCByteManager.shared.integer(from: width!.hexa).float
                                 userModel.fuelTankHeight = OCByteManager.shared.integer(from: height!.hexa).float
-                                userModel.createTime = NSDate.now
                                 userModel.voltage = OCByteManager.shared.integer(from: compareV!.hexa)
                                 self.updateViewValues(userModel)
-                            }else{//本地有存储当前设备，更新设备参数
-                                let userModel = UserAndCarModel()
-                                userModel.id = carModel!.id
-                                userModel.deviceID = deviceIDIntValue.string
-                                userModel.carNumber = carModel!.carNumber
-                                userModel.fuelTankLength = OCByteManager.shared.integer(from: length!.hexa).float
-                                userModel.fuelTankWidth = OCByteManager.shared.integer(from: width!.hexa).float
-                                userModel.fuelTankHeight = OCByteManager.shared.integer(from: height!.hexa).float
-                                userModel.createTime = carModel!.createTime
-                                userModel.voltage = OCByteManager.shared.integer(from: compareV!.hexa)
-                                SettingManager.shared.updateUserCarInfo(userModel)
-                                self.updateViewValues(carModel!)
+
+                            }else{
+                                SVProgressHUD.showInfo(withStatus: "Set device parameters".localized())
                             }
                         }else{
-                            SVProgressHUD.showError(withStatus: "设置参数参数有误,请重新设置")
+                            SVProgressHUD.showInfo(withStatus: "Set device parameters".localized())
                         }
                     }else{
-                        SVProgressHUD.showInfo(withStatus: "新设备，请设置参数")
+                        SVProgressHUD.showInfo(withStatus: "Set device parameters".localized())
                     }
+                    
                 }
                 
                 if cmd![0] == 0x84 {//参数设置应答
+                    guard self.sendDataState == .RequestSettingDeviceParamers else {
+                        return
+                    }
                     let response = try? binary.readBytes(1)
                     if response?[0] == 0x00 {
                         self.saveToRealmDataBase()
-                        SVProgressHUD.show(withStatus: "设备参数设置成功")
+                        SVProgressHUD.showInfo(withStatus: "set device info successfully, Please restart the device!".localized())
                         self.baby?.cancelAllPeripheralsConnection()
                         self.navigationController?.popToRootViewController(animated: true)
                     }else{
-                        SVProgressHUD.show(withStatus: "设备参数设置失败")
+                        SVProgressHUD.show(withStatus: "Failed to set device info".localized())
                     }
                 }
             }
@@ -241,6 +242,10 @@ class AddNewDeviceViewController: UIViewController {
         let compareV = compareVoltageInput.textfield.text
         
         let userModel = UserAndCarModel()
+        let localCacheData = RealmHelper.queryObject(objectClass: UserAndCarModel(), filter: "deviceID = '\(deviceID!)'").first
+        if localCacheData != nil {
+            userModel.id = localCacheData!.id
+        }
         userModel.deviceID = deviceID!
         userModel.carNumber = carNumberSting!
         userModel.fuelTankLength = tankLength!.float()!
@@ -249,7 +254,7 @@ class AddNewDeviceViewController: UIViewController {
         userModel.createTime = NSDate.now
         userModel.voltage = compareV!.int!
         SettingManager.shared.updateUserCarInfo(userModel)
-        SVProgressHUD.showSuccess(withStatus: "Add Success".localized())
+//        SVProgressHUD.showSuccess(withStatus: "Add Success".localized())
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -258,8 +263,8 @@ class AddNewDeviceViewController: UIViewController {
         
         sendDataState = .RequestSettingDeviceParamers
         var datas: [UInt8] = []
-        let defaultDeviceID: [UInt8] = DefualtDeviceID.intTo2Bytes()
-        let deviceSettingID: [UInt8] = deviceID.double()!.int.intTo2Bytes()
+        let defaultDeviceID: [UInt8] = OCByteManager.shared.integer(from: originalDeviceIDFromDevice).intTo2Bytes()//deviceID.hexa//DefualtDeviceID.intTo2Bytes()
+        let deviceSettingID: [UInt8] = OCByteManager.shared.integer(from: deviceID).intTo2Bytes()//deviceID.double()!.int.intTo2Bytes()
         let deviceLength: [UInt8] = length.double()!.int.intTo2Bytes()
         let deviceWidth: [UInt8] = width.double()!.int.intTo2Bytes()
         let deviceHeight: [UInt8] = height.double()!.int.intTo2Bytes()
@@ -306,7 +311,7 @@ class AddNewDeviceViewController: UIViewController {
         
         let sendData = Data.init(datas)
         if writeCBCharacteristic == nil {
-            SVProgressHUD.showSuccess(withStatus: "重新连接设备")
+            SVProgressHUD.showError(withStatus: "Please reconnect the device".localized())
             self.navigationController?.popToRootViewController(animated: true)
         }else{
             logger.info("发送配置数据 + \(writeCBCharacteristic!.uuid.uuidString) + \(sendData.bytes.hexa)")
@@ -316,7 +321,7 @@ class AddNewDeviceViewController: UIViewController {
     }
     
     func requestDeviceInfo() {
-
+        sendDataState = .RequestDeviceParamers
         let defaultDeviceID: [UInt8] = DefualtDeviceID.intTo2Bytes()
         var datas: [UInt8] = []
         datas.append(0x02)//STX 1字节
@@ -342,7 +347,7 @@ class AddNewDeviceViewController: UIViewController {
         
         let sendData = Data.init(datas)
         if writeCBCharacteristic == nil {
-            SVProgressHUD.showSuccess(withStatus: "重新连接设备")
+            SVProgressHUD.showError(withStatus: "Please reconnect the device".localized())
         }else{
             logger.info("请求设备信息 + \(writeCBCharacteristic!.uuid.uuidString) + \(sendData.bytes.hexa)")
             currentPeripheral.writeValue(sendData, for: writeCBCharacteristic!, type: .withoutResponse)
@@ -458,6 +463,7 @@ class AddNewDeviceViewController: UIViewController {
         let input = OCInputView.init()
         input.titleLabel.text = "Device Identify".localized()
         input.textfield.placeholder = "Set Device Identify".localized()
+        input.textfield.inputView = digitesKeyboardView
         return input
     }()
     
@@ -495,7 +501,37 @@ class AddNewDeviceViewController: UIViewController {
         return input
     }()
     
+    lazy var digitesKeyboardView: KeyboardView = {
+        let keyboard = KeyboardView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: DigtesKeyboardHeight))
+        keyboard.delegate = self
+        return keyboard
+    }()
 
+}
+
+extension AddNewDeviceViewController: KeyboardViewDelegate{
+    func keyboardViewDeleteText() {
+        guard deviceIDInput.textfield.text != nil else {
+            return
+        }
+        if deviceIDInput.textfield.text!.count > 0 {
+            deviceIDInput.textfield.text?.removeLast()
+        }
+    }
+    
+    func keyboardEnterText(_ text: String) {
+        if deviceIDInput.textfield.text == nil {
+            deviceIDInput.textfield.text = text
+        }else{
+            if deviceIDInput.textfield.text!.count == 4 {
+                return
+            }else{
+                deviceIDInput.textfield.text! += text
+            }
+        }
+    }
+    
+    
 }
 
 

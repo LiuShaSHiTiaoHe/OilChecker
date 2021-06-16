@@ -11,6 +11,8 @@
 		6953CCE82642E5A100D48DA2 /* RecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */; };
 		6953CCFB26431F8100D48DA2 /* OCInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CCFA26431F8100D48DA2 /* OCInputView.swift */; };
 		6953CD03264458B100D48DA2 /* ScanBleDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CD02264458B100D48DA2 /* ScanBleDeviceViewController.swift */; };
+		6994F9F02678FA3700EF073A /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6994F9EF2678FA3700EF073A /* KeyboardView.swift */; };
+		6994F9F22678FCB900EF073A /* DigitsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6994F9F12678FCB900EF073A /* DigitsCell.swift */; };
 		699786F6267281F900FF7946 /* BabyBluetooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786E4267281F900FF7946 /* BabyBluetooth.m */; };
 		699786F7267281F900FF7946 /* BabySpeaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786E8267281F900FF7946 /* BabySpeaker.m */; };
 		699786F8267281F900FF7946 /* BabyToy.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786E9267281F900FF7946 /* BabyToy.m */; };
@@ -95,6 +97,8 @@
 		6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTableViewCell.swift; sourceTree = "<group>"; };
 		6953CCFA26431F8100D48DA2 /* OCInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCInputView.swift; sourceTree = "<group>"; };
 		6953CD02264458B100D48DA2 /* ScanBleDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanBleDeviceViewController.swift; sourceTree = "<group>"; };
+		6994F9EF2678FA3700EF073A /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
+		6994F9F12678FCB900EF073A /* DigitsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitsCell.swift; sourceTree = "<group>"; };
 		699786E4267281F900FF7946 /* BabyBluetooth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyBluetooth.m; sourceTree = "<group>"; };
 		699786E5267281F900FF7946 /* BabyBluetooth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyBluetooth.h; sourceTree = "<group>"; };
 		699786E6267281F900FF7946 /* BabyPeripheralManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyPeripheralManager.h; sourceTree = "<group>"; };
@@ -215,6 +219,15 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		6994F9EE2678FA0F00EF073A /* keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				6994F9EF2678FA3700EF073A /* KeyboardView.swift */,
+				6994F9F12678FCB900EF073A /* DigitsCell.swift */,
+			);
+			path = keyboard;
+			sourceTree = "<group>";
+		};
 		699786E3267281C600FF7946 /* Bluetooth */ = {
 			isa = PBXGroup;
 			children = (
@@ -308,6 +321,7 @@
 		69B10BAB262DF41E00617D17 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				6994F9EE2678FA0F00EF073A /* keyboard */,
 				699786E3267281C600FF7946 /* Bluetooth */,
 				69AF2FBC26692F790015B987 /* BinaryKit */,
 				69B10D63263499B800617D17 /* Extension */,
@@ -662,11 +676,13 @@
 				69B10BAD262DF47900617D17 /* Macro.swift in Sources */,
 				69B10DA12635D05600617D17 /* HomeChartView.swift in Sources */,
 				693DAFA8266D03B70007EADD /* OCByteManager.swift in Sources */,
+				6994F9F02678FA3700EF073A /* KeyboardView.swift in Sources */,
 				69B10E6D263DD95C00617D17 /* BaseFuelDataModel.swift in Sources */,
 				69AF2FB926691C370015B987 /* ExpandButton.swift in Sources */,
 				69B10D432634480F00617D17 /* MalfunctionListViewController.swift in Sources */,
 				69B10C61262F5DE100617D17 /* GlobalConfigure.swift in Sources */,
 				69B10B81262DE7A200617D17 /* BaseBouncesContentView.swift in Sources */,
+				6994F9F22678FCB900EF073A /* DigitsCell.swift in Sources */,
 				69B10D9C2635C74900617D17 /* FuelCapacityView.swift in Sources */,
 				69B10DC026371AE300617D17 /* UserDefaultsKeys.swift in Sources */,
 				69AF2FC526692F790015B987 /* UIntExtensions.swift in Sources */,

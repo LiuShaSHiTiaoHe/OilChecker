@@ -51,9 +51,11 @@ class GlobalDataMananger: NSObject {
         if refuelDataArray.count > 0 {
             let array = refuelDataArray.filter { dic in
                 let refuel = dic["refuel"]
-                return refuel != "0"
+                return refuel != "0" && refuel != "0.0"
             }
-            RealmHelper.clearTableClass(objectClass: RefuelRecordModel())
+//            RealmHelper.clearTableClass(objectClass: RefuelRecordModel())
+            RealmHelper.deleteObjectFilter(objectClass: RefuelRecordModel(), filter: "deviceID = '\(deviceID)'")
+
             var refuelDataSource: [RefuelRecordModel] = []
             for (index, item) in array.enumerated() {
                 let refuleModel = RefuelRecordModel()
@@ -70,9 +72,10 @@ class GlobalDataMananger: NSObject {
         if consumptionDataArray.count > 0 {
             let array = consumptionDataArray.filter { dic in
                 let refuel = dic["consumpiton"]
-                return refuel != "0"
+                return refuel != "0" && refuel != "0.0"
             }
-            RealmHelper.clearTableClass(objectClass: FuelConsumptionModel())
+//            RealmHelper.clearTableClass(objectClass: FuelConsumptionModel())
+            RealmHelper.deleteObjectFilter(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(deviceID)'")
             var consumptionDataSource: [FuelConsumptionModel] = []
 
             for (index, item) in array.enumerated() {
@@ -95,7 +98,7 @@ class GlobalDataMananger: NSObject {
     
     
     func getCurrentDeviceInfo(_ deviceID: String) -> UserAndCarModel? {
-        if Defaults[\.currentCarID] != "" {
+        if Defaults[\.currentCarDeviceID] != "" {
             return RealmHelper.queryObject(objectClass: UserAndCarModel(), filter: "deviceID = '\(deviceID)'").first
         }else{
             return nil

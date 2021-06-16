@@ -42,7 +42,7 @@ class MalfunctionListViewController: UIViewController {
     
     func initData(){
         let currentCarModel = realm.objects(UserAndCarModel.self).filter({ (model) -> Bool in
-            model.id == Defaults[\.currentCarID]
+            model.id == Defaults[\.currentCarDeviceID]
         }).first
         guard let _ = currentCarModel else {
             return

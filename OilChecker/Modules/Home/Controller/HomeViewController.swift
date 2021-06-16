@@ -46,13 +46,13 @@ class HomeViewController: UIViewController {
     
     @objc
     func syncDataFromDevice() {
-        if Defaults[\.currentCarID]!.isEmpty {
+        if Defaults[\.currentCarDeviceID]!.isEmpty {
             SVProgressHUD.showInfo(withStatus: "please add a device first".localized())
             self.navigationController?.pushViewController(ScanBleDeviceViewController())
             return
         }
         //TODO
-        OCBlueToothManager.shared.startScan(Defaults[\.currentCarID]!)
+        OCBlueToothManager.shared.startScan(Defaults[\.currentCarDeviceID]!)
     }
     
     func initData()  {
@@ -65,12 +65,12 @@ class HomeViewController: UIViewController {
             carNumberLabel.textColor = kThemeGreenColor
             carNumberLabel.text = "Add A Device".localized()
         }else{
-            if Defaults[\.currentCarID]!.isEmpty {
+            if Defaults[\.currentCarDeviceID]!.isEmpty {
                 currentCarModel = userCarArray[0]
-                Defaults[\.currentCarID] = currentCarModel!.deviceID
+                Defaults[\.currentCarDeviceID] = currentCarModel!.deviceID
             }else{
                 currentCarModel = realm.objects(UserAndCarModel.self).filter({ (model) -> Bool in
-                    model.deviceID == Defaults[\.currentCarID]
+                    model.deviceID == Defaults[\.currentCarDeviceID]
                 }).first
                 guard currentCarModel != nil else {
                     return
@@ -204,6 +204,7 @@ class HomeViewController: UIViewController {
     lazy var capacityView: FuelCapacityView = {
         let view = FuelCapacityView()
         view.nameLabel.text = "Fuel Capacity Status".localized()
+        view.nameLabel.adjustsFontSizeToFitWidth = true
         view.statusLabel.textColor = kThemeGreenColor
         view.statusLabel.text = FuelCapacityState.Unknown.rawValue.localized()
         return view
@@ -212,6 +213,7 @@ class HomeViewController: UIViewController {
     lazy var consumptionView: FuelCapacityView = {
         let view = FuelCapacityView()
         view.nameLabel.text = "Average Fuel Consumption".localized()
+        view.nameLabel.adjustsFontSizeToFitWidth = true
         view.statusLabel.text = DefaultEmptyNumberString + "L"
         return view
     }()
@@ -226,7 +228,7 @@ extension HomeViewController: MyDeviceListViewControllerDelegate {
 
     func selectedCarInfo(_ data: UserAndCarModel) {
         carNumberLabel.text = data.carNumber
-        Defaults[\.currentCarID] = data.deviceID
+        Defaults[\.currentCarDeviceID] = data.deviceID
         chartView.updateCurrentDevice(model: data)
         updateLatestFuelCapacityAndConsumption(deviceID: data.deviceID)
     }
