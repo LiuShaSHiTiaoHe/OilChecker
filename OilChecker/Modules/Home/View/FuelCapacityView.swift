@@ -45,7 +45,7 @@ class FuelCapacityView: UIView {
         let label = UILabel.init()
         label.textColor = kSecondBlackColor
         label.font = k16Font
-        label.textAlignment = .left
+        label.textAlignment = .center
         return label
     }()
 

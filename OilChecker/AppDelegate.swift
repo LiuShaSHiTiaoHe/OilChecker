@@ -48,6 +48,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let cmd = try? binary.readBytes(1)
 //        let response = try? binary.readBytes(1)
         
+        let remoteData = 0x0700
+        let singleData:[UInt8] = [0x07,0x00]
+        let number = OCByteManager.shared.integer(from: singleData.hexa)
+        let local = CFSwapInt16BigToHost(UInt16(number))
+        
         logger.info("\(NSHomeDirectory())")
         return true
     }

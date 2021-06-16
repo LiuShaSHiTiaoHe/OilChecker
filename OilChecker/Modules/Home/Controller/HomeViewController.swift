@@ -206,7 +206,7 @@ class HomeViewController: UIViewController {
         view.nameLabel.text = "Fuel Capacity Status".localized()
         view.nameLabel.adjustsFontSizeToFitWidth = true
         view.statusLabel.textColor = kThemeGreenColor
-        view.statusLabel.text = FuelCapacityState.Unknown.rawValue.localized()
+        view.statusLabel.text = "-"//FuelCapacityState.Unknown.rawValue.localized()
         return view
     }()
     

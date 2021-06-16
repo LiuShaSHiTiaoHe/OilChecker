@@ -33,6 +33,7 @@ class OCBlueToothManager: NSObject {
 
     
     static let shared = OCBlueToothManager()
+    private var delayTask: Task!
 
     //MARK: observers
     private var objservers: [OCBlueToothManagerWrapper] = []
@@ -69,6 +70,7 @@ class OCBlueToothManager: NSObject {
     func startScan(_ deviceID: String) {
         currentDeviceID = deviceID
         receivedFuelDatas = Data.init()
+     
         SVProgressHUD.show()
         SVProgressHUD.dismiss(withDelay: 20) {
             if self.receivedFuelDatas.count == 0 {
@@ -258,8 +260,13 @@ class OCBlueToothManager: NSObject {
                                 userModel.createTime = carModel!.createTime
                                 userModel.voltage = OCByteManager.shared.integer(from: compareV!.hexa)
                                 SettingManager.shared.updateUserCarInfo(userModel)
+
                                 //设备参数无误，开始请求油量数据
-                                self.requestHistoryData()
+                                self.delayTask = Plan.after(2.seconds).do {
+                                    self.requestHistoryData()
+                                }
+//                                //设备参数无误，开始请求油量数据
+//                                self.requestHistoryData()
                             }else{
                                 SVProgressHUD.show(withStatus: "Please reset device parameters".localized())
                                 self.baby?.cancelAllPeripheralsConnection()
@@ -372,7 +379,7 @@ class OCBlueToothManager: NSObject {
         guard currentPeripheral != nil else {
             return
         }
-        let defaultDeviceID: [UInt8] = currentDeviceID.hexa
+        let defaultDeviceID: [UInt8] = DefualtDeviceID.intTo2Bytes()//currentDeviceID.hexa
         var datas: [UInt8] = []
         datas.append(0x02)//STX 1字节
         datas.append(0x01)//数据长度  1字节
@@ -520,6 +527,8 @@ class OCBlueToothManager: NSObject {
         }
         let width = carModel!.fuelTankWidth.double
         let length = carModel!.fuelTankLength.double
+        let height = carModel!.fuelTankHeight.double
+
 //        logger.info("width: \(width) + length: \(length)")
 
         RealmHelper.deleteObjectFilter(objectClass: BaseFuelDataModel(), filter: "deviceID = '\(currentDeviceID!)'")
@@ -527,19 +536,29 @@ class OCBlueToothManager: NSObject {
         var isFirstActive: Bool = false//是否是上电
         for (index, data) in fuelData.enumerated()  {
             logger.info("index: \(index) + data: \(data)")
-            if data == 0xFFFD {//0xFFFD
+            
+            let realData = CFSwapInt16BigToHost(UInt16(data))
+            
+            if realData == 0xFFFD  {//0xFFFD
                 isFirstActive = true
-                return
+                continue
             }
-            if data == 0 {
-                return
+            if realData == 0xFFFE { //0xFFFE
+                continue
             }
+            if Double(realData) > height {
+                continue
+            }
+            
             let baseFuelModel = BaseFuelDataModel.init()
             if isFirstActive {
                 baseFuelModel.isFirstActive = true
             }
             baseFuelModel.deviceID = currentDeviceID
-            baseFuelModel.fuelLevel = data.double*width*length/1000000
+            baseFuelModel.fuelLevel = Double(realData)*width*length/1000000
+            baseFuelModel.fueltankHeight = height
+            baseFuelModel.fueltankWidth = width
+            baseFuelModel.fueltankLength = length
             baseFuelModel.recordIDFromDevice = Int64(index)
             dataSource.append(baseFuelModel)
             isFirstActive = false

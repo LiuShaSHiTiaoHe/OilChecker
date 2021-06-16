@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import SwiftyUserDefaults
 
 protocol MyDeviceListViewControllerDelegate: NSObjectProtocol {
     func selectedCarInfo(_ data: UserAndCarModel)
@@ -107,8 +108,8 @@ extension MyDeviceListViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let userCar = dataSource[indexPath.row]
+        Defaults[\.currentCarDeviceID] = userCar.deviceID
         delegate?.selectedCarInfo(userCar)
-//        self.dismiss(animated: true, completion: nil)
         self.navigationController?.popViewController()
     }
 }

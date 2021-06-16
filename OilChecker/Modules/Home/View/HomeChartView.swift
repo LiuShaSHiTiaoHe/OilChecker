@@ -14,6 +14,8 @@ import RealmSwift
 class HomeChartView: UIView {
     let realm = try! Realm()
     var currentDevice: UserAndCarModel?
+    private var currentSelectedIndex: Int = 0
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         initUI()
@@ -61,7 +63,7 @@ class HomeChartView: UIView {
     
     func updateCurrentDevice(model: UserAndCarModel) {
         currentDevice = model
-        segment.setIndex(0, animated: true, shouldSendValueChangedEvent: true)
+        segment.setIndex(currentSelectedIndex, animated: true, shouldSendValueChangedEvent: true)
     }
     
     func updateChartData(data: Array<BaseFuelDataModel>) {
@@ -83,13 +85,16 @@ class HomeChartView: UIView {
         guard currentDevice != nil else {
             return
         }
+        currentSelectedIndex = sender.index
+        
         prepareData(sender.index+1)
     }
     
     func prepareData(_ index: Int) {
         
-        let dataSource = realm.objects(BaseFuelDataModel.self).sorted(byKeyPath: "recordIDFromDevice").suffix(index*20)
-
+//        let dataSource = realm.objects(BaseFuelDataModel.self).sorted(byKeyPath: "recordIDFromDevice").suffix(index*20)
+        let dataSource =  RealmHelper.queryObject(objectClass: BaseFuelDataModel(), filter: "deviceID = '\(currentDevice!.deviceID)'").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(index*30)
+        
         let fuelLeverDataSource = Array(dataSource)
 
         updateChartData(data: Array(fuelLeverDataSource) )
@@ -114,6 +119,7 @@ class HomeChartView: UIView {
         
         
         let set1 = LineChartDataSet(entries: values, label: "Current Fuel".localized())
+        set1.drawValuesEnabled = false
         set1.axisDependency = .left
         set1.setColor(kThemeGreenColor)
         set1.lineWidth = 1.0

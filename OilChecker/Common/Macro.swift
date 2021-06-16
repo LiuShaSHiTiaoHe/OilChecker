@@ -148,7 +148,7 @@ let CharacteristicWriteUUID = 0xFFE2
 let CharacteristicWriteUUIDString = "FFE2"
 
 let DefualtDeviceID = 0x0000
-let warningFuelChangedValue: Double = 40.0
+let warningFuelChangedValue: Double = 5.0
 
 let BabyChannelHomeIdentifier = "BabyChannelHomeIdentifier"
 let BabyChannelScanViewIdentifier = "BabyChannelScanViewIdentifier"
