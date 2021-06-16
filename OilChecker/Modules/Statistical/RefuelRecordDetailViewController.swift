@@ -139,7 +139,9 @@ extension RefuelRecordDetailViewController: UITableViewDelegate, UITableViewData
         cell.contentTitle.text = "Refuel".localized()
         cell.dateLabel.text = model.deviceID
         cell.recordDateLabel.text = model.recordIDFromDevice.string
-        cell.contentMessage.text = model.refuelLevel.string + "  L"
+        let dataString = String(format: "%.2f", model.refuelLevel)
+        cell.contentMessage.text = dataString + "  L"
+//        cell.contentMessage.text = model.refuelLevel.string + "  L"
         cell.contentMessage.textColor = kThemeGreenColor
         return cell
     }

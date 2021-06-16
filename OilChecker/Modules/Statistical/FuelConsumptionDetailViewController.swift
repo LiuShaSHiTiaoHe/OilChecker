@@ -143,7 +143,8 @@ extension FuelConsumptionDetailViewController: UITableViewDelegate, UITableViewD
         cell.contentTitle.text = "Consumption".localized()
         cell.dateLabel.text = model.deviceID
         cell.recordDateLabel.text = model.recordIDFromDevice.string
-        cell.contentMessage.text = model.consumption.string + "  L"
+        let dataString = String(format: "%.2f", model.consumption)
+        cell.contentMessage.text = dataString + "  L"
         cell.contentMessage.textColor = kRedFontColor
         return cell
     }

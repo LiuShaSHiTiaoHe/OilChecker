@@ -182,7 +182,7 @@ class HomeViewController: UIViewController {
         label.layer.cornerRadius = 10
         label.clipsToBounds = true
         label.textAlignment = .center
-        label.textColor = kSecondBlackColor
+        label.textColor = kThemeGreenColor
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(carNumberButtonAction)))
         return label

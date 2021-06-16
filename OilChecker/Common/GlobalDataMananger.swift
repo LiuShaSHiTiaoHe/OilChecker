@@ -92,8 +92,12 @@ class GlobalDataMananger: NSObject {
     }
     
     func getAverageConsumption(_ deviceID: String) -> String {
-        let model = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(deviceID)'").last?.consumption.string
-        return model ?? "0"
+        let model = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(deviceID)'").last?.consumption
+        guard model != nil else {
+            return "0.00"
+        }
+        let dataString = String(format: "%.2f", model!)
+        return dataString
     }
     
     
