@@ -27,32 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         initializeApp()
-        
-//        AlicloudTlogProvider.init().autoInit(withAppVersion: "1.0.0", channel: "debug", nick: "oilchecker")
-//        AlicloudHAProvider.start()
-//        TRDManagerService.update(.info)
-
-//        let loggerr = TLogFactory.createTLog(forModuleName: "com.OilChecker.UIApplicationDelegate")!
-//        loggerr.info("UIApplicationDelegate")
-//        let uuidString = "FFE1"
-//        if uuidString != "FFE1" && uuidString != "FFE2" {
-//            logger.info("\(NSHomeDirectory())")
-//        }
-//        var binary = Binary.init(hexString: "020AF600000008400")!
-//        let count = binary.count
-//        let qw = try? binary.readBytes(1)//stx
-//        let ass = try? binary.readBytes(1)//dataLength
-//        let df = try? binary.readBytes(1)//length comp
-//        let dataDeviceID = try? binary.readBytes(2)//deviceID
-//        let property = try? binary.readBytes(1)
-//        let cmd = try? binary.readBytes(1)
-//        let response = try? binary.readBytes(1)
-        
-//        let remoteData = 0x0700
-//        let singleData:[UInt8] = [0x07,0x00]
-//        let number = OCByteManager.shared.integer(from: singleData.hexa)
-//        let local = CFSwapInt16BigToHost(UInt16(number))
-//        let dataString = String(format: "%.2f", 5.23434543)
         logger.info("\(NSHomeDirectory())")
         return true
     }
@@ -87,22 +61,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
         SVProgressHUD.setMaximumDismissTimeInterval(2)
         self.window?.makeKeyAndVisible()
-    }
-    
-
-    func addFakeData() {
-        
-        RealmHelper.clearTableClass(objectClass: BaseFuelDataModel())
-        var dataSource: [BaseFuelDataModel] = []
-        for index in 1...1000 {
-            let data = Double(arc4random_uniform(100))+50
-            let baseFuelModel = BaseFuelDataModel.init()
-            baseFuelModel.deviceID = "2345"
-            baseFuelModel.fuelLevel = data
-            baseFuelModel.recordIDFromDevice = Int64(index)
-            dataSource.append(baseFuelModel)
-        }
-        RealmHelper.addObjects(by: dataSource)
     }
 
      func initializeRootViewController() -> ESTabBarController {

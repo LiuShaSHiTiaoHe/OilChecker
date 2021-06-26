@@ -52,6 +52,11 @@
 
 "Add" = "Add";
 "Save" = "Save";
+"Edit" = "Edit";
+"Confirm" = "Confirm";
+"Tips" = "Tips";
+"Cancle" = "Cancle";
+"ChangeDeviceInfoTips" = "Change device infomation will lead to deviation of the collected data, Sure to modify?";
 "Add Success" = "Add Success";
 "Please Enter Correctly" = "Please Enter Correctly";
 

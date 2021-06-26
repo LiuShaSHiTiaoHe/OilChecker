@@ -18,12 +18,10 @@ class StatisticalViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.title = "Statistical".localized()
         self.view.backgroundColor = kBackgroundColor
-//        GlobalDataMananger.shared.fuelDataProcessor(Defaults[\.currentCarDeviceID]!)
         initUI()
     }
     
@@ -40,9 +38,6 @@ class StatisticalViewController: UIViewController {
         })
         
         if userCarArray.count == 0 {
-//            carNumberButton.setTitle("Add New Car", for: .normal)
-//            carNumberButton.setImage(UIImage.init(named: "btn_addCar"), for: .normal)
-//            carNumberButton.imageEdgeInsets = UIEdgeInsets.init(top: 0, left: kMargin/2, bottom: 0, right: kMargin)
 
         }else{
             if Defaults[\.currentCarDeviceID]!.isEmpty {

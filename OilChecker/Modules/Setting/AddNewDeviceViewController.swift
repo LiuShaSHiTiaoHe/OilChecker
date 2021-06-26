@@ -207,19 +207,38 @@ class AddNewDeviceViewController: UIViewController {
 
     
     @objc
-    func saveButtonAction() {
-        logger.info("saveButtonAction")
-        let deviceID = deviceIDInput.textfield.text
-        let carNumberSting = carNumberInput.textfield.text
-        let tankLength = fuelTankLengthInput.textfield.text
-        let tankWitdh = fuelTankWitdhInput.textfield.text
-        let tankHeight = fuelTankHeightInput.textfield.text
-        let compareV = compareVoltageInput.textfield.text        
+    func editButtonAction() {
         
-        if !deviceID!.isEmpty && !carNumberSting!.isEmpty && !tankLength!.isEmpty && !tankWitdh!.isEmpty && !tankHeight!.isEmpty && !compareV!.isEmpty {
-            sendDeviceInfo(deviceID!, tankLength!, tankWitdh!, tankHeight!, compareV!)
+    }
+    
+    @objc
+    func saveButtonAction() {
+        if bottomSaveButton.title(for: .normal) == "Edit".localized() {
+            let alertView = UIAlertController.init(title: "Tips".localized(), message: "ChangeDeviceInfoTips".localized(), preferredStyle: .alert)
+
+            let alert = UIAlertAction.init(title: "Confirm".localized(), style: .destructive) {[unowned self] (UIAlertAction) in
+                allowEdit(true)
+                bottomSaveButton.setTitle("Save".localized(), for: .normal)
+            }
+            let cancleAlert = UIAlertAction.init(title: "Cancle".localized(), style: .cancel) { (UIAlertAction) in
+                
+            }
+            alertView.addAction(cancleAlert)
+            alertView.addAction(alert);
+            self.present(alertView, animated: true, completion: nil)
         }else{
-            SVProgressHUD.showError(withStatus: "Please Enter Correctly".localized())
+            let deviceID = deviceIDInput.textfield.text
+            let carNumberSting = carNumberInput.textfield.text
+            let tankLength = fuelTankLengthInput.textfield.text
+            let tankWitdh = fuelTankWitdhInput.textfield.text
+            let tankHeight = fuelTankHeightInput.textfield.text
+            let compareV = compareVoltageInput.textfield.text
+            
+            if !deviceID!.isEmpty && !carNumberSting!.isEmpty && !tankLength!.isEmpty && !tankWitdh!.isEmpty && !tankHeight!.isEmpty && !compareV!.isEmpty {
+                sendDeviceInfo(deviceID!, tankLength!, tankWitdh!, tankHeight!, compareV!)
+            }else{
+                SVProgressHUD.showError(withStatus: "Please Enter Correctly".localized())
+            }
         }
     }
     
@@ -230,6 +249,17 @@ class AddNewDeviceViewController: UIViewController {
         fuelTankWitdhInput.textfield.text = model.fuelTankWidth.string
         fuelTankHeightInput.textfield.text = model.fuelTankHeight.string
         compareVoltageInput.textfield.text = model.voltage.string
+        allowEdit(false)
+        bottomSaveButton.setTitle("Edit".localized(), for: .normal)
+    }
+    
+    func allowEdit(_ allowEdit: Bool)  {
+        deviceIDInput.textfield.isUserInteractionEnabled = allowEdit
+        carNumberInput.textfield.isUserInteractionEnabled = allowEdit
+        fuelTankLengthInput.textfield.isUserInteractionEnabled = allowEdit
+        fuelTankWitdhInput.textfield.isUserInteractionEnabled = allowEdit
+        fuelTankHeightInput.textfield.isUserInteractionEnabled = allowEdit
+        compareVoltageInput.textfield.isUserInteractionEnabled = allowEdit
     }
     
     func saveToRealmDataBase() {
@@ -366,7 +396,7 @@ class AddNewDeviceViewController: UIViewController {
         scrollView.addSubview(fuelTankWitdhInput)
         scrollView.addSubview(fuelTankHeightInput)
         scrollView.addSubview(compareVoltageInput)
-        scrollView.addSubview(rightSaveButton)
+        scrollView.addSubview(bottomSaveButton)
         
         scrollView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -377,6 +407,7 @@ class AddNewDeviceViewController: UIViewController {
            make.width.equalTo(kScreenWidth)
            make.height.greaterThanOrEqualTo(scrollView).offset(1)
         })
+        
         
         carNumberInput.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(kMargin)
@@ -421,7 +452,7 @@ class AddNewDeviceViewController: UIViewController {
             make.width.equalTo(kScreenWidth - kMargin*2)
         }
         
-        rightSaveButton.snp.makeConstraints { make  in
+        bottomSaveButton.snp.makeConstraints { make  in
             make.left.equalToSuperview().offset(kMargin)
             make.width.equalTo(kScreenWidth - kMargin*2)
             make.height.equalTo(50)
@@ -438,7 +469,7 @@ class AddNewDeviceViewController: UIViewController {
         return scroll
     }()
     
-    lazy var rightSaveButton: UIButton = {
+    lazy var bottomSaveButton: UIButton = {
         let btn = UIButton.init(type: .custom)
         btn.backgroundColor = kThemeGreenColor
         btn.layer.cornerRadius = 10
@@ -448,6 +479,17 @@ class AddNewDeviceViewController: UIViewController {
         btn.addTarget(self, action: #selector(saveButtonAction), for: .touchUpInside)
         return btn
     }()
+    
+//    private let editButton: UIButton = {
+//        let btn = UIButton.init(type: .custom)
+//        btn.backgroundColor = kThemeGreenColor
+//        btn.layer.cornerRadius = 10
+//        btn.setTitle("Edit".localized(), for: .normal)
+//        btn.setTitleColor(kWhiteColor, for: .normal)
+//        btn.titleLabel?.font = k16Font
+//        btn.addTarget(self, action: #selector(editButtonAction), for: .touchUpInside)
+//        return btn
+//    }()
     
     
     

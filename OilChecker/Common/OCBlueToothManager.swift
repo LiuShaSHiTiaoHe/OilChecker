@@ -58,7 +58,6 @@ class OCBlueToothManager: NSObject {
     /////////////////////////////////////////////
     let baby = BabyBluetooth.share();
     var currentPeripheral: CBPeripheral!
-//    private var sendDataState: BleSendDataState = .RequestDeviceParamers
 
     private var readCBCharacteristic: CBCharacteristic?
     private var writeCBCharacteristic: CBCharacteristic?
@@ -114,13 +113,6 @@ class OCBlueToothManager: NSObject {
                         self.connetDevice()
                     }
                 }
-//                if name == "BT-" + self.currentDeviceID {
-//                    if peripheral != nil {
-//                        self.currentPeripheral = peripheral
-//                        self.stopScan()
-//                        self.connetDevice()
-//                    }
-//                }
             }
         })
         
@@ -245,7 +237,6 @@ class OCBlueToothManager: NSObject {
                         if deviceID?.hexa ==  self.currentDeviceID{
                             if length?.hexa != "FFFF" && width?.hexa != "FFFF" && height?.hexa != "FFFF" && compareV?.hexa != "FFFF" {//设备参数符合标准
                                 let deviceIDString = deviceID?.hexa
-//                                let deviceIDIntValue = OCByteManager.shared.integer(from: deviceIDString!)
                                 let carModel = RealmHelper.queryObject(objectClass: UserAndCarModel(), filter: "deviceID = '\(deviceIDString!)'").first
                                 guard carModel != nil else {
                                     return
@@ -265,7 +256,6 @@ class OCBlueToothManager: NSObject {
                                 self.delayTask = Plan.after(2.seconds).do {
                                     self.requestHistoryData()
                                 }
-//                                //设备参数无误，开始请求油量数据
 //                                self.requestHistoryData()
                             }else{
                                 SVProgressHUD.show(withStatus: "Please reset device parameters".localized())
@@ -277,30 +267,7 @@ class OCBlueToothManager: NSObject {
                         }
                     }
                 }
-                                
-//                if cmd![0] == 0x82 {//获取油量历史数据
-//                    logger.info("获取油量历史数据 + \(String(describing: characteristic!.value))")
-//                    logger.info("获取油量历史数据 + \(characteristic!.value!.bytes.hexa)")
-//                    let number = try? binary.readBytes(1)
-//                    let numberIntStrng = OCByteManager.shared.integer(from: number!.hexa)
-//                    if number![0] == 0xFF{
-//                        SVProgressHUD.show(withStatus: "数据传输完成,正在解析...")
-//                        SVProgressHUD.dismiss(withDelay: 4)
-//                        self.analyzeData()
-//                        return
-//                    }
-//                    self.showProcessWhenReceiveData()
-//                    var dataArray :[String] = []
-//                    for _ in 1 ... (dataLength![0] - 2)/2 {
-//                        let data = try?binary.readBytes(2)
-//                        guard data != nil else {
-//                            continue
-//                        }
-//                        dataArray.append(data!.hexa)
-//                    }
-//                    self.historyData.updateValue(dataArray, forKey: numberIntStrng.string)
-//                    self.sendReceiveHistoryDataFeedBack()
-//                }
+
             }
         })
 
@@ -329,11 +296,9 @@ class OCBlueToothManager: NSObject {
             var binary = Binary.init(bytes: datas.bytes)
             var isContinue = true
             while isContinue {
-                let stx = try? binary.readBytes(1)//stx
-//                logger.info("stx \(stx!.hexa)")
+                let _ = try? binary.readBytes(1)//stx
                 let length = try? binary.readBytes(1)//dataLength
-//                logger.info("length \(length!.hexa)")
-                let dataLength = OCByteManager.shared.integer(from: length!.hexa)//第一条数据帧的数据区长度
+                let dataLength = OCByteManager.shared.integer(from: length!.hexa)//一条数据帧的数据区长度
                 let _ = try? binary.readBytes(5)//length comp + deviceID + 帧标识 hard->APP 0x00 + cmd油量历史数据 0x82
                 
                 let dataNumber = try? binary.readBytes(1)
@@ -529,13 +494,11 @@ class OCBlueToothManager: NSObject {
         let length = carModel!.fuelTankLength.double
         let height = carModel!.fuelTankHeight.double
 
-//        logger.info("width: \(width) + length: \(length)")
-
         RealmHelper.deleteObjectFilter(objectClass: BaseFuelDataModel(), filter: "deviceID = '\(currentDeviceID!)'")
         var dataSource: [BaseFuelDataModel] = []
         var isFirstActive: Bool = false//是否是上电
         for (index, data) in fuelData.enumerated()  {
-            logger.info("index: \(index) + data: \(data)")
+//            logger.info("index: \(index) + data: \(data)")
             
             let realData = CFSwapInt16BigToHost(UInt16(data))
             
@@ -549,7 +512,9 @@ class OCBlueToothManager: NSObject {
             if Double(realData) > height {
                 continue
             }
-            
+            let fuelDataReal = Double(realData)*width*length/1000000
+            logger.info("width: \(width)----  length: \(length) ---- height: \(realData) ---- fuelDataReal: \(fuelDataReal)")
+
             let baseFuelModel = BaseFuelDataModel.init()
             if isFirstActive {
                 baseFuelModel.isFirstActive = true

@@ -39,7 +39,6 @@ class HomeViewController: UIViewController {
             deviceListVC.delegate = self
             self.navigationController?.pushViewController(deviceListVC)
         }else{
-            //TODO
             self.navigationController?.pushViewController(ScanBleDeviceViewController())
         }
     }
@@ -51,7 +50,6 @@ class HomeViewController: UIViewController {
             self.navigationController?.pushViewController(ScanBleDeviceViewController())
             return
         }
-        //TODO
         OCBlueToothManager.shared.startScan(Defaults[\.currentCarDeviceID]!)
     }
     
@@ -103,8 +101,8 @@ class HomeViewController: UIViewController {
         default :
             break
         }
-        capacityView.statusLabel.text  = state.rawValue.localized() //FuelCapacityState.Normal.rawValue.localized()
-        consumptionView.statusLabel.text = GlobalDataMananger.shared.getAverageConsumption(deviceID!) + "L"//DefaultEmptyNumberString
+        capacityView.statusLabel.text  = state.rawValue.localized()
+        consumptionView.statusLabel.text = GlobalDataMananger.shared.getAverageConsumption(deviceID!) + "L"
     }
     
  
@@ -206,7 +204,7 @@ class HomeViewController: UIViewController {
         view.nameLabel.text = "Fuel Capacity Status".localized()
         view.nameLabel.adjustsFontSizeToFitWidth = true
         view.statusLabel.textColor = kThemeGreenColor
-        view.statusLabel.text = "-"//FuelCapacityState.Unknown.rawValue.localized()
+        view.statusLabel.text = "-"
         return view
     }()
     

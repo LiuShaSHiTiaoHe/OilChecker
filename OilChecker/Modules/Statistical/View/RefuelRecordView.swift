@@ -46,7 +46,7 @@ class RefuelRecordView: UIView {
     
     func updateCurrentDevice(model: UserAndCarModel) {
         currentDevice = model
-        let dataSource = RealmHelper.queryObject(objectClass: RefuelRecordModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(50)
+        let dataSource = RealmHelper.queryObject(objectClass: RefuelRecordModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}
         updateChartData(Array(dataSource))
     }
     
@@ -77,28 +77,29 @@ class RefuelRecordView: UIView {
         data.setValueFont(UIFont(name: "HelveticaNeue-Light", size: 10)!)
         data.barWidth = 0.9
         fuelChartView.data = data
+        fuelChartView.zoomAndCenterViewAnimated(scaleX: values.count.cgFloat/15, scaleY: 1, xValue: values.last!.x, yValue: values.last!.y, axis: .left, duration: 0.1)
     }
     
     
-    func updateChartAxis() {
-        let xAxis = fuelChartView.xAxis
-        xAxis.labelPosition = .bottom
-        xAxis.labelFont = k10Font
-        xAxis.labelTextColor = kSecondBlackColor
-        xAxis.drawAxisLineEnabled = false
-        xAxis.drawGridLinesEnabled = false
-
-        
-        let leftAxis = fuelChartView.leftAxis
-        leftAxis.labelPosition = .outsideChart
-        leftAxis.labelFont = k12Font
-        leftAxis.axisMinimum = 0
-        leftAxis.axisMaximum = 170
-        leftAxis.yOffset = -9
-        leftAxis.labelTextColor = kSecondBlackColor
-        leftAxis.gridColor = kLightGaryFontColor
-
-    }
+//    func updateChartAxis() {
+//        let xAxis = fuelChartView.xAxis
+//        xAxis.labelPosition = .bottom
+//        xAxis.labelFont = k10Font
+//        xAxis.labelTextColor = kSecondBlackColor
+//        xAxis.drawAxisLineEnabled = false
+//        xAxis.drawGridLinesEnabled = false
+//
+//
+//        let leftAxis = fuelChartView.leftAxis
+//        leftAxis.labelPosition = .outsideChart
+//        leftAxis.labelFont = k12Font
+//        leftAxis.axisMinimum = 0
+//        leftAxis.axisMaximum = 170
+//        leftAxis.yOffset = -9
+//        leftAxis.labelTextColor = kSecondBlackColor
+//        leftAxis.gridColor = kLightGaryFontColor
+//
+//    }
     
     func initUI() {
         self.layer.cornerRadius = 10
@@ -166,8 +167,8 @@ class RefuelRecordView: UIView {
     lazy var fuelChartView: BarChartView = {
         let chartView = BarChartView.init()
         chartView.drawBarShadowEnabled = false
-        chartView.drawValueAboveBarEnabled = false
-        chartView.maxVisibleCount = 60
+        chartView.drawValueAboveBarEnabled = true
+//        chartView.maxVisibleCount = 60
         chartView.legend.enabled = false
         chartView.drawGridBackgroundEnabled = false
         chartView.rightAxis.enabled = false

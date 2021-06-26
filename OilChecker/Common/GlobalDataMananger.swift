@@ -53,7 +53,6 @@ class GlobalDataMananger: NSObject {
                 let refuel = dic["refuel"]
                 return refuel != "0" && refuel != "0.0"
             }
-//            RealmHelper.clearTableClass(objectClass: RefuelRecordModel())
             RealmHelper.deleteObjectFilter(objectClass: RefuelRecordModel(), filter: "deviceID = '\(deviceID)'")
 
             var refuelDataSource: [RefuelRecordModel] = []
@@ -74,7 +73,6 @@ class GlobalDataMananger: NSObject {
                 let refuel = dic["consumpiton"]
                 return refuel != "0" && refuel != "0.0"
             }
-//            RealmHelper.clearTableClass(objectClass: FuelConsumptionModel())
             RealmHelper.deleteObjectFilter(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(deviceID)'")
             var consumptionDataSource: [FuelConsumptionModel] = []
 
@@ -92,7 +90,8 @@ class GlobalDataMananger: NSObject {
     }
     
     func getAverageConsumption(_ deviceID: String) -> String {
-        let model = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(deviceID)'").last?.consumption
+//        let model = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(deviceID)'").sorted(byKeyPath: "recordIDFromDevice").last?.consumption
+        let model = realm.objects(FuelConsumptionModel.self).filter("deviceID = '\(deviceID)'").sorted(byKeyPath: "recordIDFromDevice").last?.consumption//RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(deviceID)'").sorted(byKeyPath: "recordIDFromDevice").last?.consumption
         guard model != nil else {
             return "0.00"
         }

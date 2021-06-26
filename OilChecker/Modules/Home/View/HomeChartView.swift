@@ -81,27 +81,20 @@ class HomeChartView: UIView {
     
     // MARK: - Action handlers
     @objc func segmentedControlValueChanged(_ sender: BetterSegmentedControl) {
-        
         guard currentDevice != nil else {
             return
         }
         currentSelectedIndex = sender.index
-        
         prepareData(sender.index+1)
     }
     
     func prepareData(_ index: Int) {
-        
-//        let dataSource = realm.objects(BaseFuelDataModel.self).sorted(byKeyPath: "recordIDFromDevice").suffix(index*20)
         let dataSource =  RealmHelper.queryObject(objectClass: BaseFuelDataModel(), filter: "deviceID = '\(currentDevice!.deviceID)'").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(index*30)
-        
         let fuelLeverDataSource = Array(dataSource)
-
         updateChartData(data: Array(fuelLeverDataSource) )
     }
     
     func setDataCount(_ dataSource: [BaseFuelDataModel]) {
-
         var values: [ChartDataEntry] = []
         for index in 0 ... dataSource.count - 1 {
             if index < dataSource.count - 2 {

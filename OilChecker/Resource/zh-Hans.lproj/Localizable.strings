@@ -48,6 +48,11 @@
 
 "Add" = "添加";
 "Save" = "保存";
+"Edit" = "修改";
+"Confirm" = "确认";
+"Tips" = "提示";
+"Cancle" = "取消";
+"ChangeDeviceInfoTips" = "如果修改设备参数会导致采集数据的偏差，您确认要修改吗？";
 "Add Success" = "添加成功";
 "Please Enter Correctly" = "请输入正确参数";
 

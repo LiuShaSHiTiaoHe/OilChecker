@@ -31,20 +31,9 @@ class MyDeviceListViewController: UIViewController {
     
     func initUI() {
         self.view.backgroundColor = kBackgroundColor
-//        self.view.addSubview(rightAddButton)
         self.view.addSubview(tableView)
-        
-//        rightAddButton.snp.makeConstraints { make in
-//            make.width.equalTo(80)
-//            make.height.equalTo(30)
-//            make.top.equalToSuperview().offset(kTitleAndStateHeight)
-//            make.right.equalToSuperview().offset(-kMargin)
-//        }
         tableView.snp.makeConstraints { make  in
-//            make.top.equalTo(rightAddButton.snp.bottom).offset(kMargin)
-//            make.left.right.bottom.equalToSuperview()
             make.edges.equalToSuperview()
-
         }
     }
     
@@ -101,7 +90,7 @@ extension MyDeviceListViewController: UITableViewDelegate, UITableViewDataSource
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellid)
         }
         let userCar = dataSource[indexPath.row]
-        cell?.textLabel?.text = userCar.carNumber
+        cell?.textLabel?.text = userCar.carNumber + "(BT-\(userCar.deviceID))"
         return cell!
     }
     

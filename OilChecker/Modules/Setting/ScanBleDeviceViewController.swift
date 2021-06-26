@@ -72,10 +72,7 @@ class ScanBleDeviceViewController: UIViewController {
     
 
     override func viewWillAppear(_ animated: Bool) {
-//        discoveries.removeAll()
-//        self.tableView.reloadData()
         reloadTask = Plan.every(20.second).do {
-            logger.info("reload task")
             self.baby?.cancelScan()
             self.discoveries.removeAll()
             self.tableView.reloadData()
