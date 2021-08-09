@@ -11,6 +11,8 @@
 		6953CCE82642E5A100D48DA2 /* RecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */; };
 		6953CCFB26431F8100D48DA2 /* OCInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CCFA26431F8100D48DA2 /* OCInputView.swift */; };
 		6953CD03264458B100D48DA2 /* ScanBleDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6953CD02264458B100D48DA2 /* ScanBleDeviceViewController.swift */; };
+		698111C1269203980033B77F /* AppParamatersSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698111C0269203980033B77F /* AppParamatersSettingViewController.swift */; };
+		698111C4269210AC0033B77F /* BalloonMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698111C3269210AC0033B77F /* BalloonMarker.swift */; };
 		6994F9F02678FA3700EF073A /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6994F9EF2678FA3700EF073A /* KeyboardView.swift */; };
 		6994F9F22678FCB900EF073A /* DigitsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6994F9F12678FCB900EF073A /* DigitsCell.swift */; };
 		699786F6267281F900FF7946 /* BabyBluetooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 699786E4267281F900FF7946 /* BabyBluetooth.m */; };
@@ -97,6 +99,8 @@
 		6953CCE72642E5A100D48DA2 /* RecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTableViewCell.swift; sourceTree = "<group>"; };
 		6953CCFA26431F8100D48DA2 /* OCInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCInputView.swift; sourceTree = "<group>"; };
 		6953CD02264458B100D48DA2 /* ScanBleDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanBleDeviceViewController.swift; sourceTree = "<group>"; };
+		698111C0269203980033B77F /* AppParamatersSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppParamatersSettingViewController.swift; sourceTree = "<group>"; };
+		698111C3269210AC0033B77F /* BalloonMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalloonMarker.swift; sourceTree = "<group>"; };
 		6994F9EF2678FA3700EF073A /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		6994F9F12678FCB900EF073A /* DigitsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitsCell.swift; sourceTree = "<group>"; };
 		699786E4267281F900FF7946 /* BabyBluetooth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyBluetooth.m; sourceTree = "<group>"; };
@@ -305,6 +309,7 @@
 				69B10CD02633F6E200617D17 /* AddNewDeviceViewController.swift */,
 				69B10D422634480F00617D17 /* MalfunctionListViewController.swift */,
 				6953CD02264458B100D48DA2 /* ScanBleDeviceViewController.swift */,
+				698111C0269203980033B77F /* AppParamatersSettingViewController.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -333,6 +338,7 @@
 				69D4FAB8266B6350009D4EF0 /* GlobalDataMananger.swift */,
 				693DAFA7266D03B70007EADD /* OCByteManager.swift */,
 				693DAFA3266CEAB10007EADD /* OilChecker-Bridging-Header.h */,
+				698111C3269210AC0033B77F /* BalloonMarker.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -688,6 +694,7 @@
 				69AF2FC526692F790015B987 /* UIntExtensions.swift in Sources */,
 				69B10D482634615B00617D17 /* MalfunctionModel.swift in Sources */,
 				69B10CD12633F6E200617D17 /* AddNewDeviceViewController.swift in Sources */,
+				698111C1269203980033B77F /* AppParamatersSettingViewController.swift in Sources */,
 				69CAA3DA2628B19600333AA2 /* BaseViewController.swift in Sources */,
 				69CB1ABF266404D2001BE0D3 /* OCRealmManager.swift in Sources */,
 				69B10C882631E41300617D17 /* AddSectionHeaderView.swift in Sources */,
@@ -700,6 +707,7 @@
 				69B10C40262F517300617D17 /* SettingViewController.swift in Sources */,
 				69B10CC7263324E300617D17 /* AddNewCarTableViewCell.swift in Sources */,
 				69AF2FC426692F790015B987 /* StringExtensions.swift in Sources */,
+				698111C4269210AC0033B77F /* BalloonMarker.swift in Sources */,
 				699786FE267281F900FF7946 /* BabyRhythm.m in Sources */,
 				69B10D7226359E1000617D17 /* RefuelRecordView.swift in Sources */,
 				69CAA35826275E8100333AA2 /* AppDelegate.swift in Sources */,

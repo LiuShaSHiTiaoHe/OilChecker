@@ -88,7 +88,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource{
         case 0:
             return 1
         case 1:
-            return 2
+            return 3
         default:
             return 0
         }
@@ -115,23 +115,18 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource{
                 cell.selectionStyle = .none
                 return cell
             }else{
-//                let cell = tableView.dequeueReusableCell(withIdentifier: MyCarInfoTableViewCellIdentifier, for: indexPath) as! MyCarInfoTableViewCell
-//                let model = dataArray[indexPath.row]
-//                cell.updateCellValue(model)
-//                cell.selectionStyle = .none
-//                return cell
-                
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCellIdentifier, for: indexPath) as! SettingTableViewCell
                 cell.updateCellValue(text: "Device List".localized(), imageName: "icon_list")
                 return cell
-                
             }
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCellIdentifier, for: indexPath) as! SettingTableViewCell
             if indexPath.row == 0 {
                 cell.updateCellValue(text: "Equipment Malfunction Record".localized(), imageName: "icon_error")
-            }else{
+            }else if indexPath.row == 1{
                 cell.updateCellValue(text: "Search Device".localized(), imageName: "icon_findble")
+            }else{
+                cell.updateCellValue(text: "setting_threshold".localized(), imageName: "icon_appsetting")
             }
             return cell
             
@@ -155,8 +150,11 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource{
         case 1:
             if indexPath.row == 0 {
                 self.navigationController?.pushViewController(MalfunctionListViewController())
-            }else{
+            }else if indexPath.row == 1{
                 self.navigationController?.pushViewController(ScanBleDeviceViewController(), animated: true)
+            }else{
+                self.navigationController?.pushViewController(AppParamatersSettingViewController(), animated: true)
+
             }
         default:
             fatalError()

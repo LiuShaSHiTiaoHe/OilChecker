@@ -69,6 +69,9 @@
 "Height" = "Height";
 "Compare Voltage" = "Compare Voltage";
 
+"setting_threshold" = "Setting Thresholds";
+"inputErrorData" = "Unexpected Paramaters";
+"setAppParamatersSuccess" = "Setting Success";
 //ScanDevice
 "Please reconnect the device" = "Please reconnect the device";
 "open mobile bluetooth" = "Please open mobile bluetooth";

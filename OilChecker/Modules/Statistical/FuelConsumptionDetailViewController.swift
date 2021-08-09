@@ -143,8 +143,13 @@ extension FuelConsumptionDetailViewController: UITableViewDelegate, UITableViewD
         cell.contentTitle.text = "Consumption".localized()
         cell.dateLabel.text = model.deviceID
         cell.recordDateLabel.text = model.recordIDFromDevice.string
+        let thresholds = Defaults[\.kThresholds]
         let dataString = String(format: "%.2f", model.consumption)
-        cell.contentMessage.text = dataString + "  L"
+        if model.consumption > thresholds {
+            cell.contentMessage.text = dataString + "  L  " + "  (\(FuelCapacityState.Irregular.rawValue.localized()))"
+        }else{
+            cell.contentMessage.text = dataString + "  L"
+        }
         cell.contentMessage.textColor = kRedFontColor
         return cell
     }

@@ -109,6 +109,7 @@ class GlobalDataMananger: NSObject {
     }
     
     func checkLastFuelStatus(_ deviceID: String) -> FuelCapacityState {
+        let warningFuelChangedValue: Double = Defaults[\.kThresholds]
         let dataSource = realm.objects(BaseFuelDataModel.self).filter("deviceID = '\(deviceID)'").sorted(byKeyPath: "recordIDFromDevice")
         if dataSource.count == 0 {
             return .Unknown

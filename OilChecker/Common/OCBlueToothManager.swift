@@ -67,6 +67,16 @@ class OCBlueToothManager: NSObject {
     private var receivedFuelDatas:Data = Data.init()
 
     func startScan(_ deviceID: String) {
+        if currentPeripheral != nil  {
+            if currentPeripheral.state != .disconnected {
+                return
+            }
+        }
+      
+        if isReceiveFuelData {
+            return
+        }
+        
         currentDeviceID = deviceID
         receivedFuelDatas = Data.init()
      

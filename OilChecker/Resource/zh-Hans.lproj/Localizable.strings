@@ -69,7 +69,9 @@
 "Height" = "油箱高度";
 "Compare Voltage" = "比较电压";
 
-
+"setting_threshold" = "设置预警阀值";
+"inputErrorData" = "设置的参数格式不正确";
+"setAppParamatersSuccess" = "设置成功";
 //ScanDevice
 "Please reconnect the device" = "重新连接设备";
 "open mobile bluetooth" = "蓝牙没有打开";

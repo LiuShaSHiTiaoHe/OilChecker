@@ -23,26 +23,6 @@ class RefuelRecordView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func segmentedControlValueChanged(_ sender: BetterSegmentedControl) {
-        
-        guard currentDevice != nil else {
-            return
-        }
-        if sender.index == 0{
-            let dataSource = RealmHelper.queryObject(objectClass: RefuelRecordModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(20)
-            updateChartData(Array(dataSource))
-
-        }else if sender.index == 1{
-            let dataSource = RealmHelper.queryObject(objectClass: RefuelRecordModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(30)
-            updateChartData(Array(dataSource))
-        }else {
-            let dataSource = RealmHelper.queryObject(objectClass: RefuelRecordModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(60)
-            updateChartData(Array(dataSource))
-        }
-      
-        
-    }
-    
     
     func updateCurrentDevice(model: UserAndCarModel) {
         currentDevice = model
@@ -62,7 +42,6 @@ class RefuelRecordView: UIView {
             fuelChartView.isHidden = false
         }
         
-        
         let values = dataSource.map { (model) -> BarChartDataEntry in
             return BarChartDataEntry(x: Double(model.recordIDFromDevice), y: model.refuelLevel)
         }
@@ -80,49 +59,20 @@ class RefuelRecordView: UIView {
         fuelChartView.zoomAndCenterViewAnimated(scaleX: values.count.cgFloat/15, scaleY: 1, xValue: values.last!.x, yValue: values.last!.y, axis: .left, duration: 0.1)
     }
     
-    
-//    func updateChartAxis() {
-//        let xAxis = fuelChartView.xAxis
-//        xAxis.labelPosition = .bottom
-//        xAxis.labelFont = k10Font
-//        xAxis.labelTextColor = kSecondBlackColor
-//        xAxis.drawAxisLineEnabled = false
-//        xAxis.drawGridLinesEnabled = false
-//
-//
-//        let leftAxis = fuelChartView.leftAxis
-//        leftAxis.labelPosition = .outsideChart
-//        leftAxis.labelFont = k12Font
-//        leftAxis.axisMinimum = 0
-//        leftAxis.axisMaximum = 170
-//        leftAxis.yOffset = -9
-//        leftAxis.labelTextColor = kSecondBlackColor
-//        leftAxis.gridColor = kLightGaryFontColor
-//
-//    }
+
     
     func initUI() {
         self.layer.cornerRadius = 10
         self.backgroundColor = kWhiteColor
-        
-//        self.addSubview(segment)
         self.addSubview(emptyImageView)
         self.addSubview(detailButton)
         self.addSubview(fuelChartView)
         
         emptyImageView.isHidden = false
         fuelChartView.isHidden = true
-        
-//        segment.snp.makeConstraints { (make) in
-//            make.top.equalToSuperview().offset(kMargin)
-//            make.width.equalTo(kScreenWidth - 200)
-//            make.height.equalTo(30)
-//            make.centerX.equalToSuperview()
-//        }
-        
+
         detailButton.snp.makeConstraints { (make) in
             make.right.equalToSuperview().offset(-kMargin)
-//            make.centerY.equalTo(segment.snp.centerY)
             make.top.equalToSuperview().offset(kMargin)
             make.width.equalTo(20)
             make.height.equalTo(20)
@@ -143,20 +93,6 @@ class RefuelRecordView: UIView {
 
     }
     
-    lazy var segment: BetterSegmentedControl = {
-        let segmentedControl = BetterSegmentedControl(
-            frame: CGRect.zero,
-            segments: LabelSegment.segments(withTitles: ["Week".localized(), "Month".localized(),"Year".localized()],
-                                            normalTextColor: kWhiteColor,
-                                            selectedTextColor: kThemeGreenColor),
-            options:[.backgroundColor(kThemeGreenColor),
-                     .indicatorViewBackgroundColor(kWhiteColor),
-                     .cornerRadius(15.0),
-                     .animationSpringDamping(1.0)])
-        segmentedControl.addTarget(self,action: #selector(segmentedControlValueChanged(_:)),for: .valueChanged)
-        segmentedControl.alwaysAnnouncesValue = true
-        return segmentedControl
-    }()
     
     lazy var detailButton: ExpandButton = {
         let btn = ExpandButton.init(type: .custom)
@@ -168,7 +104,6 @@ class RefuelRecordView: UIView {
         let chartView = BarChartView.init()
         chartView.drawBarShadowEnabled = false
         chartView.drawValueAboveBarEnabled = true
-//        chartView.maxVisibleCount = 60
         chartView.legend.enabled = false
         chartView.drawGridBackgroundEnabled = false
         chartView.rightAxis.enabled = false

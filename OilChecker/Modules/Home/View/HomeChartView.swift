@@ -10,6 +10,7 @@ import Charts
 import BetterSegmentedControl
 import SwiftDate
 import RealmSwift
+import SwiftyUserDefaults
 
 class HomeChartView: UIView {
     let realm = try! Realm()
@@ -95,6 +96,7 @@ class HomeChartView: UIView {
     }
     
     func setDataCount(_ dataSource: [BaseFuelDataModel]) {
+        let warningFuelChangedValue: Double = Defaults[\.kThresholds]
         var values: [ChartDataEntry] = []
         for index in 0 ... dataSource.count - 1 {
             if index < dataSource.count - 2 {
@@ -154,15 +156,25 @@ class HomeChartView: UIView {
         let chartView = LineChartView.init()
         chartView.delegate = self
         chartView.chartDescription?.enabled = false
-        chartView.dragEnabled = false
-        chartView.setScaleEnabled(false)
-        chartView.pinchZoomEnabled = false
-        chartView.highlightPerDragEnabled = false
+//        chartView.dragEnabled = false
+//        chartView.setScaleEnabled(false)
+//        chartView.pinchZoomEnabled = false
+        chartView.scaleYEnabled = false
+        chartView.highlightPerDragEnabled = true
         chartView.rightAxis.enabled = false
         chartView.backgroundColor = .white
         chartView.legend.enabled = true
         chartView.legend.textColor = kThemeGreenColor
         chartView.drawGridBackgroundEnabled = false
+        
+        let marker = BalloonMarker(color: kThemeGreenColor,
+                                   font: k14Font,
+                                   textColor: kWhiteColor,
+                                   insets: UIEdgeInsets(top: 8, left: 8, bottom: 20, right: 8))
+        marker.chartView = chartView
+        marker.minimumSize = CGSize(width: 80, height: 40)
+        chartView.marker = marker
+        
         return chartView
     }()
 

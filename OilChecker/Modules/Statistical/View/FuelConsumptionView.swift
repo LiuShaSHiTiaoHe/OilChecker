@@ -9,6 +9,7 @@ import UIKit
 import Charts
 import RealmSwift
 import BetterSegmentedControl
+import SwiftyUserDefaults
 
 class FuelConsumptionView: UIView {
     let realm = try! Realm()
@@ -24,36 +25,10 @@ class FuelConsumptionView: UIView {
     }
     
     // MARK: - Action handlers
-    @objc func segmentedControlValueChanged(_ sender: BetterSegmentedControl) {
-        
-        guard currentDevice != nil else {
-            return
-        }
-        if sender.index == 0{
-            let dataSource = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(20)
-            updateChartData(Array(dataSource))
-        }else if sender.index == 1{
-            let dataSource = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(40)
-            updateChartData(Array(dataSource))
-        }else {
-            let dataSource = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(60)
-            updateChartData(Array(dataSource))
-        }
-    }
-    
     func updateCurrentDevice(model: UserAndCarModel) {
         currentDevice = model
 //        let dataSource = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}.suffix(50)
         let dataSource = RealmHelper.queryObject(objectClass: FuelConsumptionModel(), filter: "deviceID = '\(currentDevice.deviceID)' ").sorted { $0.recordIDFromDevice < $1.recordIDFromDevice}
-//        var datas: [FuelConsumptionModel] = []
-//        for index in 0...2000 {
-//            let model = FuelConsumptionModel.init()
-//            model.recordIDFromDevice = Int64(index)
-//            model.consumption = drand48()*200
-//            datas.append(model)
-//        }
-//
-//        updateChartData(datas)
         updateChartData(Array(dataSource))
     }
     
@@ -72,6 +47,19 @@ class FuelConsumptionView: UIView {
             return BarChartDataEntry(x: Double(model.recordIDFromDevice), y: model.consumption)
         }
   
+        let thresholds = Defaults[\.kThresholds]
+        let ll1 = ChartLimitLine(limit: thresholds, label: "Consumption Thresholds")
+        ll1.lineWidth = 4
+        ll1.lineDashLengths = [5, 5]
+        ll1.labelPosition = .topRight
+        ll1.valueFont = k12Font
+        ll1.lineColor = kThemeGreenColor
+        ll1.valueTextColor = kThemeGreenColor
+        let leftAxis = fuelChartView.leftAxis
+        leftAxis.removeAllLimitLines()
+        leftAxis.addLimitLine(ll1)
+        
+        
         let set1 = BarChartDataSet(entries: values, label: "Consumption")
         set1.setColor(kRedAlphaColor)
         set1.highlightColor = kRedFontColor
@@ -82,30 +70,8 @@ class FuelConsumptionView: UIView {
         data.setValueFont(UIFont(name: "HelveticaNeue-Light", size: 10)!)
         data.barWidth = 0.9
         fuelChartView.data = data
-        
-//        fuelChartView.zoomToCenter(scaleX: values.count.cgFloat/15, scaleY: 1)
         fuelChartView.zoomAndCenterViewAnimated(scaleX: values.count.cgFloat/15, scaleY: 1, xValue: values.last!.x, yValue: values.last!.y, axis: .left, duration: 0.1)
     }
-    
-    
-//    func updateChartAxis() {
-//        let xAxis = fuelChartView.xAxis
-//        xAxis.labelPosition = .bottom
-//        xAxis.labelFont = k10Font
-//        xAxis.labelTextColor = kSecondBlackColor
-//        xAxis.drawAxisLineEnabled = false
-//        xAxis.drawGridLinesEnabled = false
-//
-//        
-//        let leftAxis = fuelChartView.leftAxis
-//        leftAxis.labelPosition = .outsideChart
-//        leftAxis.labelFont = k12Font
-//        leftAxis.axisMinimum = 0
-//        leftAxis.axisMaximum = 170
-//        leftAxis.yOffset = -9
-//        leftAxis.labelTextColor = kSecondBlackColor
-//        leftAxis.gridColor = kLightGaryFontColor
-//    }
     
     
     func initUI() {
@@ -141,21 +107,6 @@ class FuelConsumptionView: UIView {
     }
 
     
-    lazy var segment: BetterSegmentedControl = {
-        let segmentedControl = BetterSegmentedControl(
-            frame: CGRect.zero,
-            segments: LabelSegment.segments(withTitles: ["Week".localized(), "Month".localized(),"Year".localized()],
-                                            normalTextColor: kWhiteColor,
-                                            selectedTextColor: kThemeGreenColor),
-            options:[.backgroundColor(kThemeGreenColor),
-                     .indicatorViewBackgroundColor(kWhiteColor),
-                     .cornerRadius(15.0),
-                     .animationSpringDamping(1.0)])
-        segmentedControl.addTarget(self,action: #selector(segmentedControlValueChanged(_:)),for: .valueChanged)
-        segmentedControl.alwaysAnnouncesValue = true
-        return segmentedControl
-    }()
-    
     lazy var detailButton: ExpandButton = {
         let btn = ExpandButton.init(type: .custom)
         btn.setImage(UIImage(named: "btn_list_icon"), for: .normal)
@@ -172,7 +123,6 @@ class FuelConsumptionView: UIView {
         let chartView = BarChartView.init()
         chartView.drawBarShadowEnabled = false
         chartView.drawValueAboveBarEnabled = true
-//        chartView.maxVisibleCount = 20
         chartView.legend.enabled = false
         chartView.drawGridBackgroundEnabled = false
         chartView.rightAxis.enabled = false
@@ -188,8 +138,6 @@ class FuelConsumptionView: UIView {
         xAxis.labelFont = .systemFont(ofSize: 10)
         xAxis.granularity = 1
         xAxis.labelCount = 7
-//        xAxis.axisMaximum = 200
-    
         xAxis.valueFormatter = DefaultAxisValueFormatter(formatter: leftAxisFormatter)
         
         let leftAxis = chartView.leftAxis

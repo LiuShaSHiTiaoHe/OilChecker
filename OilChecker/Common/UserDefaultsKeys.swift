@@ -14,4 +14,7 @@ extension DefaultsKeys {
     
     var currentCarDeviceID: DefaultsKey<String?> { .init("currentCarDeviceID", defaultValue: "") }
     
+    var kThresholds: DefaultsKey<Double> { .init("launchCount", defaultValue: 5.0) }
+
+    
 }

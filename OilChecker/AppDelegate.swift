@@ -60,6 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
         SVProgressHUD.setMaximumDismissTimeInterval(2)
+        SVProgressHUD.setDefaultMaskType(.black)
         self.window?.makeKeyAndVisible()
     }
 
